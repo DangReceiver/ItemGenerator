@@ -1,0 +1,328 @@
+/*     */ package de.cruelambition.oo;
+/*     */ 
+/*     */ import de.cruelambition.language.Lang;
+/*     */ import de.cruelambition.language.Language;
+/*     */ import java.io.File;
+/*     */ import java.io.IOException;
+/*     */ import java.util.ArrayList;
+/*     */ import java.util.Arrays;
+/*     */ import java.util.List;
+/*     */ import org.bukkit.Bukkit;
+/*     */ import org.bukkit.Color;
+/*     */ import org.bukkit.Location;
+/*     */ import org.bukkit.OfflinePlayer;
+/*     */ import org.bukkit.configuration.ConfigurationSection;
+/*     */ import org.bukkit.configuration.file.YamlConfiguration;
+/*     */ import org.bukkit.entity.Player;
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ public class PC
+/*     */ {
+/*     */   private final OfflinePlayer op;
+/*     */   private String uuid;
+/*     */   private final File f;
+/*     */   private final YamlConfiguration c;
+/*     */   private final String path;
+/*     */   
+/*     */   public PC(OfflinePlayer pOp) {
+/*  29 */     this.path = "ItemGenerator/player/%s.yaml";
+/*  30 */     this.op = pOp;
+/*     */     
+/*  32 */     this.f = new File("ItemGenerator/player/" + this.op.getUniqueId() + ".yaml");
+/*  33 */     new YamlConfiguration();
+/*  34 */     this.c = YamlConfiguration.loadConfiguration(this.f);
+/*     */   }
+/*     */   
+/*     */   public File getFile() {
+/*  38 */     return this.f;
+/*     */   }
+/*     */   
+/*     */   public YamlConfiguration getCon() {
+/*  42 */     return this.c;
+/*     */   }
+/*     */   
+/*     */   public PC load(OfflinePlayer op) {
+/*  46 */     if (!hasCon(op))
+/*  47 */       createCon(op); 
+/*  48 */     return new PC(op);
+/*     */   }
+/*     */   
+/*     */   public PC load(Player p) {
+/*  52 */     if (!hasCon((OfflinePlayer)p))
+/*  53 */       createCon((OfflinePlayer)p); 
+/*  54 */     return new PC((OfflinePlayer)p);
+/*     */   }
+/*     */   
+/*     */   public boolean hasCon(OfflinePlayer p) {
+/*  58 */     return (new File(String.format(this.path, new Object[] { p.getUniqueId() }))).exists();
+/*     */   }
+/*     */   
+/*     */   public PC createCon(OfflinePlayer op) {
+/*  62 */     File tf = new File(String.format(this.path, new Object[] { op.getUniqueId() }));
+/*     */     
+/*  64 */     if (!tf.exists())
+/*     */       try {
+/*  66 */         tf.createNewFile();
+/*     */       }
+/*  68 */       catch (IOException ignore) {
+/*     */         
+/*  70 */         if (!createFolder(this.path))
+/*     */           try {
+/*  72 */             tf.createNewFile();
+/*     */           }
+/*  74 */           catch (IOException ex) {
+/*  75 */             ex.printStackTrace();
+/*     */           }  
+/*     */       }  
+/*  78 */     return new PC(op);
+/*     */   }
+/*     */ 
+/*     */   
+/*     */   public static boolean createFolder(String path) {
+/*  83 */     if (path == null) path = "plugins/ItemGenerator/player"; 
+/*  84 */     File f1 = new File(path);
+/*     */     
+/*  86 */     if (f1.exists()) {
+/*  87 */       System.out.println("The folder already exists.");
+/*  88 */       return false;
+/*     */     } 
+/*     */     
+/*  91 */     if (!f1.mkdir()) {
+/*  92 */       System.out.println("The folder could not be created.");
+/*  93 */       return false;
+/*     */     } 
+/*     */     
+/*  96 */     return true;
+/*     */   }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*     */   public void set(String pPath, Object pInput) {
+/* 103 */     this.c.set(pPath, pInput);
+/*     */   }
+/*     */   
+/*     */   public String getString(String pPath) {
+/* 107 */     return this.c.getString(pPath);
+/*     */   }
+/*     */   
+/*     */   public List<String> getStringList(String pPath) {
+/* 111 */     return this.c.getStringList(pPath);
+/*     */   }
+/*     */   
+/*     */   public boolean getBoolean(String pPath) {
+/* 115 */     return this.c.getBoolean(pPath);
+/*     */   }
+/*     */   
+/*     */   public Color getColor(String pPath) {
+/* 119 */     return this.c.getColor(pPath);
+/*     */   }
+/*     */   
+/*     */   public ConfigurationSection getConfigurationSection(String pPath) {
+/* 123 */     return this.c.getConfigurationSection(pPath);
+/*     */   }
+/*     */   
+/*     */   public double getDouble(String pPath) {
+/* 127 */     return this.c.getDouble(pPath);
+/*     */   }
+/*     */   
+/*     */   public float getFloat(String pPath) {
+/* 131 */     return (float)this.c.getDouble(pPath);
+/*     */   }
+/*     */   
+/*     */   public int getInt(String pPath) {
+/* 135 */     return this.c.getInt(pPath);
+/*     */   }
+/*     */   
+/*     */   public long getLong(String pPath) {
+/* 139 */     return this.c.getLong(pPath);
+/*     */   }
+/*     */   
+/*     */   public boolean isSet(String pPath) {
+/* 143 */     return this.c.isSet(pPath);
+/*     */   }
+/*     */   
+/*     */   public OfflinePlayer getOfflinePlayer(String pPath) {
+/* 147 */     return this.c.getOfflinePlayer(pPath);
+/*     */   }
+/*     */   
+/*     */   public Player getPlayer(String pPath) {
+/* 151 */     return this.c.getOfflinePlayer(pPath).isOnline() ? 
+/* 152 */       (Player)this.c.getOfflinePlayer(pPath) : null;
+/*     */   }
+/*     */   
+/*     */   public OfflinePlayer thisOfflinePlayer() {
+/* 156 */     return this.op;
+/*     */   }
+/*     */   
+/*     */   public Player thisPlayer() {
+/* 160 */     return this.op.isOnline() ? (Player)this.op : null;
+/*     */   }
+/*     */   
+/*     */   public boolean setDefaultMessageColor(int r, int g, int b) {
+/* 164 */     if (r > 255 || r < 0 || g > 255 || g < 0 || b > 255 || b < 0) return false;
+/*     */     
+/* 166 */     this.c.set("Customization.Chat.ChatColor", new ArrayList(Arrays.asList((Object[])new Integer[] { Integer.valueOf(r), Integer.valueOf(g), Integer.valueOf(b) })));
+/* 167 */     return true;
+/*     */   }
+/*     */   
+/*     */   public boolean setDefaultMessageColor(List<Integer> rgb) {
+/* 171 */     if (rgb.size() != 2 || ((Integer)rgb.get(0)).intValue() > 255 || ((Integer)rgb.get(0)).intValue() < 0 || ((Integer)rgb.get(1)).intValue() > 255 || ((Integer)rgb.get(1)).intValue() < 0 || ((Integer)rgb.get(2)).intValue() > 255 || ((Integer)rgb.get(2)).intValue() < 0) {
+/* 172 */       return false;
+/*     */     }
+/* 174 */     this.c.set("Customization.Chat.ChatColor", rgb);
+/* 175 */     return true;
+/*     */   }
+/*     */   
+/*     */   public List<Integer> getDefaultMessageColor() {
+/* 179 */     return this.c.isSet("Customization.Chat.ChatColor") ? this.c.getIntegerList("Customization.Chat.ChatColor") : 
+/* 180 */       Arrays.<Integer>asList(new Integer[] { Integer.valueOf(190), Integer.valueOf(180), Integer.valueOf(185) });
+/*     */   }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*     */   public String getPlayerColor() {
+/* 187 */     return this.c.isSet("Customization.Chat.Color") ? this.c.getString("Customization.Chat.Color") : "§7";
+/*     */   }
+/*     */   
+/*     */   public String getCounterLink() {
+/* 191 */     return this.c.isSet("Customization.Chat.Link.Counter") ? this.c.getString("Customization.Chat.Link.Counter") : "§8";
+/*     */   }
+/*     */   
+/*     */   public String getLink() {
+/* 195 */     return this.c.isSet("Customization.Chat.Link.Default") ? this.c.getString("Customization.Chat.Link.Default") : "§8:";
+/*     */   }
+/*     */   
+/*     */   public List<String> getLinks() {
+/* 199 */     return this.c.isSet("Customization.Chat.Link") ? new ArrayList<>(Arrays.asList(new String[] { getCounterLink(), getLink()
+/* 200 */           })) : new ArrayList<>(Arrays.asList(new String[] { "", "§8:" }));
+/*     */   }
+/*     */   
+/*     */   public boolean hasLogoutLocation() {
+/* 204 */     return this.c.isSet("Statistics.Locations.LogOut");
+/*     */   }
+/*     */   
+/*     */   public Location getLogoutLocation() {
+/* 208 */     return this.c.getLocation("Statistics.Locations.LogOut");
+/*     */   }
+/*     */   
+/*     */   public void setLogoutLocation(Location l) {
+/* 212 */     this.c.set("Statistics.Locations.LogOut", l);
+/*     */   }
+/*     */   
+/*     */   public boolean hasDeathLocation() {
+/* 216 */     return this.c.isSet("Statistics.Locations.Death");
+/*     */   }
+/*     */   
+/*     */   public Location getDeathLocation() {
+/* 220 */     return this.c.getLocation("Statistics.Locations.Death");
+/*     */   }
+/*     */   
+/*     */   public void setDeathLocation(Location l) {
+/* 224 */     this.c.set("Statistics.Locations.Death", l);
+/*     */   }
+/*     */   
+/*     */   public String getLanguageString() {
+/* 228 */     return this.c.getString("Settings.Language");
+/*     */   }
+/*     */   
+/*     */   public File getLanguage() {
+/* 232 */     return Language.getLangFile((getLanguageString() != null) ? getLanguageString() : Language.getServerLang().getName().split(".")[0]);
+/*     */   }
+/*     */   
+/*     */   public boolean setLanguage(File f) {
+/* 236 */     if (Lang.isLangFile(f.getName().split(".yml")[0])) {
+/* 237 */       this.c.set("Settings.Language", f.getName().split("\\.")[0]);
+/* 238 */       return true;
+/*     */     } 
+/* 240 */     return false;
+/*     */   }
+/*     */   
+/*     */   public void updatePlayTime() {
+/* 244 */     setTotalPlayTime(getTotalPlayTime() + getQuitTime() - getJoinTime());
+/* 245 */     setJoinTime(-1L);
+/*     */   }
+/*     */   
+/*     */   public void setTotalPlayTime(long millis) {
+/* 249 */     this.c.set("Mechanics.Time.TotalPlayTime", Long.valueOf(millis));
+/*     */   }
+/*     */   
+/*     */   public long getTotalPlayTime() {
+/* 253 */     return this.c.getLong("Mechanics.Time.TotalPlayTime");
+/*     */   }
+/*     */   
+/*     */   public long getCurrentPlayTIme() {
+/* 257 */     return this.c.getLong("Mechanics.Time.TotalPlayTime") + System.currentTimeMillis() - getJoinTime();
+/*     */   }
+/*     */   
+/*     */   public void setQuitTime(long millis) {
+/* 261 */     this.c.set("Mechanics.Time.QuitTime", Long.valueOf(millis));
+/*     */   }
+/*     */   
+/*     */   public long getQuitTime() {
+/* 265 */     return this.c.getLong("Mechanics.Time.QuitTime");
+/*     */   }
+/*     */   
+/*     */   public void setJoinTime(long millis) {
+/* 269 */     this.c.set("Mechanics.Time.JoinTime", Long.valueOf(millis));
+/*     */   }
+/*     */   
+/*     */   public long getJoinTime() {
+/* 273 */     return this.c.getLong("Mechanics.Time.JoinTime");
+/*     */   }
+/*     */   
+/*     */   public int getPronouns() {
+/* 277 */     return this.c.getInt("Settings.Pronouns", 0);
+/*     */   }
+/*     */   
+/*     */   public void setPronouns(int i) {
+/* 281 */     this.c.set("Settings.Pronouns", Integer.valueOf((i <= 4) ? i : 0));
+/*     */   }
+/*     */   
+/*     */   public float getReadOutVolume() {
+/* 285 */     return (float)this.c.getDouble("Settings.ReadOut.Volume", 1.0D);
+/*     */   }
+/*     */   
+/*     */   public void setReadOutVolume(float volume) {
+/* 289 */     this.c.set("Settings.ReadOut.Volume", Float.valueOf(volume));
+/*     */   }
+/*     */   
+/*     */   public float getReadOutPitch() {
+/* 293 */     return (float)this.c.getDouble("Settings.ReadOut.Pitch", 1.0D);
+/*     */   }
+/*     */   
+/*     */   public void setReadOutPitch(float pitch) {
+/* 297 */     this.c.set("Settings.ReadOut.Pitch", Float.valueOf(pitch));
+/*     */   }
+/*     */   
+/*     */   public boolean getReadOutEnabled() {
+/* 301 */     return this.c.getBoolean("Settings.ReadOut.toggle");
+/*     */   }
+/*     */   
+/*     */   public void setReadOutEnabled(boolean enabled) {
+/* 305 */     this.c.set("Settings.ReadOut.toggle", Boolean.valueOf(enabled));
+/*     */   }
+/*     */   
+/*     */   public void savePCon() {
+/*     */     try {
+/* 310 */       this.c.save(this.f);
+/* 311 */     } catch (IOException e) {
+/* 312 */       Bukkit.getConsoleSender().sendMessage(Language.getMessage(Lang.getServerLang(), "info") + Language.getMessage(Lang.getServerLang(), "info"));
+/*     */     } 
+/*     */   }
+/*     */ 
+/*     */   
+/*     */   public void savePConErrorFree() {
+/*     */     try {
+/* 319 */       this.c.save(this.f);
+/* 320 */     } catch (IOException iOException) {}
+/*     */   }
+/*     */ }
+
+
+/* Location:              H:\Downloads\ItemGenerator-0.1.0.jar!\de\cruelambition\oo\PC.class
+ * Java compiler version: 16 (60.0)
+ * JD-Core Version:       1.1.3
+ */
