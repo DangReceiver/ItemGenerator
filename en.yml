@@ -1,0 +1,87 @@
+
+prefixes:
+  broadcast: "
+  info: "
+  error: "
+  warn: "
+
+fly:
+  flight_updated: "Your target's flight mode was toggled."
+  flight_updated_target: "Your flight mode was toggled."
+
+info:
+  info_version: "version %s"
+  info_author: "author %s"
+  info_ping: "ping: 
+  info_average_ping: "ping: 
+
+pronouns:
+  example: "@pc0 @pc1 @pc2 @pc3 @name"
+
+cm:
+  welcome_back: "back 
+  join_teleport_spawn: "You were teleported to the 
+  login_location_broadcast_warning: "Your original logout location will be broadcast in seconds
+  spawn_location_bossbar: "Login location broadcast timer"
+  login_location_broadcast: "@%s's login location%s, y: %s, z: %s
+  player_first_join: "%s joined us for the first time!"
+  player_join_0: "%s just hopped in
+  player_join_1: "%s is now with us
+  player_join_2: "Hey %s, lookin' good today
+  player_join_3: "%s now accompanies us
+  player_join_4: "%s's taste in music just improved
+  player_join_5: "%s just wanted to take a look at how you've progressed
+  player_join_6: "%s was forced to join
+  player_join_7: "%s's daily dose of minecraft appears to take place here
+  player_join_8: "%s wants to make their day more difficult
+  player_join_9: "%s found out how to fix their router
+  player_join_10: "%smore than that
+  player_join_11: "%s was summoned
+  player_join_12: "%s is now looking for diamonds
+  player_join_13: "Breaking news of the day: %s
+  player_join_14: "The magic worked! %s is now here
+  player_join_15: "Stop cursing, %s appeared
+  player_join_16: "What's that? A %s
+  player_unsuitable_quit: "%s dodged the quitting system
+  player_quit_0: "%s has enough for today
+  player_quit_1: "%s forgot their pizza in the oven
+  player_quit_2: "%s separated from us
+  player_quit_3: "%s lost their mind
+  player_quit_4: "%s ditched us
+  player_quit_5: "%s's internet seems to have collapsed
+  player_quit_6: "%s's crush is more important than us
+  player_quit_7: "%s figured a way to get rich
+  player_quit_8: "%s called it a day
+  player_quit_9: "%s left the stove on
+  player_quit_10: "%s has to pee really bad
+  player_quit_11: "%s was caught by their parental authority
+  player_quit_12: "The day %s left, was the day my heart broke
+  player_quit_13: "%s just made poof
+  player_quit_14: "%s left their trouble behind
+  player_quit_15: "%s figured this is a waste of time
+  player_quit_16: "The last thing we've got left of %s is the idea of them
+  player_rejoin_0: "Am I havin' a Deja Vu? It's %s again! 
+  player_rejoin_1: "And it is... %s... I read that name today already... 
+  player_rejoin_2: "Here we go again, %s. Welcome back 
+  player_rejoin_3: "You must be fooling me! %s, I almost thought we lost you :c 
+
+language:
+  string_not_found: "The string %s could not be determined
+  language_loaded: "The language %s was loaded
+  replacing_lang_file: "The language file %s was replaced by its resource, since it was estimated more up to date
+  creating_lang_resource: "The language file %s was created from the resource
+  invalid_lang_resource: "The provided language resource file %s could not be accessed."
+
+frequent:
+  not_implemented_yet: "You are looking into the future! This feature has not been implemented yet!"
+  arg_invalid: "The provided argument (%s) is invalid
+  argument_specifics: "The argument #%s must be of the type %s
+  argument_range: "The argument #%s should be between %s and %s
+  arg_length_required: "The required argument length for this command is %s
+  arg_length_range: "Valid argument lengths for this command are between %s and %s
+  insufficient_permission: "You do not have the required permission %s to perform this action."
+  usage: "The usage of the command %s is %s"
+  target_invalid: "The specified target is invalid."
+  no_player: "This feature is exclusively available to players
+  change_attribute_target: "The target's attribute was changed from %s to %s successfully."
+  change_attribute: "Your attribute was changed from %s to %s successfully."
