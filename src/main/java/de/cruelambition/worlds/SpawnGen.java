@@ -11,9 +11,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SpawnGen
-  extends ChunkGenerator
-{
+public class SpawnGen extends ChunkGenerator {
   @NotNull
   public ChunkGenerator.ChunkData generateChunkData(@NotNull World world, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkGenerator.BiomeGrid biome) {
 /* 30 */     ChunkGenerator.ChunkData chunkData = createChunkData(world);

@@ -2,6 +2,7 @@ package de.cruelambition.itemgenerator;
 
 import de.cruelambition.cmd.moderation.Fly;
 import de.cruelambition.cmd.user.Info;
+import de.cruelambition.generator.Generator;
 import de.cruelambition.language.Language;
 import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
@@ -40,14 +41,21 @@ public final class ItemGenerator extends JavaPlugin {
 
         ssl = SpawnWorld.getSafeSpawnLocation();
 
-        ((PluginCommand) Objects.<PluginCommand>requireNonNull(getCommand("Fly"))).setExecutor((CommandExecutor) new Fly());
-        ((PluginCommand) Objects.<PluginCommand>requireNonNull(getCommand("Info"))).setExecutor((CommandExecutor) new Info());
+        Objects.requireNonNull(getCommand("Fly")).setExecutor(new Fly());
+        Objects.requireNonNull(getCommand("Info")).setExecutor(new Info());
 
         PluginManager pm = Bukkit.getPluginManager();
-        pm.registerEvents((Listener) new CM(), (Plugin) this);
-        pm.registerEvents((Listener) new Chat(), (Plugin) this);
+        pm.registerEvents(new CM(), this);
+        pm.registerEvents(new Chat(), this);
 
-        VERSION = "0.1.1";
+        Generator g = new Generator();
+        g.syncForbiddenItems();
+        g.removeAllForbiddenItemsFromMaterialList();
+
+        g.checkForForbiddenItemsLoop(15, 60);
+        g.startGeneratorLoop(12, 12);
+
+        VERSION = "0.0.1";
     }
 
 

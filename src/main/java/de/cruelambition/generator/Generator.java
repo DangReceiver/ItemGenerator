@@ -6,75 +6,111 @@ import java.util.List;
 import java.util.Random;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
+import de.cruelambition.language.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 
 public class Generator {
+
     private List<Material> material, forbidden;
+    private BukkitTask generatorLoop, checkLoop;
 
     public void fillList() {
         material.addAll(Arrays.asList(Material.values()));
     }
 
-    public void removeForbiddenItemFromList() {
-
+    public void removeItemFromForbiddenList(Material m) {
+        forbidden.remove(m);
     }
 
-    public void removeForbiddenItemsFromPlayer() {
+    public void removeForbiddenItemFromPlayer(Player p, Material m) {
+        if (!isForbiddenItem(m)) return;
+        for (ItemStack c : p.getInventory().getContents())
+            if (c != null && c.getType() == m) c.setType(Material.AIR);
+    }
 
+    public void removeAllForbiddenItemsFromPlayer(Player p) {
+        for (ItemStack c : p.getInventory().getContents())
+            if (c != null && forbidden.contains(c.getType())) c.setType(Material.AIR);
+    }
+
+    public void removeAllForbiddenItemsFromAllPlayers() {
+        for (Player ap : Bukkit.getOnlinePlayers())
+            for (ItemStack c : ap.getInventory().getContents())
+                if (c != null && forbidden.contains(c.getType())) c.setType(Material.AIR);
     }
 
     public void syncForbiddenItems() {
         FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-        List<String> sl = c.getStringList("Item.List.Forbidden");
         List<Material> newForbidden = new ArrayList<>();
+        List<String> sl = c.getStringList("Item.List.Forbidden");
 
+        for (String s : sl) newForbidden.add(Material.valueOf(s));
+        for (Material m : newForbidden) addItemToForbiddenList(m);
 
-        for (String s : sl) {
-            newForbidden.add(Material.valueOf(s));
+        removeAllForbiddenItemsFromMaterialList();
+    }
 
-        }
-
-        for (Material m : newForbidden) {
-            if (!forbidden.contains(m)) {
-                forbidden.add(m);
-                System.out.println("Item " + m + " added to forbidden items!");
-            }
+    public void addItemToForbiddenList(Material m) {
+        if (!forbidden.contains(m)) {
+            forbidden.add(m);
+            System.out.println(new Lang(null)
+                    .getString("itemgenerator_forbiddenlist_add_item"));
         }
     }
 
-    public boolean isForbiddenItem() {
-        return false;
+    public void removeAllForbiddenItemsFromMaterialList() {
+        for (Material m : material)
+            if (forbidden.contains(m))
+                removeItemFromList(m);
+    }
+
+    public void removeItemFromList(Material m) {
+        material.remove(m);
+    }
+
+    public boolean isForbiddenItem(Material m) {
+        return forbidden.contains(m);
     }
 
     public Material getRandomMaterial() {
-        return Material.AIR;
+        return material.get(new Random().nextInt(material.size() - 1));
     }
 
-    public Material getMaterialFromInt() {
-        return Material.AIR;
+    public Material getMaterialFromInt(int i) {
+        return material.get(i);
     }
 
     public List<Material> getMaterialList() {
         return this.material;
     }
 
-    public void startLoop() {
-        int max = Material.values().length;
+    public void startGeneratorLoop(int startIn, int frequency) {
+        BukkitTask gl = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
+                () -> giveAll(getRandomMaterial()), 20L * startIn, 20L * frequency);
+        this.generatorLoop = gl;
+    }
 
-        Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
+    public void checkForForbiddenItemsLoop(int startIn, int frequency) {
+        BukkitTask cl = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
+                this::removeAllForbiddenItemsFromAllPlayers, 20L * startIn, 20L * frequency);
+        this.checkLoop = cl;
+    }
 
-            int i = new Random().nextInt(max);
-            Material m1 = material.get(i);
+    public void cancelGenerator() {
+        checkLoop.cancel();
+    }
 
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.getInventory().addItem(new ItemStack(m1));
-            }
+    public void cancelCheck() {
+        checkLoop.cancel();
+    }
 
-        }, 20 * 2, 20 * 5);
-
+    public void giveAll(Material m) {
+        for (Player p : Bukkit.getOnlinePlayers())
+            p.getInventory().addItem(new ItemStack(m));
     }
 }
