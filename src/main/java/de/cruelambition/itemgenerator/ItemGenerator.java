@@ -18,6 +18,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -28,6 +29,7 @@ public final class ItemGenerator extends JavaPlugin {
     private static ItemGenerator ig;
     public static String VERSION;
     private static Location ssl;
+    private Generator g;
 
     public void onEnable() {
         ig = this;
@@ -48,20 +50,35 @@ public final class ItemGenerator extends JavaPlugin {
         pm.registerEvents(new CM(), this);
         pm.registerEvents(new Chat(), this);
 
-        Generator g = new Generator();
+        FileConfiguration c = getConfig();
+
+        int csi = getSafeInt(c, "Loops.Check.StartIn", 50, 50),
+                cf = getSafeInt(c, "Loops.Check.Frequency", 60, 60),
+                gsi = getSafeInt(c, "Loops.Generator.StartIn", 12, 12),
+                gf = getSafeInt(c, "Loops.Generator.Frequency", 12, 12);
+
+        g = new Generator();
         g.syncForbiddenItems();
         g.removeAllForbiddenItemsFromMaterialList();
 
-        g.checkForForbiddenItemsLoop(15, 60);
-        g.startGeneratorLoop(12, 12);
+        g.checkForForbiddenItemsLoop(csi, cf);
+        g.startGeneratorLoop(gsi, gf);
 
         VERSION = "0.0.1";
     }
 
+    public int getSafeInt(FileConfiguration c, String path, int setDefault, int toReturn) {
+        if (c.isSet(path)) toReturn = c.getInt(path);
+        else c.set(path, setDefault);
 
-    public void onDisable() {
+        saveConfig();
+        return toReturn;
     }
 
+    public void onDisable() {
+        g.cancelCheck();
+        g.cancelGenerator();
+    }
 
     public static ItemGenerator getItemGenerator() {
         return ig;
