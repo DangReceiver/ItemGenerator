@@ -7,24 +7,19 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
-public class Info
-        implements CommandExecutor {
+public class Info implements CommandExecutor {
     public boolean onCommand(CommandSender sen, Command cmd, String lab, String[] args) {
         Player p;
         Lang l = new Lang(null);
 
         if (sen instanceof Player) {
             p = (Player) sen;
+
         } else {
             sen.sendMessage(Lang.PRE + Lang.PRE);
             return false;
         }
 
-
-        p.sendMessage(Lang.PRE + Lang.PRE);
-
-        p.sendMessage(Lang.PRE + Lang.PRE);
         p.sendMessage(Lang.PRE + Lang.PRE);
 
         int i = 0, ping = 0;

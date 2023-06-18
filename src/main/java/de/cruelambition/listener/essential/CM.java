@@ -33,26 +33,20 @@ public class CM implements Listener {
 
         e.setJoinMessage(null);
         if (!p.hasPlayedBefore()) {
-            Lang.broadcastArg("player_first_join", new String[]{p.getName()});
+            Lang.broadcastArg("player_first_join", p.getName());
             p.teleport(SpawnWorld.getSafeSpawnLocation());
 
         } else if (pc.getJoinTime() - pc.getQuitTime() <= 20000L)
             Lang.broadcastArg("player_rejoin_" + (new Random())
-                    .nextInt(4), new String[]{p.getName()});
+                    .nextInt(4), p.getName());
         else
-            Lang.broadcastArg("player_join_" + (new Random()).nextInt(17), new String[]{p.getName()});
+            Lang.broadcastArg("player_join_" + (new Random()).nextInt(17), p.getName());
 
         p.setGameMode(GameMode.ADVENTURE);
-        p.sendTitle(Lang.PRE, String.format(Lang.getMessage(lf, "welcome_back"), new Object[]{p.getName()}), 30, 50, 50);
+        p.sendTitle(Lang.PRE, String.format(Lang.getMessage(lf, "welcome_back"), p.getName()), 30, 50, 50);
     }
 
     @EventHandler
     public void handle(PlayerQuitEvent e) {
     }
 }
-
-
-/* Location:              H:\Downloads\ItemGenerator-0.1.0.jar!\de\cruelambition\listener\essential\CM.class
- * Java compiler version: 16 (60.0)
- * JD-Core Version:       1.1.3
- */

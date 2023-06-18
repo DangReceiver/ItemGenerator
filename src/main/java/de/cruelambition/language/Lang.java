@@ -11,31 +11,31 @@ public class Lang extends Language {
     public static String PRE = "§9ItemGenerator";
 
     private File lf;
-
     private Player p;
+
     private String last;
     private final Language lang;
 
     public Lang(Player player) {
-        this.lang = new Language();
-        this.p = player;
-        this.lf = this.lang.getLang(this.p.isOnline() ? this.p : null);
+        lang = new Language();
+        p = player;
+        lf = lang.getLang(p.isOnline() ? p : null);
     }
 
     public void setPlayerLanguage(File pLang) {
-        if (this.p != null) this.lang.setPlayerLang(this.p, pLang);
+        if (p != null) lang.setPlayerLang(p, pLang);
     }
 
     public void setPlayer(Player player) {
-        this.lf = this.lang.getLang(this.p = player);
+        lf = lang.getLang((p = player));
     }
 
     public String getString(String key) {
-        return Language.getMessage(this.lf, this.last = key);
+        return Language.getMessage(lf, (last = key));
     }
 
     public String replaceString(String key, String toReplace, String... replacements) {
-        String temp = Language.getMessage(this.lf, this.last = key);
+        String temp = Language.getMessage(lf, (last = key));
 
         for (String s : replacements) {
             temp = temp.replaceAll(toReplace, s);
@@ -51,7 +51,7 @@ public class Lang extends Language {
     }
 
     public String formatString(String key, String... replacements) {
-        return String.format(Language.getMessage(this.lf, this.last = key), (Object[]) replacements);
+        return String.format(Language.getMessage(lf, last = key), (Object[]) replacements);
     }
 
 
@@ -60,7 +60,7 @@ public class Lang extends Language {
     }
 
     public String getLast() {
-        return this.last;
+        return last;
     }
 
 

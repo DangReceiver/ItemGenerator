@@ -1,17 +1,14 @@
 name: ItemGenerator
 main: de.cruelambition.itemgenerator.ItemGenerator
-version: '0.1.0'
-api-version: 1.19
-authors: [ CruelAmbition ]
-description: okay
+version: '0.0.1'
+api-version: '1.20'
+author: CruelAmbition
+description: oki doke
 
 commands:
-  Fly:
-    description: toggle flight mode - no gamemode change required!
+  fly:
+    description: toggle flight mode. No game mode change required!
     aliases:
       - Flight
-    usage: /Fly <Player>
-    permission: ItemGenerator.Fly.Self
-
-  Info:
-    description: Get basic Plugin / User Info
+  info:
+    description: Get basic plugin and user Info

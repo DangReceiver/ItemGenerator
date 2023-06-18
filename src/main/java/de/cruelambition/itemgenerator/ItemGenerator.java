@@ -11,16 +11,11 @@ import de.cruelambition.worlds.SpawnWorld;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Properties;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -43,8 +38,8 @@ public final class ItemGenerator extends JavaPlugin {
 
         ssl = SpawnWorld.getSafeSpawnLocation();
 
-        Objects.requireNonNull(getCommand("Fly")).setExecutor(new Fly());
-        Objects.requireNonNull(getCommand("Info")).setExecutor(new Info());
+        Objects.requireNonNull(getCommand("fly")).setExecutor(new Fly());
+        Objects.requireNonNull(getCommand("info")).setExecutor(new Info());
 
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new CM(), this);
@@ -58,6 +53,7 @@ public final class ItemGenerator extends JavaPlugin {
                 gf = getSafeInt(c, "Loops.Generator.Frequency", 12, 12);
 
         g = new Generator();
+        g.fillList();
         g.syncForbiddenItems();
         g.removeAllForbiddenItemsFromMaterialList();
 
