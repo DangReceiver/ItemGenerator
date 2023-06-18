@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -28,12 +29,12 @@ public class PC {
 
 	public PC(OfflinePlayer pOp) {
 		/*  29 */
-		path = "ItemGenerator/player/%s.yaml";
+		path = "ItemGenerator/players/%s.yaml";
 		/*  30 */
 		op = pOp;
 
 		/*  32 */
-		f = new File("ItemGenerator/player/" + op.getUniqueId() + ".yaml");
+		f = new File("ItemGenerator/players/" + op.getUniqueId() + ".yaml");
 		/*  33 */
 		new YamlConfiguration();
 		/*  34 */
@@ -83,7 +84,7 @@ public class PC {
 			/*  68 */ catch (IOException ignore) {
 
 				/*  70 */
-				if (!createFolder(path))
+				if (!createFolder(op.getUniqueId()))
 					try {
 						/*  72 */
 						tf.createNewFile();
@@ -98,35 +99,23 @@ public class PC {
 	}
 
 
-	public static boolean createFolder(String path) {
-		/*  83 */
-		if (path == null) path = "plugins/ItemGenerator/player";
-		/*  84 */
+	public static boolean createFolder(UUID uuid) {
+		String path = "plugins/ItemGenerator/players/" + uuid.toString() + ".yml";
 		File f1 = new File(path);
 
-		/*  86 */
-		if (f1.exists()) {
-			/*  87 */
-			System.out.println("The folder already exists.");
-			/*  88 */
+		if (f1.exists())
 			return false;
-		}
 
-		/*  91 */
 		if (!f1.mkdir()) {
-			/*  92 */
 			System.out.println("The folder could not be created.");
-			/*  93 */
 			return false;
 		}
 
-		/*  96 */
 		return true;
 	}
 
 
 	public void set(String pPath, Object pInput) {
-		/* 103 */
 		c.set(pPath, pInput);
 	}
 
@@ -283,17 +272,19 @@ public class PC {
 
 	public String getLanguageString() {
 		/* 228 */
-		return c.getString("Settings.Language");
+		return c.isSet("Settings.Language") ? c.getString("Settings.Language") :
+				Language.getServerLang().getName().split("\\.yml")[0];
 	}
 
 	public File getLanguage() {
 		/* 232 */
-		return Language.getLangFile((getLanguageString() != null) ? getLanguageString() : Language.getServerLang().getName().split(".")[0]);
+		return Language.getLangFile((getLanguageString() != null) ?
+				getLanguageString() : Language.getServerLang().getName().split("\\.")[0]);
 	}
 
 	public boolean setLanguage(File f) {
 		/* 236 */
-		if (Lang.isLangFile(f.getName().split(".yml")[0])) {
+		if (Lang.isLangFile(f.getName().split("\\.")[0])) {
 			/* 237 */
 			c.set("Settings.Language", f.getName().split("\\.")[0]);
 			/* 238 */

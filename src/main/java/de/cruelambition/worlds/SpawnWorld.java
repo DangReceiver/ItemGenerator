@@ -26,7 +26,8 @@ public class SpawnWorld
     extends ChunkGenerator
   {
     @NotNull
-    public ChunkGenerator.ChunkData generateChunkData(@NotNull World world, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkGenerator.BiomeGrid biome) {
+    public ChunkGenerator.ChunkData generateChunkData(@NotNull World world, @NotNull Random random,
+                                                      int chunkX, int chunkZ, @NotNull ChunkGenerator.BiomeGrid biome) {
 /*  30 */       ChunkGenerator.ChunkData chunkData = createChunkData(world);
 /*  31 */       for (int x = 0; x < 24; x++) {
 /*  32 */         for (int z = 0; z < 24; z++)
@@ -68,13 +69,13 @@ public class SpawnWorld
   
   public static Location getSafeSpawnLocation() {
 /*  70 */     FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-/*  71 */     Location spawnLoc = c.getLocation("Locations.Spawn");
+/*  71 */     Location spawnLoc = c.getLocation("Locations.Spawn.Spawn");
     
 /*  73 */     if (spawnLoc == null) {
-/*  74 */       spawnLoc = new Location(Bukkit.getWorld("world"), 0.5D, 64.02D, 0.5D);
+/*  74 */       spawnLoc = new Location(Bukkit.getWorld("world"), 0.5D, 64.02, 0.5D);
       
-/*  76 */       c.set("Locations.Spawn", spawnLoc);
-/*  77 */       c.set("Spawn.ButtonLocation", spawnLoc);
+/*  76 */       c.set("Locations.Spawn.Spawn", spawnLoc);
+/*  77 */       c.set("Locations.Spawn.ButtonLocation", spawnLoc);
 /*  78 */       ItemGenerator.getItemGenerator().saveConfig();
     } 
     
@@ -87,12 +88,12 @@ public class SpawnWorld
 /*  87 */     boolean b = true;
 /*  88 */     if (!SpawnGen.checkExists()) b = false;
     
-/*  90 */     Location c = ItemGenerator.getItemGenerator().getConfig().getLocation("Locations.Spawn");
+/*  90 */     Location c = ItemGenerator.getItemGenerator().getConfig().getLocation("Locations.Spawn.Spawn");
 /*  91 */     ConsoleCommandSender cs = Bukkit.getConsoleSender();
     
 /*  93 */     if (c == null || c.getWorld() == null) {
-/*  94 */       Location sp = new Location(Bukkit.getWorld("world"), 0.5D, 64.02D, 0.5D);
-/*  95 */       ItemGenerator.getItemGenerator().getConfig().set("Locations.Spawn", sp);
+/*  94 */       Location sp = new Location(Bukkit.getWorld("world"), 0.5D, 64.02, 0.5D);
+/*  95 */       ItemGenerator.getItemGenerator().getConfig().set("Locations.Spawn.Spawn", sp);
 /*  96 */       ItemGenerator.getItemGenerator().saveConfig();
 /*  97 */       c = sp.clone();
     } 
@@ -101,7 +102,8 @@ public class SpawnWorld
 /* 101 */       b = false;
       
 /* 103 */       c.getBlock().setType(Material.BEDROCK);
-/* 104 */       Bukkit.getScheduler().runTaskLater((Plugin)ItemGenerator.getItemGenerator(), () -> cs.sendMessage(Lang.PRE + Lang.PRE), 1L);
+/* 104 */       Bukkit.getScheduler().runTaskLater((Plugin)ItemGenerator.getItemGenerator(), ()
+              -> cs.sendMessage(Lang.PRE + Lang.PRE), 1L);
 
       
 /* 107 */       c.add(0.0D, 1.0D, 0.0D);
@@ -112,7 +114,8 @@ public class SpawnWorld
 /* 112 */       b = false;
       
 /* 114 */       c.getWorld().setGameRule(GameRule.FALL_DAMAGE, Boolean.valueOf(false));
-/* 115 */       Bukkit.getScheduler().runTaskLater((Plugin)ItemGenerator.getItemGenerator(), () -> cs.sendMessage(Lang.PRE + Lang.PRE), 1L);
+/* 115 */       Bukkit.getScheduler().runTaskLater((Plugin)ItemGenerator.getItemGenerator(),
+              () -> cs.sendMessage(Lang.PRE + Lang.PRE), 1L);
     } 
 
 
@@ -124,9 +127,3 @@ public class SpawnWorld
 /* 124 */     return b;
   }
 }
-
-
-/* Location:              H:\Downloads\ItemGenerator-0.1.0.jar!\de\cruelambition\worlds\SpawnWorld.class
- * Java compiler version: 16 (60.0)
- * JD-Core Version:       1.1.3
- */
