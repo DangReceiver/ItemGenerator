@@ -38,6 +38,10 @@ public class Lang extends Language {
 		Language.getLangFile(temp.getName());
 	}
 
+	public File getLanguage() {
+		return lf;
+	}
+
 	public String replaceString(String key, String toReplace, String... replacements) {
 		String temp = Language.getMessage(lf, (last = key));
 

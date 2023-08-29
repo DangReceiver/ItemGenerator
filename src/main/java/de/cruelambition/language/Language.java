@@ -27,9 +27,13 @@ public class Language {
 	private final String lp;
 	private static final Map<File, Map<String, String>> messages = new HashMap<>();
 
+	public static List<String> missingKeys;
+
 	public Language() {
 		df = ItemGenerator.getItemGenerator().getDataFolder();
 		lp = df + "/languages";
+
+		missingKeys = new ArrayList<>();
 
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
 		sLang = getLangFile(c.isSet("Lang") ? c.getString("Lang") : setDefaultLang());
@@ -54,7 +58,10 @@ public class Language {
 	}
 
 	public static boolean isValid(File lang, String key) {
-		return (messages.get(lang) != null && ((Map) messages.get(lang)).get(key) != null);
+		boolean b = (messages.get(lang) != null && ((Map) messages.get(lang)).get(key) != null);
+		if (!b & !missingKeys.contains(key)) missingKeys.add(key);
+
+		return b;
 	}
 
 
@@ -198,6 +205,17 @@ public class Language {
 						key) : invalidString(key)));
 	}
 
+	@Deprecated
+	public static String getMessageUnverified(File lang, String key) {
+		return isValidUnlisted(lang, key) ? (messages.get(lang)).get(key) : (isValidUnlisted(getServerLang(), key) ?
+				(messages.get(getServerLang())).get(key) : (isValidUnlisted(lang, "string_not_found") ?
+				String.format((messages.get(lang)).get("string_not_found"),
+						key) : invalidString(key)));
+	}
+
+	public static boolean isValidUnlisted(File lang, String key) {
+		return (messages.get(lang) != null && ((Map) messages.get(lang)).get(key) != null);
+	}
 
 	public static void loadCustomLanguages(File langF) {
 		if (langF == null || langF.listFiles() == null || (langF.listFiles()).length == 0) {

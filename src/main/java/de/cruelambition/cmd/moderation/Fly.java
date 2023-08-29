@@ -16,14 +16,11 @@ public class Fly implements CommandExecutor {
 			p = (Player) sen;
 
 		} else {
-			sen.sendMessage(Lang.PRE + Lang.PRE);
+			sen.sendMessage(Lang.PRE + Lang.getMessage(null, "not_a_player"));
 			return false;
 		}
 
-		if (p != null) {
-			Bukkit.broadcastMessage("Not null");
-			l.setPlayer(p);
-		}
+		if (p != null) l.setPlayer(p);
 
 		if (args.length == 0) {
 			p.setFlying(!p.isFlying());

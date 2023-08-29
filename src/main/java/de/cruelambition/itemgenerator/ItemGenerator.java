@@ -1,5 +1,6 @@
 package de.cruelambition.itemgenerator;
 
+import de.cruelambition.cmd.moderation.CheckMessage;
 import de.cruelambition.cmd.moderation.Fly;
 import de.cruelambition.cmd.user.Info;
 import de.cruelambition.generator.Generator;
@@ -48,6 +49,7 @@ public final class ItemGenerator extends JavaPlugin {
 
 		Objects.requireNonNull(getCommand("fly")).setExecutor(new Fly());
 		Objects.requireNonNull(getCommand("info")).setExecutor(new Info());
+		Objects.requireNonNull(getCommand("checkmessage")).setExecutor(new CheckMessage());
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new CM(), this);
