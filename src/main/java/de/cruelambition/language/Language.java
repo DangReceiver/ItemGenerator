@@ -18,14 +18,13 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 public class Language {
-	private static File sLang;
-	private final Map<Player, File> settings = new HashMap<>();
-	private static File df;
-	private final String lp;
-	private static final Map<File, Map<String, String>> messages = new HashMap<>();
+    private static File sLang;
+    private final Map<Player, File> settings = new HashMap<>();
+    private static File df;
+    private final String lp;
+    private static final Map<File, Map<String, String>> messages = new HashMap<>();
 
 	public static List<String> missingKeys;
 
@@ -39,142 +38,161 @@ public class Language {
 		sLang = getLangFile(c.isSet("Lang") ? c.getString("Lang") : setDefaultLang());
 	}
 
-	public String setDefaultLang() {
-		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+    public String setDefaultLang() {
+        FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
 
-		c.set("Lang", "en");
-		ItemGenerator.getItemGenerator().saveConfig();
+        c.set("Lang", "en");
+        ItemGenerator.getItemGenerator().saveConfig();
 
-		return c.getString("Lang", "en");
-	}
+        return c.getString("Lang", "en");
+    }
 
-	public void setSLang(File serverLang) {
-		sLang = serverLang;
-		setServerLanguage(serverLang);
-	}
+    public void setSLang(File serverLang) {
+        sLang = serverLang;
+        setServerLanguage(serverLang);
+    }
 
-	public File getDf() {
-		return df;
-	}
+    public File getDf() {
+        return df;
+    }
 
-
-	public File getLang(Player p) {
-		return (!settings.isEmpty() && settings.get(p) != null) ? settings.get(p) : getServerLang();
-	}
-
-	public static File getServerLang() {
-		return sLang;
-	}
+    public static boolean isValid(File lang, String key) {
+        return (messages.get(lang) != null && ((Map) messages.get(lang)).get(key) != null);
+    }
 
 
-	public List<String> getLanguages() {
-		List<String> langFiles = new ArrayList<>();
-		File folder = new File(df + "/languages");
+    public static String invalidString(String key) {
+        try {
+            String s = (messages != null && messages.get(getServerLang()) != null) ? (String) ((Map)
+                    messages.get(getServerLang())).get(key) : "§oString not loaded yet!";
 
-		if (folder.listFiles() == null) throw new RuntimeException("§cLanguage folder is empty!!");
-		for (File file : folder.listFiles()) langFiles.add(file.getName());
+            s = s.split("a")[1];
+        } catch (InvalidStringException ex) {
+            ex.printStackTrace();
+        }
 
-		return langFiles;
-	}
+        return (messages != null && messages.get(getServerLang()) != null) ?
+                String.format((String) ((Map) messages.get(getServerLang())).get("string_not_found"),
+                        key) : "§oString not loaded yet!";
+    }
 
-	public void setServerLanguage(File language) {
-		ItemGenerator itemGenerator = ItemGenerator.getItemGenerator();
-		FileConfiguration c = itemGenerator.getConfig();
-		List<String> langFiles = getLanguages();
+    public File getLang(Player p) {
+        return (!settings.isEmpty() && settings.get(p) != null) ? settings.get(p) : getServerLang();
+    }
 
-		if (language == null) {
-			if (!c.isSet("Language")) {
-				c.set("Language", "en");
-				itemGenerator.saveConfig();
-			}
+    public static File getServerLang() {
+        return sLang;
+    }
 
-			if (!langFiles.contains(c.getString("Language") + ".yml"))
-				return;
-			sLang = new File(df + "/languages", c.getString("Language") + ".yml");
-		} else if (langFiles.contains(language.getName()))
-			sLang = language;
-	}
 
-	public void setPlayerLang(Player p, File file) {
-		if (p != null) {
-			removePlayer(p);
-			settings.put(p, getLangFile("en"));
+    public List<String> getLanguages() {
+        List<String> langFiles = new ArrayList<>();
+        File folder = new File(df + "/languages");
 
-			if (!file.exists()) return;
-			settings.put(p, file);
-		} else {
+        if (folder.listFiles() == null) throw new RuntimeException("§cLanguage folder is empty!!");
+        for (File file : folder.listFiles()) langFiles.add(file.getName());
 
-		}
-	}
+        return langFiles;
+    }
 
-	public static boolean isLangFile(String lang) {
-		return (new File(df + "/languages", lang + ".yml")).exists();
-	}
+    public void setServerLanguage(File language) {
+        ItemGenerator itemGenerator = ItemGenerator.getItemGenerator();
+        FileConfiguration c = itemGenerator.getConfig();
+        List<String> langFiles = getLanguages();
 
-	public static File getLangFile(String lang) {
-		File file = new File(df + "languages", lang + ".yml");
-		if (file == null) throw new RuntimeException("The resulting lang file does not exist!");
-		return file;
-	}
+        if (language == null) {
+            if (!c.isSet("Language")) {
+                c.set("Language", "en");
+                itemGenerator.saveConfig();
+            }
 
-	public void removePlayer(Player p) {
-		settings.remove(p);
-	}
+            if (!langFiles.contains(c.getString("Language") + ".yml"))
+                return;
+            sLang = new File(df + "/languages", c.getString("Language") + ".yml");
+        } else if (langFiles.contains(language.getName()))
+            sLang = language;
+    }
 
-	public static File getLangFolder() {
-		return new File(df + "/languages");
-	}
+    public void setPlayerLang(Player p, File file) {
+        if (p != null) {
+            removePlayer(p);
+            settings.put(p, getLangFile("en"));
 
-	public static void loadResources() {
-		ItemGenerator itemGenerator = ItemGenerator.getItemGenerator();
-		List<File> resources = new ArrayList<>(List.of(getLangFile("en.yml")));
+            if (!file.exists()) return;
+            settings.put(p, file);
+        } else {
 
-		for (File f : resources) {
-			Path target = f.toPath();
-			String s = f.getName();
+        }
+    }
 
-			InputStream in = itemGenerator.getResource(s);
-			ConsoleCommandSender cs = Bukkit.getConsoleSender();
+    public static boolean isLangFile(String lang) {
+        return (new File(df + "/languages", lang + ".yml")).exists();
+    }
 
-			if (in == null) {
-				Bukkit.getScheduler().runTaskLaterAsynchronously(itemGenerator,
-						() -> cs.sendMessage(getMessage(getServerLang(), "error")
-								+ getMessage(getServerLang(), "error")), 0L);
+    public static File getLangFile(String lang) {
+        File file = new File(df + "languages", lang + ".yml");
+        if (file == null) throw new RuntimeException("The resulting lang file does not exist!");
+        return file;
+    }
 
-				return;
-			}
+    public void removePlayer(Player p) {
+        settings.remove(p);
+    }
 
-			try {
-				Files.copy(in, getCache().toPath());
-				File tempFile = new File(String.valueOf(getCache().toPath()) + getCache().toPath());
+    public static File getLangFolder() {
+        return new File(df + "/languages");
+    }
 
-				if (tempFile.length() <= getLangFile(s).length()) {
-					tempFile.delete();
+    public static void loadResources() {
+        ItemGenerator itemGenerator = ItemGenerator.getItemGenerator();
+        List<File> resources = new ArrayList<>(List.of(getLangFile("en.yml")));
 
-					continue;
-				}
+        for (File f : resources) {
+            Path target = f.toPath();
+            String s = f.getName();
 
-				Files.copy(in, target);
-				Bukkit.getScheduler().runTaskLaterAsynchronously(itemGenerator,
-						() -> cs.sendMessage(getMessage(getServerLang(), "error")
-								+ getMessage(getServerLang(), "error")), 0L);
+            InputStream in = itemGenerator.getResource(s);
+            ConsoleCommandSender cs = Bukkit.getConsoleSender();
 
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
+            if (in == null) {
+                Bukkit.getScheduler().runTaskLaterAsynchronously(itemGenerator,
+                        () -> cs.sendMessage(getMessage(getServerLang(), "error")
+                                + getMessage(getServerLang(), "error")), 0L);
 
-	public static File getCache() {
-		return new File(df + "/cache");
-	}
+                return;
+            }
 
-	public void loadMessages() {
-		File langF = getLangFolder();
+            try {
+                Files.copy(in, getCache().toPath());
+                File tempFile = new File(String.valueOf(getCache().toPath()) + getCache().toPath());
 
-		if (getServerLang() == null) setSLang(new File(langF, "en.yml"));
-		loadCustomLanguages(langF);
-	}
+                if (tempFile.length() <= getLangFile(s).length()) {
+                    tempFile.delete();
+
+                    continue;
+                }
+
+                Files.copy(in, target);
+                Bukkit.getScheduler().runTaskLaterAsynchronously(itemGenerator,
+                        () -> cs.sendMessage(getMessage(getServerLang(), "error")
+                                + getMessage(getServerLang(), "error")), 0L);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public static File getCache() {
+        return new File(df + "/cache");
+    }
+
+    public void loadMessages() {
+        File langF = getLangFolder();
+
+        if (getServerLang() == null) setSLang(new File(langF, "en.yml"));
+        loadCustomLanguages(langF);
+    }
 
 	public static String getMessage(File lang, String key) {
 		if (lang == null) lang = getServerLang();
@@ -221,54 +239,56 @@ public class Language {
 			Bukkit.getConsoleSender().sendMessage("Resources loaded");
 			loadCustomLanguages(getLangFile("en"));
 
-			return;
-		}
+        for (File file : langF.listFiles()) {
+            Map<String, String> lm = new HashMap<>();
+            FileConfiguration lang = YamlConfiguration.loadConfiguration(file);
 
-		for (File file : langF.listFiles()) {
-			Map<String, String> lm = new HashMap<>();
-			YamlConfiguration ymlc = YamlConfiguration.loadConfiguration(file);
+            ConsoleCommandSender cs = Bukkit.getConsoleSender();
+            for (String key : lang.getKeys(false)) {
+                for (String messName : lang.getConfigurationSection(key).getKeys(false)) {
 
-			ConsoleCommandSender cs = Bukkit.getConsoleSender();
-			for (String key : ymlc.getKeys(false)) {
-				for (String messName : ymlc.getConfigurationSection(key).getKeys(false)) {
+                    cs.sendMessage(key + "." + messName);
+                    if (lang.getString(key + "." + messName) != null) {
 
 					cs.sendMessage(key + "§8/§7" + messName + " §8» §aWas loaded");
 					if (ymlc.getString(key + "." + messName) != null) {
 
-						String message = ChatColor.translateAlternateColorCodes('§',
-								ymlc.getString(key + "." + messName));
-						lm.put(messName, message);
-					}
-				}
-			}
+            messages.put(file, lm);
 
-			messages.put(file, lm);
-		}
-	}
+            if (!file.exists()) {
+                Bukkit.getConsoleSender().sendMessage(String.format(Lang.PRE +
+                        "Language %s could not be loaded", file.getName()));
+                continue;
+            }
 
-	public static void printAllMessages(File file) {
-		YamlConfiguration ymlc = YamlConfiguration.loadConfiguration(file);
-		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+            Bukkit.getConsoleSender().sendMessage(Lang.PRE +
+                    String.format(getMessage(file, "language_loaded"), file.getName()));
+        }
+    }
 
-		Map<String, String> lm = new HashMap<>();
-		Lang l = new Lang(null);
-		l.setLocalLanguage(file);
+    public static void printAllMessages(File file) {
+        YamlConfiguration ymlc = YamlConfiguration.loadConfiguration(file);
 
-		for (String key : ymlc.getKeys(false)) {
-			for (String messName : ymlc.getConfigurationSection(key).getKeys(false)) {
+        Map<String, String> lm = new HashMap<>();
+        Lang l = new Lang(null);
+        l.setLocalLanguage(file);
 
-				if (ymlc.getString(key + "." + messName) != null) {
+        for (String key : ymlc.getKeys(false)) {
+            for (String messName : ymlc.getConfigurationSection(key).getKeys(false)) {
 
-					String message = ChatColor.translateAlternateColorCodes('§',
-							ymlc.getString(key + "." + messName));
-					lm.put(messName, message);
-				}
+                if (ymlc.getString(key + "." + messName) != null) {
 
-				cs.sendMessage(key + "/" + messName);
+                    String message = ChatColor.translateAlternateColorCodes('§',
+                            ymlc.getString(key + "." + messName));
+                    lm.put(messName, message);
+                }
 
-				for (Player ap : Bukkit.getOnlinePlayers())
-					ap.sendMessage(key + "." + messName + ": " + l.getString(key + "." + messName));
-			}
-		}
-	}
+                System.out.println(key + "." + messName);
+
+
+                for (Player ap : Bukkit.getOnlinePlayers())
+                    System.out.println(key + "." + messName + ": " + l.getString(key + "." + messName));
+            }
+        }
+    }
 }
