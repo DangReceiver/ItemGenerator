@@ -1,4 +1,3 @@
-
 prefixes:
   broadcast: "§3Broadcast §8‖ §7"
   info: "§9Info §8‖ §7"
@@ -10,6 +9,7 @@ fly:
   flight_updated_target: "Your flight mode was toggled."
 
 info:
+  info: "Test 1234"
   info_version: "§7Plugin version %s"
   info_author: "§7Plugin author %s"
   info_ping: "§7Your ping: §%c%s"
@@ -74,6 +74,7 @@ language:
 
 frequent:
   not_implemented_yet: "You are looking into the future! This feature has not been implemented yet!"
+  not_a_player: "This feature is exclusively available to players§8."
   arg_invalid: "The provided argument (%s) is invalid§8."
   argument_specifics: "The argument #%s must be of the type %s§8."
   argument_range: "The argument #%s should be between %s and %s§8."

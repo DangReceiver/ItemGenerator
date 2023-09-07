@@ -8,7 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class Lang extends Language {
-	public static String PRE = "§9ItemGenerator";
+	public static String PRE = colorFromRGB(66, 20, 200) + "ItemGenerator§8: "
+			+ colorFromRGB(150, 150, 150);
 
 	private File lf;
 	private Player p;

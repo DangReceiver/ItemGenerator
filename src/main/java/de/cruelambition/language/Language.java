@@ -57,28 +57,6 @@ public class Language {
 		return df;
 	}
 
-	public static boolean isValid(File lang, String key) {
-		boolean b = (messages.get(lang) != null && ((Map) messages.get(lang)).get(key) != null);
-		if (!b & !missingKeys.contains(key)) missingKeys.add(key);
-
-		return b;
-	}
-
-
-	public static String invalidString(String key) {
-		try {
-			String s = (messages != null && messages.get(getServerLang()) != null) ? (String) ((Map)
-					messages.get(getServerLang())).get(key) : "§oString not loaded yet!";
-
-			s = s.split("a")[1];
-		} catch (InvalidStringException ex) {
-			ex.printStackTrace();
-		}
-
-		return (messages != null && messages.get(getServerLang()) != null) ?
-				String.format((String) ((Map) messages.get(getServerLang())).get("string_not_found"),
-						key) : "§oString not loaded yet!";
-	}
 
 	public File getLang(Player p) {
 		return (!settings.isEmpty() && settings.get(p) != null) ? settings.get(p) : getServerLang();
@@ -199,27 +177,49 @@ public class Language {
 	}
 
 	public static String getMessage(File lang, String key) {
+		if (lang == null) lang = getServerLang();
 		return isValid(lang, key) ? (messages.get(lang)).get(key) : (isValid(getServerLang(), key) ?
 				(messages.get(getServerLang())).get(key) : (isValid(lang, "string_not_found") ?
-				String.format((messages.get(lang)).get("string_not_found"),
-						key) : invalidString(key)));
+				String.format((messages.get(lang)).get("string_not_found"), key) : invalidString(key, lang)));
 	}
 
 	@Deprecated
 	public static String getMessageUnverified(File lang, String key) {
 		return isValidUnlisted(lang, key) ? (messages.get(lang)).get(key) : (isValidUnlisted(getServerLang(), key) ?
 				(messages.get(getServerLang())).get(key) : (isValidUnlisted(lang, "string_not_found") ?
-				String.format((messages.get(lang)).get("string_not_found"),
-						key) : invalidString(key)));
+				String.format((messages.get(lang)).get("string_not_found"), key) : invalidString(key, lang)));
+	}
+
+	public static boolean isValid(File lang, String key) {
+		boolean b = (messages.get(lang) != null && ((Map) messages.get(lang)).get(key) != null);
+		if (!b & !missingKeys.contains(key)) missingKeys.add(key + ";" + lang.getName().split(".yml")[0]);
+
+		return b;
 	}
 
 	public static boolean isValidUnlisted(File lang, String key) {
 		return (messages.get(lang) != null && ((Map) messages.get(lang)).get(key) != null);
 	}
 
+	public static String invalidString(String key, File lang) {
+		String s = "";
+		try {
+			return s = (messages != null && messages.get(getServerLang()) != null) ? (String) ((Map)
+					messages.get(getServerLang())).get(key) : String.format(
+					"§7§oString '%s' in language file '%s' not loaded yet!§7", key,
+					lang.getName().split(".yml")[0]);
+
+		} catch (InvalidStringException ex) {
+			ex.printStackTrace();
+		}
+		return s;
+	}
+
 	public static void loadCustomLanguages(File langF) {
 		if (langF == null || langF.listFiles() == null || (langF.listFiles()).length == 0) {
 			loadResources();
+			Bukkit.getConsoleSender().sendMessage("Resources loaded");
+			loadCustomLanguages(getLangFile("en"));
 
 			return;
 		}
@@ -232,7 +232,7 @@ public class Language {
 			for (String key : ymlc.getKeys(false)) {
 				for (String messName : ymlc.getConfigurationSection(key).getKeys(false)) {
 
-					cs.sendMessage(key + "." + messName);
+					cs.sendMessage(key + "§8/§7" + messName + " §8» §aWas loaded");
 					if (ymlc.getString(key + "." + messName) != null) {
 
 						String message = ChatColor.translateAlternateColorCodes('§',
@@ -264,8 +264,7 @@ public class Language {
 					lm.put(messName, message);
 				}
 
-				cs.sendMessage(key + "." + messName);
-
+				cs.sendMessage(key + "/" + messName);
 
 				for (Player ap : Bukkit.getOnlinePlayers())
 					ap.sendMessage(key + "." + messName + ": " + l.getString(key + "." + messName));

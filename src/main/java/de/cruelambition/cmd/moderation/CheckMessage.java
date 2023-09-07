@@ -25,19 +25,22 @@ public class CheckMessage implements CommandExecutor {
 				return false;
 			}
 
+			sen.sendMessage("Blup");
 
 			if (args[0].equalsIgnoreCase("*")) {
 				int i = 0;
+				sen.sendMessage("Blup1");
 
 				for (String s : Language.missingKeys) {
 					sen.sendMessage(Lang.PRE + String.format(Lang.getMessage(l.getLanguage(),
-							"list_missing_Strings"), s, i));
+							"list_missing_Strings"), s.replaceAll(";", " §8→ §7"), i));
 					i++;
 				}
 
-			} else
+			} else {
+				sen.sendMessage("Blup2");
 				sen.sendMessage(Lang.PRE + Lang.getMessageUnverified(l.getLanguage(), args[0]));
-
+			}
 		}
 		return false;
 	}

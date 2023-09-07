@@ -38,9 +38,11 @@ public final class ItemGenerator extends JavaPlugin {
 		createFolder(getDataFolder() + "/languages");
 		createFolder(getDataFolder() + "/players");
 
-		new Language().loadMessages();
+		Language l = new Language();
+		l.loadMessages();
+		System.out.println(l.getLanguages());
 
-		Language.printAllMessages(Lang.getLangFile("en"));
+//		Language.printAllMessages(Lang.getLangFile("en"));
 
 		World spawn = Bukkit.getWorld("world");
 		if (spawn == null) spawn.save();

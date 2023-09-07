@@ -70,8 +70,10 @@ public class Generator {
 	public void addItemToForbiddenList(Material m) {
 		if (!forbidden.contains(m)) {
 			forbidden.add(m);
-			Bukkit.getConsoleSender().sendMessage(new Lang(null)
-					.getString("itemgenerator_forbiddenlist_add_item"));
+
+			Lang.broadcastArg("itemgenerator_forbiddenlist_add_item", m.toString().toLowerCase());
+			Bukkit.getConsoleSender().sendMessage(String.format(new Lang(null)
+					.getString("itemgenerator_forbiddenlist_add_item"), m.toString().toLowerCase()));
 		}
 	}
 
