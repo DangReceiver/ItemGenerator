@@ -386,14 +386,4 @@ public class PC {
 			Bukkit.getConsoleSender().sendMessage(Language.getMessage(Lang.getServerLang(), "info") + Language.getMessage(Lang.getServerLang(), "info"));
 		}
 	}
-
-
-	public void savePConErrorFree() {
-		try {
-			/* 319 */
-			c.save(f);
-			/* 320 */
-		} catch (IOException iOException) {
-		}
-	}
 }

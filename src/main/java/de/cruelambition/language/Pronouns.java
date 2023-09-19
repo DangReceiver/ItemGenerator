@@ -10,88 +10,127 @@ import javax.annotation.Nullable;
 
 import org.bukkit.entity.Player;
 
-public class Pronouns
-		extends Language {
-	private PC pc;
-	private Player p;
-	private String current;
-	private String last;
-	private Lang l;
-	public static List<String> REPLACEMENTS;
-	public static List<List<String>> PRONOUNS;
+public class Pronouns extends Language {
+    private PC pc;
+    private Player p;
+    private String current;
+    private String last;
+    private Lang l;
+    public static List<String> REPLACEMENTS;
+    public static ArrayList<List<String>> PRONOUNS_EN, PRONOUNS_DE;
 
-	public Pronouns(PC pPc, @Nullable String pCurrent) {
-		pc = pPc;
-		p = pc.thisPlayer();
+    public Pronouns(PC pPc, @Nullable String pCurrent) {
+        pc = pPc;
+        p = pc.thisPlayer();
 
-		current = pCurrent;
-		last = null;
+        current = pCurrent;
+        last = null;
 
-		l = new Lang(p);
-		REPLACEMENTS = new ArrayList<>(Arrays.asList(new String[] {"@pc1 @pc2 @pc3 @name"}));
-	}
+        l = new Lang(p);
+        REPLACEMENTS = new ArrayList<>(Arrays.asList("@pc0", "@pc1", "@pc2", "@pc3", "@pc4", "@name"));
+        PRONOUNS_EN = new ArrayList<>(new ArrayList<>(Arrays.asList(
+                new ArrayList<>(Arrays.asList("they", "them", "their", "theirs", "themselves")),
+                new ArrayList<>(Arrays.asList("she", "her", "her", "hers", "herself")),
+                new ArrayList<>(Arrays.asList("he", "him", "his", "his", "himself")),
+                new ArrayList<>(Arrays.asList("it", "it", "its", "its", "itself")),
+                new ArrayList<>(Arrays.asList("one", "one", "one's", "one's", "oneself")))));
+        PRONOUNS_DE = new ArrayList<>(new ArrayList<>(Arrays.asList(
+                new ArrayList<>(Arrays.asList("dey", "deren", "denen", "dey")),
+                new ArrayList<>(Arrays.asList("sie", "ihr", "ihr", "sie")),
+                new ArrayList<>(Arrays.asList("er", "sein", "ihm", "ihn")),
+                new ArrayList<>(Arrays.asList("es", "sein", "ihm", "es")),
+                new ArrayList<>(Arrays.asList("mensch", "menschs", "mensch", "mensch")))));
+    }
 
-	public String fromKey(String key) {
-		last = current;
-		return Lang.getMessage(l.getLang(p), key);
-	}
+    public String process() {
+        if (!hasPronounsReplacement()) return getCurrent();
+        replace();
+        return getMove();
+    }
 
-	public void setFromKey(String key) {
-		last = current;
-		current = Lang.getMessage(l.getLang(p), key);
-	}
+    public String fromKey(String key) {
+        last = current;
+        current = null;
+        return Lang.getMessage(l.getLang(p), key);
+    }
 
-	public void fromString(String string) {
-		last = current;
-		current = string;
-	}
+    public void setFromKey(String key) {
+        last = current;
+        current = null;
+        current = Lang.getMessage(l.getLang(p), key);
+    }
 
-	public String getCurrent() {
-		return current;
-	}
+    public void fromString(String string) {
+        last = current;
+        current = string;
+    }
 
-	public boolean unset() {
-		return (current == null);
-	}
+    public void move() {
+        last = current;
+        current = null;
+    }
 
-	public boolean hasPronounsReplacement() {
-		if (unset()) return false;
+    public String getMove() {
+        last = current;
+        String cCurrent = current;
+        current = null;
+        return cCurrent;
+    }
 
-		for (String s : REPLACEMENTS)
-			if (current.contains(s)) return true;
-		return false;
-	}
+    public void move(String pCurrent) {
+        last = current;
+        current = pCurrent;
+    }
 
-	public List<String> getCustomPronouns() {
-		PronounsSetup ps = new PronounsSetup(pc, current);
-		return ps.getCustomPronouns();
-	}
+    public String getCurrent() {
+        return current;
+    }
 
-	public List<String> getPronouns() {
-		return (new PronounsSetup(pc, current)).getPronouns();
-	}
+    public boolean unset() {
+        return (current == null);
+    }
 
-	public List<String> getUndefinedPronouns() {
-		PronounsSetup ps = new PronounsSetup(pc, current);
+    public boolean hasPronounsReplacement() {
+        if (unset()) return false;
 
-		if (ps.isCustomPermitted() && ps.hasCustomPronouns())
-			return ps.getCustomPronouns();
+        for (String s : REPLACEMENTS)
+            if (current.contains(s)) return true;
+        return false;
+    }
 
-		return ps.getPronouns();
-	}
+    public List<String> getCustomPronouns() {
+        PronounsSetup ps = new PronounsSetup(pc, current);
+        return ps.getCustomPronouns();
+    }
 
-	public void replace() {
-		if (!hasPronounsReplacement()) return;
+    public List<String> getPronouns() {
+        return (new PronounsSetup(pc, current)).getPronouns();
+    }
 
-		PronounsSetup ps = new PronounsSetup(pc, current);
-		List<String> pronouns = ps.hasCustomPronouns() ? ps.getCustomPronouns() : ps.getPronouns();
+    public List<String> getUndefinedPronouns() {
+        PronounsSetup ps = new PronounsSetup(pc, current);
 
+        if (ps.isCustomPermitted() && ps.hasCustomPronouns())
+            return ps.getCustomPronouns();
 
-		int i = 0;
-		for (String s : REPLACEMENTS) {
+        return ps.getPronouns();
+    }
 
-			if (current.contains(s)) current.replaceAll(s, pronouns.get(i));
-			i++;
-		}
-	}
+    public void replace() {
+        if (!hasPronounsReplacement()) return;
+
+        PronounsSetup ps = new PronounsSetup(pc, current);
+        List<String> pronouns = ps.hasCustomPronouns() ? ps.getCustomPronouns() : ps.getPronouns();
+
+        String be = pronouns.get(0).equalsIgnoreCase("they") ? "are" : "is";
+
+        int i = 0;
+        for (String s : REPLACEMENTS) {
+
+            if (current.contains(s)) current.replaceAll(s, pronouns.get(i));
+            i++;
+        }
+
+        current = current.replaceAll("#be", be);
+    }
 }

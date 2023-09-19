@@ -81,6 +81,7 @@ public class Lang extends Language {
 		Bukkit.getConsoleSender().sendMessage(getMessage(getServerLang(), "info")
 				+ getMessage(getServerLang(), "info"));
 
+		//	PRONOUNS: getMessage(getServerLang(), "info")
 		for (Player ap : Bukkit.getOnlinePlayers())
 			ap.sendMessage(PRE + getMessage((new Lang(ap)).getLang(ap), key));
 	}

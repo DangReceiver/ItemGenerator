@@ -48,5 +48,18 @@ public class CM implements Listener {
 
 	@EventHandler
 	public void handle(PlayerQuitEvent e) {
+		Player p = e.getPlayer();
+		PC pc = new PC(p);
+
+		Lang l = new Lang(p);
+		File lf = pc.getLanguage() != null ? pc.getLanguage() : null;
+		l.setPlayerLanguage(lf);
+
+		pc.setQuitTime(System.currentTimeMillis());
+		pc.updatePlayTime();
+		pc.savePCon();
+
+		e.setQuitMessage(null);
+		Lang.broadcastArg("player_quit_" + (new Random()).nextInt(17), p.getName());
 	}
 }

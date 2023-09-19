@@ -1,8 +1,8 @@
 prefixes:
   broadcast: "§3Broadcast §8‖ §7"
   info: "§9Info §8‖ §7"
-  error: "§cError §8‖ §7"
-  warn: "§6Warn §8‖ §7"
+  error: "§cFehler §8‖ §7"
+  warn: "§6Warnung §8‖ §7"
 
 fly:
   flight_updated: "Your target's flight mode was toggled."
@@ -10,29 +10,29 @@ fly:
 
 info:
   info: "Test 1234"
-  info_version: "§7Plugin version %s"
-  info_author: "§7Plugin author %s"
-  info_ping: "§7Your ping: §%c%s"
-  info_average_ping: "§7Average ping: §%c%s"
+  info_version: "§7Plugin Version %s"
+  info_author: "§7Plugin Author*in %s"
+  info_ping: "§7Dein Ping: §%c%s"
+  info_average_ping: "§7Durchschnittlicher Ping: §%c%s"
 
 pronouns:
-  example: "@pc0 @pc1 @pc2 @pc3 @pc4 @name"
-  example_sentence_0: "This is @name, @pc0 #be well dressed today!"
+  example: "@pc0 @pc1 @pc2 @pc3 @name"
+  example_sentence_0: "Das ist @name, @pc0 #be heute gut gekleidet!"
 
 cm:
-  welcome_back: "§7Welcome back §3%s §c❤"
-  player_first_join: "%s joined us for the first time!"
+  welcome_back: "§7Willkommen zurück §3%s §c❤"
+  player_first_join: "%s ist das erste mal beigetreten!"
   player_join_0: "%s just hopped in§8. ⌈§a»§8⌋"
-  player_join_1: "%s is now with us§8. ⌈§a»§8⌋"
-  player_join_2: "Hey %s, lookin' good today§8! ⌈§a»§8⌋"
-  player_join_3: "%s now accompanies us§8. ⌈§a»§8⌋"
-  player_join_4: "%s's taste in music just improved§8. ⌈§a»§8⌋"
-  player_join_5: "%s just wanted to take a look at how you've progressed§8. ⌈§a»§8⌋"
-  player_join_6: "%s was forced to join§8. ⌈§a»§8⌋"
-  player_join_7: "%s's daily dose of minecraft appears to take place here§8. ⌈§a»§8⌋"
-  player_join_8: "%s wants to make their day more difficult§8. ⌈§a»§8⌋"
-  player_join_9: "%s found out how to fix their router§8. ⌈§a»§8⌋"
-  player_join_10: "%s§8. §7Nothing more than that§8. ⌈§a»§8⌋"
+  player_join_1: "%s ist heute mit dabei§8. ⌈§a»§8⌋"
+  player_join_2: "Hey %s, siehst' heute gut aus§8! ⌈§a»§8⌋"
+  player_join_3: "%s begleitet uns heute§8. ⌈§a»§8⌋"
+  player_join_4: "%s's Musikgeschmack hat sich gerade verbessert§8. ⌈§a»§8⌋"
+  player_join_5: "%s möchte nur schauen, ob du weiter gekommen bist§8. ⌈§a»§8⌋"
+  player_join_6: "%s wurde gezwungen beizutreten§8. ⌈§a»§8⌋"
+  player_join_7: "%s's tägliche Dosis an Minecraft scheint hier Platz zu finden§8. ⌈§a»§8⌋"
+  player_join_8: "%s möchte @pc1 Tag schwieriger gestalten§8. ⌈§a»§8⌋"
+  player_join_9: "%s hat rausgefunden, wie man den Router repariert§8. ⌈§a»§8⌋"
+  player_join_10: "%s§8. §7Nichts mehr als das§8. ⌈§a»§8⌋"
   player_join_11: "%s was summoned§8. ⌈§a»§8⌋"
   player_join_12: "%s is now looking for diamonds§8. ⌈§a»§8⌋"
   player_join_13: "Breaking news of the day: %s§8. ⌈§a»§8⌋"

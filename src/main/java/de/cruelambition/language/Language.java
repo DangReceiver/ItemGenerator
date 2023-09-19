@@ -26,17 +26,17 @@ public class Language {
     private final String lp;
     private static final Map<File, Map<String, String>> messages = new HashMap<>();
 
-	public static List<String> missingKeys;
+    public static List<String> missingKeys;
 
-	public Language() {
-		df = ItemGenerator.getItemGenerator().getDataFolder();
-		lp = df + "/languages";
+    public Language() {
+        df = ItemGenerator.getItemGenerator().getDataFolder();
+        lp = df + "/languages";
 
-		missingKeys = new ArrayList<>();
+        missingKeys = new ArrayList<>();
 
-		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		sLang = getLangFile(c.isSet("Lang") ? c.getString("Lang") : setDefaultLang());
-	}
+        FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+        sLang = getLangFile(c.isSet("Lang") ? c.getString("Lang") : setDefaultLang());
+    }
 
     public String setDefaultLang() {
         FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
@@ -55,11 +55,6 @@ public class Language {
     public File getDf() {
         return df;
     }
-
-    public static boolean isValid(File lang, String key) {
-        return (messages.get(lang) != null && ((Map) messages.get(lang)).get(key) != null);
-    }
-
 
     public static String invalidString(String key) {
         try {
@@ -145,7 +140,7 @@ public class Language {
 
     public static void loadResources() {
         ItemGenerator itemGenerator = ItemGenerator.getItemGenerator();
-        List<File> resources = new ArrayList<>(List.of(getLangFile("en.yml")));
+        List<File> resources = new ArrayList<>(List.of(getLangFile("en.yml"), getLangFile("de.yml")));
 
         for (File f : resources) {
             Path target = f.toPath();
@@ -194,72 +189,74 @@ public class Language {
         loadCustomLanguages(langF);
     }
 
-	public static String getMessage(File lang, String key) {
-		if (lang == null) lang = getServerLang();
-		return isValid(lang, key) ? (messages.get(lang)).get(key) : (isValid(getServerLang(), key) ?
-				(messages.get(getServerLang())).get(key) : (isValid(lang, "string_not_found") ?
-				String.format((messages.get(lang)).get("string_not_found"), key) : invalidString(key, lang)));
-	}
+    public static String getMessage(File lang, String key) {
+        if (lang == null) lang = getServerLang();
+        return isValid(lang, key) ? (messages.get(lang)).get(key) : (isValid(getServerLang(), key) ?
+                (messages.get(getServerLang())).get(key) : (isValid(lang, "string_not_found") ?
+                String.format((messages.get(lang)).get("string_not_found"), key) : invalidString(key, lang)));
+    }
 
-	@Deprecated
-	public static String getMessageUnverified(File lang, String key) {
-		return isValidUnlisted(lang, key) ? (messages.get(lang)).get(key) : (isValidUnlisted(getServerLang(), key) ?
-				(messages.get(getServerLang())).get(key) : (isValidUnlisted(lang, "string_not_found") ?
-				String.format((messages.get(lang)).get("string_not_found"), key) : invalidString(key, lang)));
-	}
+    @Deprecated
+    public static String getMessageUnverified(File lang, String key) {
+        return isValidUnlisted(lang, key) ? (messages.get(lang)).get(key) : (isValidUnlisted(getServerLang(), key) ?
+                (messages.get(getServerLang())).get(key) : (isValidUnlisted(lang, "string_not_found") ?
+                String.format((messages.get(lang)).get("string_not_found"), key) : invalidString(key, lang)));
+    }
 
-	public static boolean isValid(File lang, String key) {
-		boolean b = (messages.get(lang) != null && ((Map) messages.get(lang)).get(key) != null);
-		if (!b & !missingKeys.contains(key)) missingKeys.add(key + ";" + lang.getName().split(".yml")[0]);
+    public static boolean isValid(File lang, String key) {
+        boolean b = (messages.get(lang) != null && ((Map) messages.get(lang)).get(key) != null);
+        if (!b & !missingKeys.contains(key)) missingKeys.add(key + ";" + lang.getName().split(".yml")[0]);
 
-		return b;
-	}
+        return b;
+    }
 
-	public static boolean isValidUnlisted(File lang, String key) {
-		return (messages.get(lang) != null && ((Map) messages.get(lang)).get(key) != null);
-	}
+    public static boolean isValidUnlisted(File lang, String key) {
+        return (messages.get(lang) != null && ((Map) messages.get(lang)).get(key) != null);
+    }
 
-	public static String invalidString(String key, File lang) {
-		String s = "";
-		try {
-			return s = (messages != null && messages.get(getServerLang()) != null) ? (String) ((Map)
-					messages.get(getServerLang())).get(key) : String.format(
-					"§7§oString '%s' in language file '%s' not loaded yet!§7", key,
-					lang.getName().split(".yml")[0]);
+    public static String invalidString(String key, File lang) {
+        String s = "";
+        try {
+            return s = (messages != null && messages.get(getServerLang()) != null) ? (String) ((Map)
+                    messages.get(getServerLang())).get(key) : String.format(
+                    "§7§oString '%s' in language file '%s' not loaded yet!§7", key,
+                    lang.getName().split(".yml")[0]);
 
-		} catch (InvalidStringException ex) {
-			ex.printStackTrace();
-		}
-		return s;
-	}
+        } catch (InvalidStringException ex) {
+            ex.printStackTrace();
+        }
+        return s;
+    }
 
-	public static void loadCustomLanguages(File langF) {
-		if (langF == null || langF.listFiles() == null || (langF.listFiles()).length == 0) {
-			loadResources();
-			Bukkit.getConsoleSender().sendMessage("Resources loaded");
-			loadCustomLanguages(getLangFile("en"));
+    public static void loadCustomLanguages(File langF) {
+        if (langF == null || langF.listFiles() == null || (langF.listFiles()).length == 0) {
+            loadResources();
+            Bukkit.getConsoleSender().sendMessage("Resources loaded");
+            loadCustomLanguages(getLangFile("en"));
+        }
 
         for (File file : langF.listFiles()) {
             Map<String, String> lm = new HashMap<>();
             FileConfiguration lang = YamlConfiguration.loadConfiguration(file);
 
             ConsoleCommandSender cs = Bukkit.getConsoleSender();
-            for (String key : lang.getKeys(false)) {
+            for (String key : lang.getKeys(false))
                 for (String messName : lang.getConfigurationSection(key).getKeys(false)) {
 
                     cs.sendMessage(key + "." + messName);
                     if (lang.getString(key + "." + messName) != null) {
 
-					cs.sendMessage(key + "§8/§7" + messName + " §8» §aWas loaded");
-					if (ymlc.getString(key + "." + messName) != null) {
+                        cs.sendMessage(key + "§8/§7" + messName + " §8» §aWas loaded");
+                        if (lang.getString(key + "." + messName) != null) {
 
-            messages.put(file, lm);
+                            messages.put(file, lm);
 
-            if (!file.exists()) {
-                Bukkit.getConsoleSender().sendMessage(String.format(Lang.PRE +
-                        "Language %s could not be loaded", file.getName()));
-                continue;
-            }
+                            if (!file.exists()) Bukkit.getConsoleSender().sendMessage(String.format(
+                                    Lang.PRE + "Language %s could not be loaded", file.getName()));
+
+                        }
+                    }
+                }
 
             Bukkit.getConsoleSender().sendMessage(Lang.PRE +
                     String.format(getMessage(file, "language_loaded"), file.getName()));
