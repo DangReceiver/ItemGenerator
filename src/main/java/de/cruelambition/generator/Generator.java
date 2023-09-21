@@ -9,12 +9,18 @@ import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
-public class Generator {
+public class Generator implements Listener {
 
 	private List<Material> material, forbidden;
 	private BukkitTask generatorLoop, checkLoop;
@@ -68,13 +74,14 @@ public class Generator {
 	}
 
 	public void addItemToForbiddenList(Material m) {
-		if (!forbidden.contains(m)) {
-			forbidden.add(m);
+		if (forbidden.contains(m)) return;
+		forbidden.add(m);
 
-			Lang.broadcastArg("itemgenerator_forbiddenlist_add_item", m.toString().toLowerCase());
-			Bukkit.getConsoleSender().sendMessage(String.format(new Lang(null)
-					.getString("itemgenerator_forbiddenlist_add_item"), m.toString().toLowerCase()));
-		}
+		Lang.broadcastArg("itemgenerator_forbiddenlist_add_item", m.toString().toLowerCase());
+		Bukkit.getConsoleSender().sendMessage(
+				String.format(
+				Lang.getMessage(Lang.getServerLang(),
+				"itemgenerator_forbiddenlist_add_item"), m.toString().toLowerCase()));
 	}
 
 	public void addItemToPermanentForbiddenList(Material m) {
@@ -149,8 +156,25 @@ public class Generator {
 	}
 
 	public void giveAll(Material m) {
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			p.getInventory().addItem(new ItemStack(m));
+		ItemStack is = new ItemStack(m);
+		for (Player ap : Bukkit.getOnlinePlayers()) {
+
+			if (!isInvEmpty(ap))
+				ap.getInventory().addItem(is);
+			else
+				ap.getWorld().dropItemNaturally(ap.getLocation(), is);
 		}
+	}
+
+	@EventHandler
+	public void handle(ItemSpawnEvent e) {
+
+	}
+
+	public boolean isInvEmpty(Player p) {
+		for (ItemStack i : p.getInventory())
+			if (i == null) return false;
+
+		return true;
 	}
 }

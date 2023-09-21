@@ -16,14 +16,11 @@ info:
   info_average_ping: "§7Average ping: §%c%s"
 
 pronouns:
-  example: "@pc0 @pc1 @pc2 @pc3 @name"
+  example: "@pc0 @pc1 @pc2 @pc3 @pc4 @name"
+  example_sentence_0: "This is @name, @pc0 #be well dressed today!"
 
 cm:
   welcome_back: "§7Welcome back §3%s §c❤"
-  join_teleport_spawn: "You were teleported to the §bSpawn§8."
-  login_location_broadcast_warning: "Your original logout location will be broadcast in §620 seconds§8."
-  spawn_location_bossbar: "Login location broadcast timer"
-  login_location_broadcast: "@%s's login location§8: §ex: %s, y: %s, z: %s§8."
   player_first_join: "%s joined us for the first time!"
   player_join_0: "%s just hopped in§8. ⌈§a»§8⌋"
   player_join_1: "%s is now with us§8. ⌈§a»§8⌋"
@@ -74,6 +71,7 @@ language:
 
 frequent:
   not_implemented_yet: "You are looking into the future! This feature has not been implemented yet!"
+  not_a_player: "This feature is exclusively available to players§8."
   arg_invalid: "The provided argument (%s) is invalid§8."
   argument_specifics: "The argument #%s must be of the type %s§8."
   argument_range: "The argument #%s should be between %s and %s§8."

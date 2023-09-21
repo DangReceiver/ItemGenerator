@@ -14,33 +14,33 @@ public class Fly implements CommandExecutor {
 
 		if (sen instanceof Player) {
 			p = (Player) sen;
+			l.setPlayer(p);
 
 		} else {
 			sen.sendMessage(Lang.PRE + Lang.getMessage(null, "not_a_player"));
 			return false;
 		}
 
-		if (p != null) l.setPlayer(p);
-
 		if (args.length == 0) {
 			p.setFlying(!p.isFlying());
-			p.sendMessage(Lang.PRE + Lang.PRE);
+			p.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "flight_updated"));
+
 		} else if (args.length != 1) {
-			p.sendMessage(Lang.PRE + Lang.PRE);
+			p.sendMessage(Lang.PRE + String.format(Lang.getMessage(l.getLanguage(), "argument_range"), 0, 1));
 			return false;
 		}
 
 		Player t = Bukkit.getPlayer(args[0]);
 		if (t == null) {
-			p.sendMessage(Lang.PRE + Lang.PRE);
+			p.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "target_invalid"));
 			return false;
 		}
 
-		p.sendMessage(Lang.PRE + Lang.PRE);
+		p.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "flight_updated_target"));
 		l.setPlayer(t);
 
 		t.setFlying(!t.isFlying());
-		t.sendMessage(Lang.PRE + Lang.PRE);
+		t.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "flight_updated"));
 
 		return false;
 	}

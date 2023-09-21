@@ -8,7 +8,6 @@ import java.io.File;
 import java.util.Random;
 
 import org.bukkit.GameMode;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,6 +34,9 @@ public class CM implements Listener {
 		if (!p.hasPlayedBefore()) {
 			Lang.broadcastArg("player_first_join", p.getName());
 			p.teleport(SpawnWorld.getSafeSpawnLocation());
+
+			pc.createCon(p);
+			pc.savePCon();
 
 		} else if (pc.getJoinTime() - pc.getQuitTime() <= 20000L)
 			Lang.broadcastArg("player_rejoin_" + (new Random())

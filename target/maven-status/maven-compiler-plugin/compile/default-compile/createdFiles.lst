@@ -12,5 +12,6 @@ de\cruelambition\worlds\SpawnGen.class
 de\cruelambition\language\ReadOut.class
 de\cruelambition\exceptions\InvalidStringException.class
 de\cruelambition\language\Lang.class
+de\cruelambition\cmd\moderation\CheckMessage.class
 de\cruelambition\cmd\user\Info.class
 de\cruelambition\language\Pronouns.class

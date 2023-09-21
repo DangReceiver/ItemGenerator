@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class Lang extends Language {
-	public static String PRE = colorFromRGB(66, 20, 200) + "ItemGenerator§8: "
+	public static String PRE = colorFromRGB(120, 50, 220) + "ItemGenerator§8: "
 			+ colorFromRGB(150, 150, 150);
 
 	private File lf;
@@ -78,17 +78,12 @@ public class Lang extends Language {
 	}
 
 	public static void broadcast(String key) {
-		Bukkit.getConsoleSender().sendMessage(getMessage(getServerLang(), "info")
-				+ getMessage(getServerLang(), "info"));
-
 		//	PRONOUNS: getMessage(getServerLang(), "info")
 		for (Player ap : Bukkit.getOnlinePlayers())
 			ap.sendMessage(PRE + getMessage((new Lang(ap)).getLang(ap), key));
 	}
 
 	public static void broadcastArg(String key, String... arg) {
-		Bukkit.getConsoleSender().sendMessage(getMessage(getServerLang(), "broadcast") + getMessage(getServerLang(), "broadcast"));
-
 		for (Player ap : Bukkit.getOnlinePlayers()) {
 			String format = String.format(getMessage((new Lang(ap)).getLang(ap), key), (Object[]) arg);
 			ap.sendMessage(PRE + format);
