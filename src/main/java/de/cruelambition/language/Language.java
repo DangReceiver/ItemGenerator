@@ -179,30 +179,44 @@ public class Language {
 
 		loadResources();
 		if (getServerLang() == null) setSLang(new File(langF, "en.yml"));
-		loadCustomLanguages(langF);
+		loadLanguages(langF);
 	}
 
 	public static String getMessage(File lang, String key) {
-		if (lang == null || key == null) lang = getServerLang();
-		if (messages.get(lang) == null || messages.get(lang).get(key) == null)
-			throw new RuntimeException("The resulting String does not exist!");
-		
-		String see = isValid(lang, key) ? (messages.get(lang)).get(key) : (isValid(getServerLang(), key) ?
-				(messages.get(getServerLang())).get(key) : (isValid(lang, "string_not_found") ?
-				String.format((messages.get(lang)).get("string_not_found"), key) : invalidString(key, lang)));
+		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+		if (lang == null || key == null) {
+			cs.sendMessage("The chosen language is invalid, proceeding on with the server language");
+			lang = getServerLang();
+		}
 
-		Bukkit.getConsoleSender().sendMessage("" + isValid(lang, key));
-//		Bukkit.getConsoleSender().sendMessage(isValid(getServerLang(), key) ?
-//				(messages.get(getServerLang())).get(key) : (isValid(lang, "string_not_found") ?
-//				String.format((messages.get(lang)).get("string_not_found"), key) : invalidString(key, lang)));
-		Bukkit.getConsoleSender().sendMessage("" + isValid(getServerLang(), key));
-		Bukkit.getConsoleSender().sendMessage(isValid(lang, "string_not_found") ?
+//		if (messages.get(lang) == null)
+//			throw new RuntimeException(String.format("The String '%s' could not be determined! [0]", lang.getName()));
+//		if (messages.get(lang).get(key) == null)
+//			throw new RuntimeException(String.format("The String key '%s' is not listed! [1]", key));
+
+		String see = isValid(lang, key) ?
+				messages.get(lang).get(key) :
+				(isValid(getServerLang(), key) ?
+						(messages.get(getServerLang())).get(key) :
+						(isValid(lang, "string_not_found") ?
+								String.format((messages.get(lang)).get("string_not_found"), key) :
+								invalidString(key, lang)));
+
+		cs.sendMessage(getServerLang() + "  ||  " + key);
+
+//		cs.sendMessage(isValid(getServerLang(), key) ?
+//				(messages.get(getServerLang())).get(key) :
+//				(isValid(lang, "string_not_found") ?
+//						String.format((messages.get(lang)).get("string_not_found"), key) : invalidString(key, lang)));
+
+		cs.sendMessage(isValid(lang, "string_not_found") ?
 				String.format((messages.get(lang)).get("string_not_found"), key) : invalidString(key, lang));
-		Bukkit.getConsoleSender().sendMessage("" + isValid(lang, "string_not_found"));
-		Bukkit.getConsoleSender().sendMessage(invalidString(key, lang));
+
+		cs.sendMessage("" + isValid(lang, "string_not_found"));
+		cs.sendMessage(invalidString(key, lang));
 
 
-		if (see == null) throw new RuntimeException("The resulting String does not exist!");
+		if (see == null) throw new RuntimeException("The resulting String does not exist! [2]");
 		return see;
 	}
 
@@ -214,12 +228,19 @@ public class Language {
 	}
 
 	public static boolean isValid(File lang, String key) {
-		if (messages.get(lang) == null || messages.get(lang).get(key) == null) return false;
-		if (!missingKeys.contains(key)) {
-			missingKeys.add(key + ";" + lang.getName().split(".yml")[0]);
+		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+		cs.sendMessage("§5" + lang);
+		cs.sendMessage("§5" + key);
+
+		cs.sendMessage("§6" + (messages.get(lang) == null));
+		cs.sendMessage("§6" + (messages.get(lang).get(key) == null));
+
+		if (messages.get(lang) == null ||
+				messages.get(lang).get(key) == null) {
+			if (!missingKeys.contains(key))
+				missingKeys.add(key.toString() + "; " + lang.getName().split(".yml")[0].toString());
 			return false;
 		}
-
 		return true;
 	}
 
@@ -242,54 +263,52 @@ public class Language {
 		return s;
 	}
 
-	public static void loadCustomLanguages(File langF) {
+	public static void loadLanguages(File langF) {
+		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 		if (langF == null || langF.listFiles() == null || (langF.listFiles()).length == 0) {
-			Bukkit.getConsoleSender().sendMessage("Resources seem not to be loaded yet! Stopping process");
+
+			cs.sendMessage("Resources seem not to be loaded yet! Stopping process");
 			return;
 		}
 
-		if (langF.listFiles() == null) return;
-		ConsoleCommandSender cs = Bukkit.getConsoleSender();
-		Lang l = new Lang(null);
+		if (langF.listFiles() == null) {
+			cs.sendMessage("Server langauge file is empty! Nothing to load...");
+			return;
+		}
+
+		if (langF.listFiles() == null) throw new RuntimeException("Cannot load language files - no files were found!");
 
 		for (File file : langF.listFiles()) {
 			Map<String, String> lm = new HashMap<>();
+
 			FileConfiguration lang = YamlConfiguration.loadConfiguration(file);
+			cs.sendMessage(String.format("§7Loading §b%s §7language keys§8...", file.getName().split(".yml")[0]));
 
 			for (String key : lang.getKeys(false))
 				for (String messName : lang.getConfigurationSection(key).getKeys(false)) {
-//					cs.sendMessage(key + "§8/§7" + messName + " §8» §aWas loaded");
+					cs.sendMessage(key + "§8/§7" + messName + " §8» §aWas loaded");
 
 					if (lang.getString(key + "." + messName) != null) {
 						messages.put(file, lm);
 
-						if (!file.exists()) Bukkit.getConsoleSender().sendMessage(String.format(
-								Lang.PRE + "§cLanguage %s could not be loaded", file.getName()));
+						if (!file.exists()) Bukkit.getConsoleSender().sendMessage(
+								String.format(Lang.PRE + "§cLanguage %s could not be loaded", file.getName()));
 					}
 				}
-
-//			cs.sendMessage(getServerLang() + "");
-//			cs.sendMessage(Lang.getMessage(getLangFile("en"), "welcome_back"));
-//			cs.sendMessage(Lang.getMessage(getServerLang(), "language_loaded"));
-//			cs.sendMessage(file.getName().split("\\.")[0]);
-//
-//			cs.sendMessage(Lang.PRE +
-//					String.format(
-//							Lang.getMessage(getServerLang(), "language_loaded"), file.getName().split("\\.")[0]
-//			)
-//			);
+			printAllMessages(file);
 		}
 	}
 
 	public static void printAllMessages(File file) {
 		YamlConfiguration ymlc = YamlConfiguration.loadConfiguration(file);
+		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 
 		Map<String, String> lm = new HashMap<>();
 		Lang l = new Lang(null);
 		l.setLocalLanguage(file);
 
-		for (String key : ymlc.getKeys(false)) {
-			for (String messName : ymlc.getConfigurationSection(key).getKeys(false)) {
+		for (String key : ymlc.getKeys(true)) {
+			for (String messName : ymlc.getConfigurationSection(key).getKeys(true)) {
 
 				if (ymlc.getString(key + "." + messName) != null) {
 
@@ -298,12 +317,16 @@ public class Language {
 					lm.put(messName, message);
 				}
 
-				System.out.println(key + "." + messName);
-
-
-//				for (Player ap : Bukkit.getOnlinePlayers())
-				System.out.println(key + "." + messName + ": " + l.getString(key + "." + messName));
+				cs.sendMessage("§9" + key + "." + messName + ": " + l.getString(key + "." + messName));
 			}
 		}
+	}
+
+	public void printMissingKeys() {
+		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+		cs.sendMessage("§7Known missing keys§8:");
+
+		for (String key : missingKeys)
+			cs.sendMessage("§7" + key.replace("; ", "§8« §2"));
 	}
 }

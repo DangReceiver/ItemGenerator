@@ -5,7 +5,6 @@ import de.cruelambition.cmd.moderation.Fly;
 import de.cruelambition.cmd.user.Info;
 import de.cruelambition.generator.Generator;
 import de.cruelambition.language.Lang;
-import de.cruelambition.language.Language;
 import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
 import de.cruelambition.worlds.SpawnWorld;
@@ -38,11 +37,11 @@ public final class ItemGenerator extends JavaPlugin {
 		createFolder(getDataFolder() + "/languages");
 		createFolder(getDataFolder() + "/players");
 
-		Language l = new Language();
+		Lang l = new Lang(null);
 		l.loadingSequence();
+		l.printMissingKeys();
 
-//		System.out.println(l.getLanguages());
-//		Language.printAllMessages(Lang.getLangFile("en"));
+		cs.sendMessage("§4" + l.getLanguages().toString());
 
 		World spawn = Bukkit.getWorld("world");
 		if (spawn == null) spawn.save();
