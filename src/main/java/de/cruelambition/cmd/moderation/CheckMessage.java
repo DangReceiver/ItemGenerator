@@ -12,35 +12,41 @@ public class CheckMessage implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sen, Command cmd, String lab, String[] args) {
-		Player p;
+		Player p = null;
 		Lang l = new Lang(null);
 
-		if (sen instanceof Player) {
+		if (sen instanceof Player)
 			p = (Player) sen;
+		if (p != null) l.setPlayer(null);
 
-			if (p != null) l.setPlayer(p);
+		if (args.length > 1) {
+			sen.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "invalid_argument_length"));
+			return false;
+		}
 
-			if (args.length != 1) {
-				sen.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "invalid_argument_length"));
-				return false;
+		sen.sendMessage("Blup");
+
+		if (args.length == 0) {
+			sen.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "missing_strings"));
+
+			for (String s : l.getMissingKeys()) sen.sendMessage(Lang.PRE + String.format(Lang.getMessage(
+					l.getLanguage(), "missing_strings"), s));
+			return false;
+		}
+
+		if (args[0].equalsIgnoreCase("*")) {
+			int i = 0;
+			sen.sendMessage("Blup1");
+
+			for (String s : Language.missingKeys) {
+				sen.sendMessage(Lang.PRE + String.format(Lang.getMessage(l.getLanguage(),
+						"list_missing_Strings"), s.replaceAll(";", " §8→ §7"), i));
+				i++;
 			}
 
-			sen.sendMessage("Blup");
-
-			if (args[0].equalsIgnoreCase("*")) {
-				int i = 0;
-				sen.sendMessage("Blup1");
-
-				for (String s : Language.missingKeys) {
-					sen.sendMessage(Lang.PRE + String.format(Lang.getMessage(l.getLanguage(),
-							"list_missing_Strings"), s.replaceAll(";", " §8→ §7"), i));
-					i++;
-				}
-
-			} else {
-				sen.sendMessage("Blup2");
-				sen.sendMessage(Lang.PRE + Lang.getMessageUnverified(l.getLanguage(), args[0]));
-			}
+		} else {
+			sen.sendMessage("Blup2");
+			sen.sendMessage(Lang.PRE + Lang.getMessageUnverified(l.getLanguage(), args[0]));
 		}
 		return false;
 	}

@@ -2,9 +2,11 @@ package de.cruelambition.language;
 
 import java.awt.Color;
 import java.io.File;
+import java.util.List;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class Lang extends Language {
@@ -21,6 +23,10 @@ public class Lang extends Language {
 		lang = new Language();
 		p = player;
 		lf = lang.getLang(p != null ? p : null);
+	}
+
+	public static File getServerLang() {
+		return Language.getServerLang();
 	}
 
 	public void setPlayerLanguage(File pLang) {
@@ -88,5 +94,26 @@ public class Lang extends Language {
 			String format = String.format(getMessage((new Lang(ap)).getLang(ap), key), (Object[]) arg);
 			ap.sendMessage(PRE + format);
 		}
+	}
+
+	public void printMissingKeys() {
+		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+		cs.sendMessage("§7Known missing keys§8:");
+
+		for (String key : missingKeys) cs.sendMessage("§7" + key.replace("; ", "§8« §2"));
+	}
+
+	public List<String> getMissingKeys() {
+		List<String> mkl = missingKeys;
+
+		int i = 0;
+		for (String s : mkl)
+			if (!s.contains("; " + lf.getName().split(".yml")[0])) {
+
+				mkl.remove(i);
+				i++;
+			}
+
+		return mkl;
 	}
 }
