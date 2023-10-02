@@ -10,7 +10,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class Lang extends Language {
-	public static String PRE = colorFromRGB(120, 50, 220) + "ItemGenerator§8: "
+	public static String PRE = colorFromRGB(195, 40, 155) + "ItemGenerator§8: "
 			+ colorFromRGB(150, 150, 150);
 
 	private File lf;
@@ -91,7 +91,7 @@ public class Lang extends Language {
 
 	public static void broadcastArg(String key, String... arg) {
 		for (Player ap : Bukkit.getOnlinePlayers()) {
-			String format = String.format(getMessage((new Lang(ap)).getLang(ap), key), (Object[]) arg);
+			String format = String.format(getMessage(new Lang(ap).getLang(ap), key), (Object[]) arg);
 			ap.sendMessage(PRE + format);
 		}
 	}
@@ -100,7 +100,7 @@ public class Lang extends Language {
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 		cs.sendMessage("§7Known missing keys§8:");
 
-		for (String key : missingKeys) cs.sendMessage("§7" + key.replace("; ", "§8« §2"));
+		for (String key : missingKeys) cs.sendMessage("§7" + key.replace("; ", "§8« §6"));
 	}
 
 	public List<String> getMissingKeys() {

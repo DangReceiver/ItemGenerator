@@ -1,14 +1,12 @@
 package de.cruelambition.generator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.language.Language;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.ConsoleCommandSender;
@@ -22,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
-public class Generator implements Listener {
+public class Generator {
 
 	private List<String> material, forbidden;
 	private BukkitTask generatorLoop, checkLoop;
@@ -62,15 +60,14 @@ public class Generator implements Listener {
 
 		if (!c.isSet("Item.List.Forbidden")) {
 			c.set("Item.List.Forbidden", new ArrayList<>(List.of(Material.AIR.toString(),
-					Material.COMMAND_BLOCK.toString(), Material.COMMAND_BLOCK_MINECART.toString(),
-					Material.REPEATING_COMMAND_BLOCK.toString(), Material.CHAIN_COMMAND_BLOCK.toString())));
+					Material.COMMAND_BLOCK.toString(), Material.JIGSAW.toString())));
 			ItemGenerator.getItemGenerator().saveConfig();
 		}
+
 		List<String> sl = c.getStringList("Item.List.Forbidden");
-
 		List<String> newForbidden = new ArrayList<>(sl);
-		for (String m : newForbidden) addItemToForbiddenList(m.toString());
 
+		for (String m : newForbidden) addItemToForbiddenList(m.toString());
 		removeAllForbiddenItemsFromMaterialList();
 	}
 
@@ -81,7 +78,7 @@ public class Generator implements Listener {
 			if (mt.toString().contains(m)) forbidden.add(m);
 
 		Lang.broadcastArg("itemgenerator_forbiddenlist_add_item", m.toLowerCase());
-		Bukkit.getConsoleSender().sendMessage(String.format(Lang.getMessage(Lang.getServerLang(),
+		Bukkit.getConsoleSender().sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),
 				"itemgenerator_forbiddenlist_add_item"), m.toLowerCase()));
 	}
 
@@ -108,10 +105,14 @@ public class Generator implements Listener {
 	public void removeAllForbiddenItemsFromMaterialList() {
 		if (material.isEmpty() || material == null) return;
 
+		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+
 		for (Material m : Material.values())
 			for (String s : forbidden)
-				if (m.toString().contains(s) && material.contains(m.toString()))
+				if (m.toString().contains(s) && material.contains(m.toString())) {
+					cs.sendMessage("Removed Item: " + m);
 					removeItemFromList(m);
+				}
 	}
 
 	public void removeItemFromList(Material m) {
@@ -157,19 +158,12 @@ public class Generator implements Listener {
 	}
 
 	public void giveAll() {
-//		Bukkit.getConsoleSender().sendMessage(Lang.getMessage(Lang.getServerLang(), "info") +
-//				String.format(Lang.getMessage(Lang.getServerLang(), "giving_item"), m.toString().toLowerCase()));
-
 		for (Player ap : Bukkit.getOnlinePlayers()) {
-			ap.playSound(ap.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.5f, 1.5f);
+			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
+			ap.playSound(ap.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.2f, 1.6f);
 
 			if (ap.getInventory().firstEmpty() != -1) ap.getInventory().addItem(new ItemStack(getRandomMaterial()));
 			else ap.getWorld().dropItemNaturally(ap.getLocation(), new ItemStack(getRandomMaterial()));
 		}
 	}
-
-//	@EventHandler
-//	public void handle(ItemSpawnEvent e) {
-//
-//	}
 }

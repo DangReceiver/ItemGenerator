@@ -7,7 +7,6 @@ import de.cruelambition.worlds.SpawnWorld;
 import java.io.File;
 import java.util.Random;
 
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +18,7 @@ public class CM implements Listener {
 	public void handle(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 		PC pc = new PC(p);
+		pc.load(p);
 
 		if (pc.getLanguageString() == null)
 			pc.setLanguage(Lang.getServerLang());
@@ -39,13 +39,12 @@ public class CM implements Listener {
 			pc.savePCon();
 
 		} else if (pc.getJoinTime() - pc.getQuitTime() <= 20000L)
-			Lang.broadcastArg("player_rejoin_" + (new Random())
-					.nextInt(4), p.getName());
+			Lang.broadcastArg("player_rejoin_" + (new Random()).nextInt(4), p.getName());
 		else
 			Lang.broadcastArg("player_join_" + (new Random()).nextInt(17), p.getName());
 
-		p.setGameMode(GameMode.ADVENTURE);
-		p.sendTitle(Lang.PRE, String.format(Lang.getMessage(lf, "welcome_back"), p.getName()), 30, 50, 50);
+		p.sendTitle(Lang.PRE, String.format(Lang.getMessage(lf, "welcome_back"),
+				p.getName()), 30, 50, 50);
 	}
 
 	@EventHandler

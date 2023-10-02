@@ -8,6 +8,7 @@ import de.cruelambition.language.Lang;
 import de.cruelambition.language.Language;
 import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
+import de.cruelambition.listener.function.GameModeChange;
 import de.cruelambition.worlds.SpawnWorld;
 
 import java.io.File;
@@ -40,7 +41,7 @@ public final class ItemGenerator extends JavaPlugin {
 
 		Lang l = new Lang(null);
 		l.loadingSequence();
-		l.printMissingKeys();
+//		l.printMissingKeys();
 
 		World spawn = Bukkit.getWorld("world");
 		if (spawn == null) spawn.save();
@@ -54,6 +55,7 @@ public final class ItemGenerator extends JavaPlugin {
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new CM(), this);
 		pm.registerEvents(new Chat(), this);
+		pm.registerEvents(new GameModeChange(), this);
 
 		FileConfiguration c = getConfig();
 
@@ -73,7 +75,8 @@ public final class ItemGenerator extends JavaPlugin {
 		VERSION = "0.0.1";
 
 		cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(), "modules_success"));
-		cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(), "running_version"));
+		cs.sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),
+				"running_version"), VERSION));
 	}
 
 	public int getSafeInt(FileConfiguration c, String path, int setDefault, int toReturn) {
