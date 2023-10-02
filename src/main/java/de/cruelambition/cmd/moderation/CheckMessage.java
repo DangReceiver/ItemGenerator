@@ -29,8 +29,13 @@ public class CheckMessage implements CommandExecutor {
 		if (args.length == 0) {
 			sen.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "missing_strings"));
 
-			for (String s : l.getMissingKeys()) sen.sendMessage(Lang.PRE + String.format(Lang.getMessage(
-					l.getLanguage(), "missing_strings"), s));
+			if(l.getMissingKeys() == null) {
+				sen.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "no_missing_keys"));
+				return false;
+			}
+
+			for (String s : l.getMissingKeys()) sen.sendMessage(Lang.PRE +
+					String.format(Lang.getMessage(l.getLanguage(), "missing_strings"), s));
 			return false;
 		}
 

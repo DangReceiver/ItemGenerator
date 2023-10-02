@@ -7,8 +7,10 @@ import java.util.Random;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
+import de.cruelambition.language.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Item;
@@ -22,7 +24,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class Generator implements Listener {
 
-	private List<Material> material, forbidden;
+	private List<String> material, forbidden;
 	private BukkitTask generatorLoop, checkLoop;
 
 	public Generator() {
@@ -31,11 +33,11 @@ public class Generator implements Listener {
 	}
 
 	public void fillList() {
-		material.addAll(Arrays.asList(Material.values()));
+		for (Material value : Material.values()) material.add(value.toString());
 	}
 
 	public void removeItemFromForbiddenList(Material m) {
-		forbidden.remove(m);
+		forbidden.remove(m.toString());
 	}
 
 	public void removeForbiddenItemFromPlayer(Player p, Material m) {
@@ -46,18 +48,17 @@ public class Generator implements Listener {
 
 	public void removeAllForbiddenItemsFromPlayer(Player p) {
 		for (ItemStack c : p.getInventory().getContents())
-			if (c != null && forbidden.contains(c.getType())) c.setType(Material.AIR);
+			if (c != null && forbidden.contains(c.getType().toString())) c.setType(Material.AIR);
 	}
 
 	public void removeAllForbiddenItemsFromAllPlayers() {
 		for (Player ap : Bukkit.getOnlinePlayers())
 			for (ItemStack c : ap.getInventory().getContents())
-				if (c != null && forbidden.contains(c.getType())) c.setType(Material.AIR);
+				if (c != null && forbidden.contains(c.getType().toString())) c.setType(Material.AIR);
 	}
 
 	public void syncForbiddenItems() {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		List<Material> newForbidden = new ArrayList<>();
 
 		if (!c.isSet("Item.List.Forbidden")) {
 			c.set("Item.List.Forbidden", new ArrayList<>(List.of(Material.AIR.toString(),
@@ -67,21 +68,21 @@ public class Generator implements Listener {
 		}
 		List<String> sl = c.getStringList("Item.List.Forbidden");
 
-		for (String s : sl) newForbidden.add(Material.valueOf(s));
-		for (Material m : newForbidden) addItemToForbiddenList(m);
+		List<String> newForbidden = new ArrayList<>(sl);
+		for (String m : newForbidden) addItemToForbiddenList(m.toString());
 
 		removeAllForbiddenItemsFromMaterialList();
 	}
 
-	public void addItemToForbiddenList(Material m) {
+	public void addItemToForbiddenList(String m) {
 		if (forbidden.contains(m)) return;
-		forbidden.add(m);
 
-		Lang.broadcastArg("itemgenerator_forbiddenlist_add_item", m.toString().toLowerCase());
-		Bukkit.getConsoleSender().sendMessage(
-				String.format(
-				Lang.getMessage(Lang.getServerLang(),
-				"itemgenerator_forbiddenlist_add_item"), m.toString().toLowerCase()));
+		for (Material mt : Material.values())
+			if (mt.toString().contains(m)) forbidden.add(m);
+
+		Lang.broadcastArg("itemgenerator_forbiddenlist_add_item", m.toLowerCase());
+		Bukkit.getConsoleSender().sendMessage(String.format(Lang.getMessage(Lang.getServerLang(),
+				"itemgenerator_forbiddenlist_add_item"), m.toLowerCase()));
 	}
 
 	public void addItemToPermanentForbiddenList(Material m) {
@@ -100,7 +101,6 @@ public class Generator implements Listener {
 		ItemGenerator.getItemGenerator().saveConfig();
 	}
 
-
 	public List<String> getItemsFromPermanentForbiddenList() {
 		return ItemGenerator.getItemGenerator().getConfig().getStringList("Item.List.Forbidden");
 	}
@@ -108,34 +108,35 @@ public class Generator implements Listener {
 	public void removeAllForbiddenItemsFromMaterialList() {
 		if (material.isEmpty() || material == null) return;
 
-		for (Material m : forbidden)
-			if (material.contains(m))
-				removeItemFromList(m);
+		for (Material m : Material.values())
+			for (String s : forbidden)
+				if (m.toString().contains(s) && material.contains(m.toString()))
+					removeItemFromList(m);
 	}
 
 	public void removeItemFromList(Material m) {
-		material.remove(m);
+		material.remove(m.toString());
 	}
 
 	public boolean isForbiddenItem(Material m) {
-		return forbidden.contains(m);
+		return forbidden.contains(m.toString());
 	}
 
 	public Material getRandomMaterial() {
-		return material.get(new Random().nextInt(material.size() - 1));
+		return Material.valueOf(material.get(new Random().nextInt(material.size() - 1)));
 	}
 
 	public Material getMaterialFromInt(int i) {
-		return material.get(i);
+		return Material.valueOf(material.get(i));
 	}
 
-	public List<Material> getMaterialList() {
+	public List<String> getMaterialList() {
 		return this.material;
 	}
 
 	public void startGeneratorLoop(int startIn, int frequency) {
 		BukkitTask gl = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
-				() -> giveAll(getRandomMaterial()), 20L * startIn, 20L * frequency);
+				this::giveAll, 20L * startIn, 20L * frequency);
 		this.generatorLoop = gl;
 	}
 
@@ -155,26 +156,20 @@ public class Generator implements Listener {
 			checkLoop.cancel();
 	}
 
-	public void giveAll(Material m) {
-		ItemStack is = new ItemStack(m);
-		for (Player ap : Bukkit.getOnlinePlayers()) {
+	public void giveAll() {
+//		Bukkit.getConsoleSender().sendMessage(Lang.getMessage(Lang.getServerLang(), "info") +
+//				String.format(Lang.getMessage(Lang.getServerLang(), "giving_item"), m.toString().toLowerCase()));
 
-			if (!isInvEmpty(ap))
-				ap.getInventory().addItem(is);
-			else
-				ap.getWorld().dropItemNaturally(ap.getLocation(), is);
+		for (Player ap : Bukkit.getOnlinePlayers()) {
+			ap.playSound(ap.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.5f, 1.5f);
+
+			if (ap.getInventory().firstEmpty() != -1) ap.getInventory().addItem(new ItemStack(getRandomMaterial()));
+			else ap.getWorld().dropItemNaturally(ap.getLocation(), new ItemStack(getRandomMaterial()));
 		}
 	}
 
-	@EventHandler
-	public void handle(ItemSpawnEvent e) {
-
-	}
-
-	public boolean isInvEmpty(Player p) {
-		for (ItemStack i : p.getInventory())
-			if (i == null) return false;
-
-		return true;
-	}
+//	@EventHandler
+//	public void handle(ItemSpawnEvent e) {
+//
+//	}
 }

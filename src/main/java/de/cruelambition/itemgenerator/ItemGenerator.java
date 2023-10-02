@@ -57,10 +57,10 @@ public final class ItemGenerator extends JavaPlugin {
 
 		FileConfiguration c = getConfig();
 
-		int csi = getSafeInt(c, "Loops.Check.StartIn", 50, 50),
-				cf = getSafeInt(c, "Loops.Check.Frequency", 60, 60),
-				gsi = getSafeInt(c, "Loops.Generator.StartIn", 5, 5),
-				gf = getSafeInt(c, "Loops.Generator.Frequency", 20, 20);
+		int csi = getSafeInt(c, "Loops.Check.StartIn", 60, 50),
+				cf = getSafeInt(c, "Loops.Check.Frequency", 80, 60),
+				gsi = getSafeInt(c, "Loops.Generator.StartIn", 6, 5),
+				gf = getSafeInt(c, "Loops.Generator.Frequency", 30, 20);
 
 		g = new Generator();
 		g.fillList();

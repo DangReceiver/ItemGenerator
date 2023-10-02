@@ -20,15 +20,12 @@ public class Language {
 	private static File sLang;
 	private final Map<Player, File> settings = new HashMap<>();
 	private static File df;
-	private final String lp;
 	private static final Map<File, Map<String, String>> messages = new HashMap<>();
 
 	public static List<String> missingKeys;
 
 	public Language() {
 		df = ItemGenerator.getItemGenerator().getDataFolder();
-		lp = df + "/languages";
-
 		missingKeys = new ArrayList<>();
 
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
@@ -46,10 +43,6 @@ public class Language {
 
 	public void setSLang(File serverLang) {
 		setServerLanguage(sLang = serverLang);
-	}
-
-	public File getDf() {
-		return df;
 	}
 
 	public File getLang(Player p) {
@@ -154,12 +147,8 @@ public class Language {
 		}
 	}
 
-	public static File getCache() {
-		return new File(df + "/cache");
-	}
-
 	public void loadingSequence() {
-		File langF = getLangFolder();
+		File langF = new File(getLangFolder().getPath());
 		loadResources();
 
 		if (getServerLang() == null) setSLang(new File(langF, "en.yml"));
@@ -170,7 +159,7 @@ public class Language {
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 		if (lang == null || !lang.exists() || key == null) {
 
-			cs.sendMessage("The chosen language is invalid, proceeding on with the server language");
+			cs.sendMessage("The chosen language is invalid, carrying on with the server language");
 			lang = getServerLang();
 		}
 
@@ -183,10 +172,10 @@ public class Language {
 				messages.get(lang).get(key) :
 
 				(isValid(getServerLang(), key) ?
-						(messages.get(getServerLang())).get(key) :
+						messages.get(getServerLang()).get(key) :
 
 						(isValid(lang, "string_not_found") ?
-								String.format((messages.get(lang)).get("string_not_found"), key) :
+								String.format(messages.get(lang).get("string_not_found"), key) :
 								invalidString(key, lang)));
 
 		if (see == null) throw new RuntimeException("The resulting String does not exist! [2]");
@@ -203,6 +192,7 @@ public class Language {
 
 	public static boolean isValid(@NotNull File lang, @NotNull String key) {
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+		if (lang.toString().contains("\\")) lang = new File(lang.getPath());
 
 		if (messages.get(lang) == null ||
 				messages.get(lang).get(key) == null) {
@@ -210,8 +200,7 @@ public class Language {
 			if (missingKeys.isEmpty() || !missingKeys.contains(key))
 				missingKeys.add(key.toString() + "; " + lang.getName().split(".yml")[0].toString());
 
-			cs.sendMessage(String.format("§bThe key %s does not exist in the language file %s.", key, lang));
-			if (lang.toString().contains("\\")) throw new RuntimeException("§4language Path Is Forbidden!");
+//			cs.sendMessage(String.format("§bThe key %s does not exist in the language file %s.", key, lang));
 			return false;
 		}
 		return true;
@@ -224,8 +213,10 @@ public class Language {
 	public static String invalidString(String key, File lang) {
 		String s;
 		try {
+
 			return (messages != null && messages.get(getServerLang()) != null
 					&& messages.get(getServerLang()).get(key) != null) ?
+
 					messages.get(getServerLang()).get(key) :
 					String.format("§e§oString '%s' in language file '%s' not loaded yet!",
 							key, lang.getName().split(".yml")[0]);
@@ -300,7 +291,7 @@ public class Language {
 		Lang l = new Lang(null);
 		l.setLocalLanguage(Lang.getLangFile(file.getName().split("/")[0].split(".yml")[0]));
 
-		for (String key : ymlc.getKeys(false)) {
+		for (String key : ymlc.getKeys(false))
 			for (String messName : ymlc.getConfigurationSection(key).getKeys(true)) {
 
 				if (ymlc.getString(key + "." + messName) != null) {
@@ -311,6 +302,5 @@ public class Language {
 				}
 				cs.sendMessage("§9" + key + "." + messName + ": " + l.getString(key + "." + messName));
 			}
-		}
 	}
 }
