@@ -68,6 +68,7 @@ language:
   replacing_lang_file: "The language file %s was replaced by its resource, since it was estimated more up to date§8."
   creating_lang_resource: "The language file %s was created from the resource§8."
   invalid_lang_resource: "The provided language resource file %s could not be accessed."
+  language_changed: "The server language was set to English"
 
 genrator:
   itemgenerator_forbiddenlist_add_item: "§6Item %s was added to the forbidden item list."

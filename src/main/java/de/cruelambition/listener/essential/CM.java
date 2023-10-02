@@ -23,9 +23,6 @@ public class CM implements Listener {
 		if (pc.getLanguageString() == null)
 			pc.setLanguage(Lang.getServerLang());
 
-		pc.setJoinTime(System.currentTimeMillis());
-		pc.savePCon();
-
 		Lang l = new Lang(p);
 		File lf = pc.getLanguage() != null ? pc.getLanguage() : null;
 		l.setPlayerLanguage(lf);
@@ -43,8 +40,13 @@ public class CM implements Listener {
 		else
 			Lang.broadcastArg("player_join_" + (new Random()).nextInt(17), p.getName());
 
-		p.sendTitle(Lang.PRE, String.format(Lang.getMessage(lf, "welcome_back"),
-				p.getName()), 30, 50, 50);
+		pc.setJoinTime(System.currentTimeMillis());
+		pc.savePCon();
+
+		p.sendTitle(Lang.PRE, String.format(Lang.getMessage(lf,
+				"welcome_back"), p.getName()), 30, 50, 50);
+
+		p.sendMessage(l.getLang(p) + " || " + l.getLanguage());
 	}
 
 	@EventHandler

@@ -2,13 +2,16 @@ package de.cruelambition.itemgenerator;
 
 import de.cruelambition.cmd.moderation.CheckMessage;
 import de.cruelambition.cmd.moderation.Fly;
+import de.cruelambition.cmd.moderation.InvSee;
 import de.cruelambition.cmd.user.Info;
+import de.cruelambition.cmd.user.Language;
+import de.cruelambition.cmd.user.PlayTime;
 import de.cruelambition.generator.Generator;
 import de.cruelambition.language.Lang;
-import de.cruelambition.language.Language;
 import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
 import de.cruelambition.listener.function.GameModeChange;
+import de.cruelambition.listener.function.ItemDrop;
 import de.cruelambition.worlds.SpawnWorld;
 
 import java.io.File;
@@ -51,11 +54,18 @@ public final class ItemGenerator extends JavaPlugin {
 		Objects.requireNonNull(getCommand("fly")).setExecutor(new Fly());
 		Objects.requireNonNull(getCommand("info")).setExecutor(new Info());
 		Objects.requireNonNull(getCommand("checkmessage")).setExecutor(new CheckMessage());
+		Objects.requireNonNull(getCommand("invsee")).setExecutor(new InvSee());
+		Objects.requireNonNull(getCommand("language")).setExecutor(new Language());
+		Objects.requireNonNull(getCommand("playtime")).setExecutor(new PlayTime());
+
+		Objects.requireNonNull(getCommand("language")).setTabCompleter(new Language());
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new CM(), this);
 		pm.registerEvents(new Chat(), this);
 		pm.registerEvents(new GameModeChange(), this);
+		pm.registerEvents(new InvSee(), this);
+		pm.registerEvents(new ItemDrop(), this);
 
 		FileConfiguration c = getConfig();
 
@@ -67,12 +77,15 @@ public final class ItemGenerator extends JavaPlugin {
 		g = new Generator();
 		g.fillList();
 		g.syncForbiddenItems();
-		g.removeAllForbiddenItemsFromMaterialList();
 
+		g.removeAllForbiddenItemsFromMaterialList();
 		g.checkForForbiddenItemsLoop(csi, cf);
+
 		g.startGeneratorLoop(gsi, gf);
+		g.listForbiddenItems();
 
 		VERSION = "0.0.1";
+//		if (getVersion() != null) VERSION = getVersion();
 
 		cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(), "modules_success"));
 		cs.sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),

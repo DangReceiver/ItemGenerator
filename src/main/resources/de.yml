@@ -22,7 +22,7 @@ pronouns:
 cm:
   welcome_back: "§7Willkommen zurück §3%s §c❤"
   player_first_join: "%s ist das erste mal beigetreten!"
-  player_join_0: "%s just hopped in§8. ⌈§a»§8⌋"
+  player_join_0: "%s ist ausgerutscht§8. ⌈§a»§8⌋"
   player_join_1: "%s ist heute mit dabei§8. ⌈§a»§8⌋"
   player_join_2: "Hey %s, siehst' heute gut aus§8! ⌈§a»§8⌋"
   player_join_3: "%s begleitet uns heute§8. ⌈§a»§8⌋"
@@ -68,6 +68,7 @@ language:
   replacing_lang_file: "The language file %s was replaced by its resource, since it was estimated more up to date§8."
   creating_lang_resource: "The language file %s was created from the resource§8."
   invalid_lang_resource: "The provided language resource file %s could not be accessed."
+  language_changed: "Die Serversprache wurde auf Deutsch gestellt."
 
 frequent:
   not_implemented_yet: "You are looking into the future! This feature has not been implemented yet!"

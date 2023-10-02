@@ -20,7 +20,6 @@ import org.bukkit.entity.Player;
 
 public class PC {
 	private final OfflinePlayer op;
-	private String uuid;
 
 	private final File f;
 	private final YamlConfiguration c;
@@ -28,10 +27,10 @@ public class PC {
 	private final String path;
 
 	public PC(OfflinePlayer pOp) {
-		path = "ItemGenerator/players/%s.yml";
+		path = "plugins/ItemGenerator/players";
 		op = pOp;
 
-		f = new File("ItemGenerator/players/", op.getUniqueId() + ".yml");
+		f = new File(path, op.getUniqueId() + ".yml");
 		c = YamlConfiguration.loadConfiguration(f);
 	}
 
@@ -54,38 +53,33 @@ public class PC {
 	}
 
 	public boolean hasCon(OfflinePlayer p) {
-		return (new File(String.format(path, p.getUniqueId()))).exists();
+		return (new File(path, p.getUniqueId() + ".yml")).exists();
 	}
 
 	public PC createCon(OfflinePlayer op) {
-		File tf = new File(String.format(path, op.getUniqueId() + ".yml"));
+		File tf = new File(path, op.getUniqueId() + ".yml");
 
 		if (!tf.exists())
 			try {
+
 				tf.createNewFile();
 			} catch (IOException ignore) {
 
-				if (!createFile(op.getUniqueId()))
-					try {
-						tf.createNewFile();
-
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
+				if (!createFile(op.getUniqueId())) tf.mkdir();
 			}
 		return new PC(op);
 	}
 
 	public static boolean createFile(UUID uuid) {
-		String path = "plugins/ItemGenerator/players/" + uuid.toString() + ".yml";
-		File f1 = new File(path);
+		String path = "plugins/ItemGenerator/players";
+		File f1 = new File(path, uuid.toString() + ".yml");
 
 		if (f1.exists())
-			return false;
+			return true;
 
 		try {
 			if (!f1.createNewFile()) {
-				System.out.println("The folder could not be created.");
+				System.out.println("The file could not be created.");
 				return false;
 			}
 
@@ -228,7 +222,7 @@ public class PC {
 	}
 
 	public File getLanguage() {
-		return Language.getLangFile((getLanguageString() != null) ?
+		return Language.getLangFile(getLanguageString() != null ?
 				getLanguageString() : Language.getServerLang().getName().split("\\.")[0]);
 	}
 

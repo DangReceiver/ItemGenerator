@@ -9,49 +9,51 @@ import org.bukkit.entity.Player;
 
 public class CheckMessage implements CommandExecutor {
 
+	public static String PERMISSION = "ItemGenerator.CheckMessage";
 
 	@Override
 	public boolean onCommand(CommandSender sen, Command cmd, String lab, String[] args) {
-		Player p = null;
 		Lang l = new Lang(null);
+		if (sen instanceof Player) l.setPlayer((Player) sen);
 
-		if (sen instanceof Player)
-			p = (Player) sen;
-		if (p != null) l.setPlayer(null);
+		if (!sen.hasPermission(PERMISSION)) {
+			sen.sendMessage(Lang.PRE + l.getString("insufficient_permission"));
+			return false;
+		}
 
 		if (args.length > 1) {
-			sen.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "invalid_argument_length"));
+			sen.sendMessage(Lang.PRE + l.getString("invalid_argument_length"));
 			return false;
 		}
 
-		sen.sendMessage("Blup");
+		if (l.getMissingKeys() == null || Language.missingKeys == null) {
+
+			sen.sendMessage(Lang.PRE + l.getString("no_missing_keys"));
+			return false;
+		}
 
 		if (args.length == 0) {
-			sen.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "missing_strings"));
+			sen.sendMessage(Lang.PRE + l.getString("listing_missing_keys"));
 
-			if(l.getMissingKeys() == null) {
-				sen.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "no_missing_keys"));
-				return false;
-			}
-
-			for (String s : l.getMissingKeys()) sen.sendMessage(Lang.PRE +
-					String.format(Lang.getMessage(l.getLanguage(), "missing_strings"), s));
+			for (String s : l.getMissingKeys())
+				sen.sendMessage(Lang.PRE + String.format(
+						l.getString("missing_strings"), s));
 			return false;
-		}
 
-		if (args[0].equalsIgnoreCase("*")) {
-			int i = 0;
-			sen.sendMessage("Blup1");
+		} else if (args.length == 1) {
+			if (args[0].equalsIgnoreCase("*")) {
 
-			for (String s : Language.missingKeys) {
-				sen.sendMessage(Lang.PRE + String.format(Lang.getMessage(l.getLanguage(),
-						"list_missing_Strings"), s.replaceAll(";", " §8→ §7"), i));
-				i++;
-			}
+				int i = 0;
+				sen.sendMessage(Lang.PRE + l.getString("listing_missing_keys"));
 
-		} else {
-			sen.sendMessage("Blup2");
-			sen.sendMessage(Lang.PRE + Lang.getMessageUnverified(l.getLanguage(), args[0]));
+				for (String s : Language.missingKeys) {
+					sen.sendMessage(Lang.PRE + String.format(Lang.getMessage(l.getLanguage(),
+							"list_missing_Strings"), s.replaceAll(";", " §8→ §7"), i));
+					i++;
+				}
+
+			} else
+				sen.sendMessage(Lang.PRE + l.getString(args[0]));
 		}
 		return false;
 	}

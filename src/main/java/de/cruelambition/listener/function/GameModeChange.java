@@ -25,6 +25,6 @@ public class GameModeChange implements Listener {
 			p.sendMessage(Lang.PRE + l.getString("gamemode_changed_non_survival"));
 		}
 
-		p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 0.25f, vol);
+		p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.4f, vol);
 	}
 }

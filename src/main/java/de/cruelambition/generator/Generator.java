@@ -30,6 +30,10 @@ public class Generator {
 		forbidden = new ArrayList<>();
 	}
 
+	public List<String> getForbiddenList() {
+		return forbidden;
+	}
+
 	public void fillList() {
 		for (Material value : Material.values()) material.add(value.toString());
 	}
@@ -77,9 +81,13 @@ public class Generator {
 		for (Material mt : Material.values())
 			if (mt.toString().contains(m)) forbidden.add(m);
 
-		Lang.broadcastArg("itemgenerator_forbiddenlist_add_item", m.toLowerCase());
 		Bukkit.getConsoleSender().sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),
 				"itemgenerator_forbiddenlist_add_item"), m.toLowerCase()));
+	}
+
+	public void listForbiddenItems() {
+		Lang.broadcastArg("itemgenerator_forbidden_listing", getForbiddenList().toString()
+				.replace("[", "").replace("]", ""));
 	}
 
 	public void addItemToPermanentForbiddenList(Material m) {
@@ -110,7 +118,7 @@ public class Generator {
 		for (Material m : Material.values())
 			for (String s : forbidden)
 				if (m.toString().contains(s) && material.contains(m.toString())) {
-					cs.sendMessage("Removed Item: " + m);
+//					cs.sendMessage( "§9Removed Item: " + m);
 					removeItemFromList(m);
 				}
 	}

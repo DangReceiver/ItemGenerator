@@ -10,8 +10,9 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class Lang extends Language {
+
 	public static String PRE = colorFromRGB(195, 40, 155) + "ItemGenerator§8: "
-			+ colorFromRGB(150, 150, 150);
+			+ colorFromRGB(160, 160, 160);
 
 	private File lf;
 	private Player p;
@@ -43,6 +44,10 @@ public class Lang extends Language {
 
 	public void setLocalLanguage(File temp) {
 		Language.getLangFile(temp.getName().split(".yml")[0]);
+	}
+
+	public void updateLf(File pF) {
+		lf = pF;
 	}
 
 	public File getLanguage() {

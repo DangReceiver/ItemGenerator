@@ -2,8 +2,8 @@ name: ItemGenerator
 main: de.cruelambition.itemgenerator.ItemGenerator
 version: '0.0.1'
 api-version: '1.20'
-author: CruelAmbition
-description: oki doki
+author: CruelAmbition / Rae
+description: this awesome generation mini game :)
 
 commands:
   fly:
@@ -14,3 +14,9 @@ commands:
     description: Get basic plugin and user Info
   checkmessage:
     description: Check if a message is set / which messages are unset
+  playtime:
+    description: View your current play time
+  language:
+    description: set your ingame language
+  invsee:
+    description: view another players inventory

@@ -89,10 +89,8 @@ public class Language {
 	public void setPlayerLang(Player p, File file) {
 		if (p != null) {
 			removePlayer(p);
-			settings.put(p, getLangFile("en"));
-
-			if (!file.exists()) return;
 			settings.put(p, file);
+			p.sendMessage(settings.get(p).getName());
 
 		} else
 			Bukkit.getConsoleSender().sendMessage(Lang.getMessage(getServerLang(), "target_invalid"));
@@ -202,11 +200,6 @@ public class Language {
 			lang = getServerLang();
 		}
 
-		if (messages.get(lang) == null)
-			throw new RuntimeException(String.format("The String '%s' could not be determined! [0]", lang.getName()));
-		if (messages.get(lang).get(key) == null)
-			throw new RuntimeException(String.format("The String key '%s' is not listed! [1]", key));
-
 		String see = isValid(lang, key) ? messages.get(lang).get(key) :
 				(isValid(getServerLang(), key) ? messages.get(getServerLang()).get(key) :
 
@@ -214,7 +207,7 @@ public class Language {
 								String.format(messages.get(lang).get("string_not_found"), key) :
 								invalidString(key, lang)));
 
-		if (see == null) throw new RuntimeException("The resulting String does not exist! [2]");
+		if (see == null) throw new RuntimeException("The resulting String does not exist! [0]");
 		return see;
 	}
 
