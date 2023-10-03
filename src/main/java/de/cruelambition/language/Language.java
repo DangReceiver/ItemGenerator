@@ -42,10 +42,6 @@ public class Language {
 		return c.getString("Lang", "en");
 	}
 
-	public void setSLang(File serverLang) {
-		setServerLanguage(sLang = serverLang);
-	}
-
 	public File getLang(Player p) {
 		return (!settings.isEmpty() && settings.get(p) != null) ? settings.get(p) : getServerLang();
 	}
@@ -66,13 +62,14 @@ public class Language {
 		return langFiles;
 	}
 
-	public void setServerLanguage(File language) {
+	public void setServerLanguage(File serverLang) {
 		ItemGenerator itemGenerator = ItemGenerator.getItemGenerator();
+		sLang = serverLang;
 
 		FileConfiguration c = itemGenerator.getConfig();
 		List<String> langFiles = getLanguages();
 
-		if (language == null) {
+		if (serverLang == null) {
 			if (!c.isSet("Language")) {
 
 				c.set("Language", "en");
@@ -82,15 +79,14 @@ public class Language {
 			if (!langFiles.contains(c.getString("Language") + ".yml")) return;
 			sLang = new File(df + "/languages", c.getString("Language") + ".yml");
 
-		} else if (langFiles.contains(language.getName()))
-			sLang = language;
+		} else if (langFiles.contains(serverLang.getName()))
+			sLang = serverLang;
 	}
 
 	public void setPlayerLang(Player p, File file) {
 		if (p != null) {
 			removePlayer(p);
 			settings.put(p, file);
-			p.sendMessage(settings.get(p).getName());
 
 		} else
 			Bukkit.getConsoleSender().sendMessage(Lang.getMessage(getServerLang(), "target_invalid"));
@@ -156,7 +152,7 @@ public class Language {
 	public void loadingSequence() {
 		loadResources();
 
-		if (getServerLang() == null) setSLang(new File(getLangFolder(), "en.yml"));
+		if (getServerLang() == null) setServerLanguage(new File(getLangFolder(), "en.yml"));
 		loadLanguages(getLangFolder());
 	}
 

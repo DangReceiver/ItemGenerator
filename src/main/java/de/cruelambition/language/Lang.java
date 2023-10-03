@@ -32,6 +32,9 @@ public class Lang extends Language {
 
 	public void setPlayerLanguage(File pLang) {
 		if (p != null) lang.setPlayerLang(p, pLang);
+
+		lf = pLang;
+		lang.setPlayerLang(p, pLang);
 	}
 
 	public void setPlayer(Player player) {

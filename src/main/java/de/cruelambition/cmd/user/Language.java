@@ -44,13 +44,10 @@ public class Language implements CommandExecutor, TabCompleter {
 		pc.setLanguage(lf);
 		l.setPlayerLanguage(lf);
 
-		l.setPlayerLang(p, lf);
-		l.updateLf(lf);
-
+		p.sendMessage("§b" + l.getLang(p) + " || " + l.getLanguage());
 
 		pc.savePCon();
 		p.sendMessage(Lang.PRE + l.getString("language_changed"));
-
 		return false;
 	}
 
