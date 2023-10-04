@@ -42,7 +42,15 @@ public class Language {
 		return c.getString("Lang", "en");
 	}
 
+	public void setPlayerInSettings(Player p, File f) {
+		settings.put(p, f);
+	}
+
 	public File getLang(Player p) {
+//		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+//		cs.sendMessage("§6" + settings.get(p));
+//		cs.sendMessage("§c" + ((!settings.isEmpty() && settings.get(p) != null) ? settings.get(p) : getServerLang()));
+
 		return (!settings.isEmpty() && settings.get(p) != null) ? settings.get(p) : getServerLang();
 	}
 
@@ -84,12 +92,13 @@ public class Language {
 	}
 
 	public void setPlayerLang(Player p, File file) {
-		if (p != null) {
-			removePlayer(p);
-			settings.put(p, file);
+		if (p == null) return;
+		removePlayer(p);
 
-		} else
-			Bukkit.getConsoleSender().sendMessage(Lang.getMessage(getServerLang(), "target_invalid"));
+		Bukkit.getConsoleSender().sendMessage("§5settings: §b" + p.getName() + " §e|| " + file.getName());
+
+		if (!file.exists()) settings.put(p, getServerLang());
+		else settings.put(p, file);
 	}
 
 	public static boolean isLangFile(String lang) {
@@ -100,7 +109,7 @@ public class Language {
 		File file = new File(df + "/languages", lang + ".yml");
 
 		try {
-			if (!file.createNewFile() && !file.exists())
+			if (!file.exists() && !file.createNewFile())
 				throw new RuntimeException("The resulting lang file does not exist!");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -109,6 +118,7 @@ public class Language {
 	}
 
 	public void removePlayer(Player p) {
+		Bukkit.getConsoleSender().sendMessage("§4Removing " + p.getName());
 		settings.remove(p);
 	}
 
@@ -121,10 +131,9 @@ public class Language {
 		List<File> resources = new ArrayList<>(List.of(getLangFile("en"), getLangFile("de")));
 
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
-
 		for (File f : resources) {
-			if (f.exists() && f.length() > 0) continue;
 
+			if (f.exists() && f.length() > 0) continue;
 			String s = f.getName();
 
 			InputStream in = ig.getResource(s);
@@ -156,38 +165,6 @@ public class Language {
 		loadLanguages(getLangFolder());
 	}
 
-
-//	public static String getMessage(File lang, String key) {
-//		String s = messages.get(lang).get(key);
-//
-//		ConsoleCommandSender cs = Bukkit.getConsoleSender();
-//		cs.sendMessage("Blup0");
-//
-//		if (s == null) {
-//			if (lang != getServerLang()) {
-//				s = messages.get(getServerLang()).get(key);
-//				cs.sendMessage("Blup1");
-//
-//			}
-//			cs.sendMessage("Blup2");
-//
-//		}
-//
-//		if (s == null) {
-//			if (messages.get(lang).get("string_not_found") == null) {
-//				s = messages.get(lang).get("string_not_found");
-//				cs.sendMessage("Blup3");
-//
-//			}
-//			cs.sendMessage("Blup4");
-//
-//		}
-//
-//		if (s == null) cs.sendMessage("Blup5");
-//
-//		return s;
-//	}
-
 	public static String getMessage(File lang, String key) {
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 		if (lang == null || !lang.exists() || key == null) {
@@ -207,14 +184,13 @@ public class Language {
 		return see;
 	}
 
-
-	@Deprecated
-	public static String getMessageUnverified(File lang, String key) {
-		return isValidUnlisted(lang, key) ? (messages.get(lang)).get(key) : (isValidUnlisted(getServerLang(), key) ?
-
-				(messages.get(getServerLang())).get(key) : (isValidUnlisted(lang, "string_not_found") ?
-				String.format((messages.get(lang)).get("string_not_found"), key) : invalidString(key, lang)));
-	}
+//	@Deprecated
+//	public static String getMessageUnverified(File lang, String key) {
+//		return isValidUnlisted(lang, key) ? (messages.get(lang)).get(key) : (isValidUnlisted(getServerLang(), key) ?
+//
+//				(messages.get(getServerLang())).get(key) : (isValidUnlisted(lang, "string_not_found") ?
+//				String.format((messages.get(lang)).get("string_not_found"), key) : invalidString(key, lang)));
+//	}
 
 	public static boolean isValid(@NotNull File lang, @NotNull String key) {
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();

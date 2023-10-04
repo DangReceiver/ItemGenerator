@@ -30,9 +30,10 @@ public class Fly implements CommandExecutor {
 		}
 
 		if (args.length == 0) {
-			p.setAllowFlight(!p.getAllowFlight());
+			p.setAllowFlight(!p.isFlying());
 			p.setFlying(!p.isFlying());
 			p.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "flight_updated"));
+			return false;
 
 		} else if (args.length != 1) {
 			p.sendMessage(Lang.PRE + String.format(Lang.getMessage(l.getLanguage(), "argument_range"), 0, 1));
@@ -48,7 +49,7 @@ public class Fly implements CommandExecutor {
 		p.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "flight_updated_target"));
 		l.setPlayer(t);
 
-		t.setAllowFlight(!t.getAllowFlight());
+		t.setAllowFlight(!p.isFlying());
 		t.setFlying(!t.isFlying());
 		t.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "flight_updated"));
 

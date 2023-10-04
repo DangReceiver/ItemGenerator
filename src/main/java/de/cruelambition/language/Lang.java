@@ -31,7 +31,7 @@ public class Lang extends Language {
 	}
 
 	public void setPlayerLanguage(File pLang) {
-		if (p != null) lang.setPlayerLang(p, pLang);
+		if (p == null) throw new RuntimeException("Player target invalid: Cannot set new language");
 
 		lf = pLang;
 		lang.setPlayerLang(p, pLang);
@@ -77,7 +77,6 @@ public class Lang extends Language {
 		return String.format(Language.getMessage(lf, last = key), (Object[]) replacements);
 	}
 
-
 	public static ChatColor colorFromRGB(int r, int g, int b) {
 		return ChatColor.of(new Color(r, g, b));
 	}
@@ -85,7 +84,6 @@ public class Lang extends Language {
 	public String getLast() {
 		return last;
 	}
-
 
 	public static ChatColor getColor(int r, int g, int b) {
 		return ChatColor.of("#" + r + g + b);
@@ -102,13 +100,6 @@ public class Lang extends Language {
 			String format = String.format(getMessage(new Lang(ap).getLang(ap), key), (Object[]) arg);
 			ap.sendMessage(PRE + format);
 		}
-	}
-
-	public void printMissingKeys() {
-		ConsoleCommandSender cs = Bukkit.getConsoleSender();
-		cs.sendMessage("§7Known missing keys§8:");
-
-		for (String key : missingKeys) cs.sendMessage("§7" + key.replace("; ", "§8« §6"));
 	}
 
 	public List<String> getMissingKeys() {

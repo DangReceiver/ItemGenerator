@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -217,8 +218,7 @@ public class PC {
 	}
 
 	public String getLanguageString() {
-		return c.isSet("Settings.Language") ? c.getString("Settings.Language") :
-				Language.getServerLang().getName().split("\\.yml")[0];
+		return c.getString("Settings.Language", "en");
 	}
 
 	public File getLanguage() {

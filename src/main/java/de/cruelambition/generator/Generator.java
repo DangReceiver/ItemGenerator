@@ -64,7 +64,8 @@ public class Generator {
 
 		if (!c.isSet("Item.List.Forbidden")) {
 			c.set("Item.List.Forbidden", new ArrayList<>(List.of(Material.AIR.toString(),
-					Material.COMMAND_BLOCK.toString(), Material.JIGSAW.toString())));
+					Material.COMMAND_BLOCK.toString(), Material.JIGSAW.toString(),
+					Material.STRUCTURE_BLOCK.toString())));
 			ItemGenerator.getItemGenerator().saveConfig();
 		}
 

@@ -8,8 +8,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,7 +42,7 @@ public class Language implements CommandExecutor, TabCompleter {
 		pc.setLanguage(lf);
 		l.setPlayerLanguage(lf);
 
-		p.sendMessage("§b" + l.getLang(p) + " || " + l.getLanguage());
+//		p.sendMessage("§b" + l.getLang(p) + " || " + l.getLanguage());
 
 		pc.savePCon();
 		p.sendMessage(Lang.PRE + l.getString("language_changed"));
