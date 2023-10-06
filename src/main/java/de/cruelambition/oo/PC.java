@@ -10,14 +10,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class PC {
 	private final OfflinePlayer op;
@@ -172,6 +170,11 @@ public class PC {
 		return c.isSet("Customization.Chat.ChatColor") ? c.getIntegerList("Customization.Chat.ChatColor") :
 				Arrays.<Integer>asList(new Integer[] {Integer.valueOf(190),
 						Integer.valueOf(180), Integer.valueOf(185)});
+	}
+
+	public ItemStack getFiller() {
+		return new ItemStack(c.isSet("Customization.Inventory.Filler") ? Material.valueOf(
+				c.getString("Customization.Inventory.Filler")) : Material.WHITE_STAINED_GLASS_PANE);
 	}
 
 	public String getPlayerColor() {

@@ -11,8 +11,9 @@ import org.bukkit.entity.Player;
 
 public class Lang extends Language {
 
-	public static String PRE = colorFromRGB(195, 40, 155) + "ItemGenerator§8: "
-			+ colorFromRGB(160, 160, 160);
+	public static String PRE = colorFromRGB(220, 45, 150) + "ItemGenerator§8: "
+			+ colorFromRGB(160, 160, 160),
+			CHAT = colorFromRGB(220, 45, 150) + "IG§8: ";
 
 	private File lf;
 	private Player p;
