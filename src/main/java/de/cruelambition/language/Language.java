@@ -296,6 +296,10 @@ public class Language {
 		}
 	}
 
+	/*
+	 			DEBUG START
+	 */
+
 	public static void printAllMessages(File file) {
 		YamlConfiguration ymlc = YamlConfiguration.loadConfiguration(file);
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
@@ -328,4 +332,8 @@ public class Language {
 			cs.sendMessage("§2" + val);
 		}
 	}
+
+	/*
+	 			DEBUG END
+	 */
 }

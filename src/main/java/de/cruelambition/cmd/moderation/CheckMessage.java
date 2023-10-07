@@ -48,7 +48,7 @@ public class CheckMessage implements CommandExecutor {
 
 				for (String s : Language.missingKeys) {
 					sen.sendMessage(Lang.PRE + String.format(Lang.getMessage(l.getLanguage(),
-							"list_missing_Strings"), s.replaceAll(";", " §8→ §7"), i));
+							"list_missing_Keys"), s.replaceAll(";", " §8→ §7"), i));
 					i++;
 				}
 

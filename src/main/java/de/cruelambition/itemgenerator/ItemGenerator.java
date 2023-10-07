@@ -2,6 +2,7 @@ package de.cruelambition.itemgenerator;
 
 import de.cruelambition.cmd.moderation.CheckMessage;
 import de.cruelambition.cmd.moderation.Fly;
+import de.cruelambition.cmd.moderation.GeneratorFrequencies;
 import de.cruelambition.cmd.moderation.InvSee;
 import de.cruelambition.cmd.user.Info;
 import de.cruelambition.cmd.user.Language;
@@ -16,8 +17,10 @@ import de.cruelambition.worlds.SpawnWorld;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -36,7 +39,9 @@ public final class ItemGenerator extends JavaPlugin {
 
 	public void onEnable() {
 		ig = this;
-		BukkitScheduler bs = Bukkit.getScheduler();
+		Lang.prefix();
+
+//		BukkitScheduler bs = Bukkit.getScheduler();
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 
 		createFolder(getDataFolder() + "/languages");
@@ -44,7 +49,6 @@ public final class ItemGenerator extends JavaPlugin {
 
 		Lang l = new Lang(null);
 		l.loadingSequence();
-//		l.printMissingKeys();
 
 		World spawn = Bukkit.getWorld("world");
 		if (spawn == null) spawn.save();
@@ -57,8 +61,11 @@ public final class ItemGenerator extends JavaPlugin {
 		Objects.requireNonNull(getCommand("invsee")).setExecutor(new InvSee());
 		Objects.requireNonNull(getCommand("language")).setExecutor(new Language());
 		Objects.requireNonNull(getCommand("playtime")).setExecutor(new PlayTime());
+		Objects.requireNonNull(getCommand("chat")).setExecutor(new de.cruelambition.cmd.moderation.Chat());
+		Objects.requireNonNull(getCommand("generatorfrequencies")).setExecutor(new GeneratorFrequencies());
 
 		Objects.requireNonNull(getCommand("language")).setTabCompleter(new Language());
+		Objects.requireNonNull(getCommand("generatorfrequencies")).setTabCompleter(new GeneratorFrequencies());
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new CM(), this);
@@ -67,24 +74,15 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new InvSee(), this);
 		pm.registerEvents(new ItemDrop(), this);
 
-		FileConfiguration c = getConfig();
-
-		int csi = getSafeInt(c, "Loops.Check.StartIn", 60, 50),
-				cf = getSafeInt(c, "Loops.Check.Frequency", 80, 60),
-				gsi = getSafeInt(c, "Loops.Generator.StartIn", 6, 5),
-				gf = getSafeInt(c, "Loops.Generator.Frequency", 30, 20);
-
 		g = new Generator();
-		g.fillList();
-		g.syncForbiddenItems();
+		List<Integer> f = g.getFrequencies();
+		Generator.start(g, f.get(0), f.get(1), f.get(2), f.get(3));
 
-		g.removeAllForbiddenItemsFromMaterialList();
-		g.checkForForbiddenItemsLoop(csi, cf);
+		int i = new Random().nextInt(6);
+		Bukkit.setMotd(l.getString("motd_" + i));
+		cs.sendMessage(Lang.PRE + String.format(l.getString("using_motd_x"), i));
 
-		g.startGeneratorLoop(gsi, gf);
-		g.listForbiddenItems();
-
-		VERSION = "0.0.1";
+		VERSION = "0.1.1";
 //		if (getVersion() != null) VERSION = getVersion();
 
 		cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(), "modules_success"));
@@ -92,6 +90,31 @@ public final class ItemGenerator extends JavaPlugin {
 				"running_version"), VERSION));
 	}
 
+
+	public void onDisable() {
+		Lang.prefix();
+
+		if (g != null) {
+			g.cancelCheck();
+			g.cancelGenerator();
+		}
+
+		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+		Lang l = new Lang(null);
+
+		if (l.getMissingKeys().isEmpty() || l.getMissingKeys() == null) return;
+		cs.sendMessage(Lang.PRE + l.getString("listing_missing_keys"));
+
+		for (String mk : l.getMissingKeys())
+			cs.sendMessage(Lang.PRE + String.format(l.getString("list_missing_Keys"), mk));
+	}
+
+
+	/*
+			Utils
+	 */
+
+	//toReturn: In case value hasn't been set yet
 	public int getSafeInt(FileConfiguration c, String path, int setDefault, int toReturn) {
 		if (c.isSet(path)) toReturn = c.getInt(path);
 		else c.set(path, setDefault);
@@ -106,16 +129,7 @@ public final class ItemGenerator extends JavaPlugin {
 
 		File f1 = new File(path);
 		if (f1.exists()) return false;
-		if (!f1.mkdir()) return false;
-
-		return true;
-	}
-
-	public void onDisable() {
-		if (g != null) {
-			g.cancelCheck();
-			g.cancelGenerator();
-		}
+		return f1.mkdir();
 	}
 
 	public static ItemGenerator getItemGenerator() {

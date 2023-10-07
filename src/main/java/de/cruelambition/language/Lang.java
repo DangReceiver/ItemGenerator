@@ -11,9 +11,9 @@ import org.bukkit.entity.Player;
 
 public class Lang extends Language {
 
-	public static String PRE = colorFromRGB(220, 45, 150) + "ItemGenerator§8: "
-			+ colorFromRGB(160, 160, 160),
-			CHAT = colorFromRGB(220, 45, 150) + "IG§8: ";
+	public static int PRE_VALUE;
+	public static String PRE = "",
+			CHAT = colorFromRGB(230, 60, 160) + "IG§8: ";
 
 	private File lf;
 	private Player p;
@@ -25,6 +25,32 @@ public class Lang extends Language {
 		lang = new Language();
 		p = player;
 		lf = lang.getLang(p != null ? p : null);
+	}
+
+	public static void prefix() {
+		switch (PRE_VALUE) {
+
+			// Before Start / After End
+			// While Running
+			default:
+			case 2:
+				PRE = colorFromRGB(230, 60, 160) + "ItemGenerator§8: "
+						+ colorFromRGB(180, 180, 180);
+				break;
+
+			// Setup / Main
+			case 1:
+				PRE = colorFromRGB(45, 220, 150) + "ItemGenerator§8: "
+						+ colorFromRGB(180, 180, 180);
+				break;
+
+			// Shutdown
+			case 3:
+				PRE = colorFromRGB(225, 20, 100) + "ItemGenerator§8: "
+						+ colorFromRGB(160, 160, 160);
+				break;
+		}
+		PRE_VALUE++;
 	}
 
 	public static File getServerLang() {
@@ -43,7 +69,39 @@ public class Lang extends Language {
 	}
 
 	public String getString(String key) {
-		return Language.getMessage(lf, (last = key));
+		return translateCustomColor(Language.getMessage(lf, (last = key)));
+	}
+
+	public String translateCustomColor(String s) {
+		if (!s.contains("$")) return s;
+		int r = 0, g = 0, b = 0;
+
+		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+		cs.sendMessage(s);
+
+		try {
+			r = Integer.parseInt(
+					s.split("\\$")[1]
+							.split(",")[0]);
+			s = s.replace("§"+r, "");
+			cs.sendMessage(s);
+
+			g = Integer.parseInt(s.split(",")[1]
+					.split(",")[0]);
+			s = s.replace(",", "").replace(g + "", "");
+			cs.sendMessage(s);
+
+			b = Integer.parseInt(s.split(",")[1]
+					.split("; ")[0]);
+			s = s.replace(",", "").replace(b + "", "").replace("; ", "§");
+			cs.sendMessage(s);
+
+		} catch (NumberFormatException ex) {
+			ex.printStackTrace();
+		}
+		cs.sendMessage(s);
+
+		return s.replace("$", colorFromRGB(r, g, b) + "");
 	}
 
 	public void setLocalLanguage(File temp) {

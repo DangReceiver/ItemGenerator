@@ -1,6 +1,6 @@
 name: ItemGenerator
 main: de.cruelambition.itemgenerator.ItemGenerator
-version: '0.0.1'
+version: '0.1.1'
 api-version: '1.20'
 author: CruelAmbition / Rae
 description: this awesome generation mini game :)
@@ -20,3 +20,7 @@ commands:
     description: set your ingame language
   invsee:
     description: view another players inventory
+  generatorfrequencies:
+    description: Adjust the generator settings in game!
+  chat:
+    description: Customize your chat experience

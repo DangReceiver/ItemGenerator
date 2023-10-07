@@ -34,6 +34,59 @@ public class Generator {
 		return forbidden;
 	}
 
+	public static void start(Generator g, int csi, int cf, int gsi, int gf) {
+		g.fillList();
+		g.syncForbiddenItems();
+
+		g.removeAllForbiddenItemsFromMaterialList();
+		g.checkForForbiddenItemsLoop(csi, cf);
+
+		g.startGeneratorLoop(gsi, gf);
+		g.listForbiddenItems();
+	}
+
+	public List<Integer> getFrequencies() {
+		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+		int csi = c.getInt("Loops.Check.StartIn", 60),
+				cf = c.getInt("Loops.Check.Frequency", 80),
+				gsi = c.getInt("Loops.Generator.StartIn", 6),
+				gf = c.getInt("Loops.Generator.Frequency", 30);
+
+		return new ArrayList<>(Arrays.asList(csi, cf, gsi, gf));
+	}
+
+	public void setFrequencies(int csi, int cf, int gsi, int gf) {
+		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+		c.set("Loops.Check.StartIn", csi);
+
+		c.set("Loops.Check.Frequency", cf);
+		c.set("Loops.Generator.StartIn", gsi);
+
+		c.set("Loops.Generator.Frequency", gf);
+		ItemGenerator.getItemGenerator().saveConfig();
+	}
+
+	public void stopLoop() {
+		generatorLoop.cancel();
+		checkLoop.cancel();
+	}
+
+	public void restart() {
+		stopLoop();
+
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
+			List<Integer> f = getFrequencies();
+			start(new Generator(), f.get(0), f.get(1), f.get(2), f.get(3));
+		}, 5);
+	}
+
+	public void restart(int csi, int cf, int gsi, int gf) {
+		stopLoop();
+
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () ->
+				start(new Generator(), csi, cf, gsi, gf), 5);
+	}
+
 	public void fillList() {
 		for (Material value : Material.values()) material.add(value.toString());
 	}

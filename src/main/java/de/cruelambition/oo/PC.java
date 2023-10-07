@@ -172,9 +172,9 @@ public class PC {
 						Integer.valueOf(180), Integer.valueOf(185)});
 	}
 
-	public ItemStack getFiller() {
-		return new ItemStack(c.isSet("Customization.Inventory.Filler") ? Material.valueOf(
-				c.getString("Customization.Inventory.Filler")) : Material.WHITE_STAINED_GLASS_PANE);
+	public Material getFiller() {
+		return c.isSet("Customization.Inventory.Filler") ? Material.valueOf(
+				c.getString("Customization.Inventory.Filler")) : Material.WHITE_STAINED_GLASS_PANE;
 	}
 
 	public String getPlayerColor() {

@@ -51,13 +51,13 @@ public class Language implements CommandExecutor, TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sen, Command cmd, String lab, String[] args) {
+		if (args.length != 1) return null;
+
 		List<File> langFiles = new ArrayList<>(Arrays.asList(Objects.requireNonNull(new File(
 				ItemGenerator.getItemGenerator().getDataFolder() + "/languages").listFiles())));
 		List<String> arg = new ArrayList<>();
 
 		for (File lf : langFiles) arg.add(lf.getName().split(".yml")[0]);
-		if (args.length == 1) return arg;
-
-		return null;
+		return arg;
 	}
 }
