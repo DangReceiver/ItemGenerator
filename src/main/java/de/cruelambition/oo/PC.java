@@ -15,6 +15,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class PC {
@@ -127,6 +128,25 @@ public class PC {
 
 	public long getLong(String pPath) {
 		return c.getLong(pPath);
+	}
+
+	public Inventory getBackpack() {
+		Inventory inv = Bukkit.createInventory(null, getBackpackSize() * 9,
+				new Lang((Player) op).getString("backpack_inventory"));
+
+		for (int i = 0; i <= getBackpackSize() * 9 - 1; i++)
+			inv.setItem(i, c.getItemStack("Backpack.Content." + i));
+
+		return inv;
+	}
+
+	public void setBackpack(Inventory inv) {
+		for (int i = 0; i <= getBackpackSize() * 9 - 1; i++)
+			inv.setItem(i, inv.getItem(i));
+	}
+
+	public int getBackpackSize() {
+		return c.isSet("Backpack.Size") ? c.getInt("Backpack.Size") : 1;
 	}
 
 	public boolean isSet(String pPath) {
