@@ -86,11 +86,8 @@ public class GeneratorFrequencies implements CommandExecutor, TabCompleter {
 		List<String> l = new ArrayList<>(Arrays.asList("CheckStartIn", "CheckFrequency",
 				"GeneratorStartIn", "GeneratorFrequency"));
 
-		int i = 0;
-		for (String s : l) {
-			if (!s.contains(lab)) l.remove(i);
-			i++;
-		}
+		for (int i = 0; i < l.size(); i++)
+			if (!l.get(i).contains(args[0])) l.remove(i);
 
 		return l;
 	}

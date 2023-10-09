@@ -67,8 +67,8 @@ public class Generator {
 	}
 
 	public void stopLoop() {
-		generatorLoop.cancel();
-		checkLoop.cancel();
+		cancelGenerator();
+		cancelCheck();
 	}
 
 	public void restart() {
@@ -82,6 +82,7 @@ public class Generator {
 
 	public void restart(int csi, int cf, int gsi, int gf) {
 		stopLoop();
+		setFrequencies(csi, cf, gsi, gf);
 
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () ->
 				start(new Generator(), csi, cf, gsi, gf), 5);
@@ -198,15 +199,13 @@ public class Generator {
 	}
 
 	public void startGeneratorLoop(int startIn, int frequency) {
-		BukkitTask gl = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
+		this.generatorLoop = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
 				this::giveAll, 20L * startIn, 20L * frequency);
-		this.generatorLoop = gl;
 	}
 
 	public void checkForForbiddenItemsLoop(int startIn, int frequency) {
-		BukkitTask cl = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
+		this.checkLoop = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
 				this::removeAllForbiddenItemsFromAllPlayers, 20L * startIn, 20L * frequency);
-		this.checkLoop = cl;
 	}
 
 	public void cancelGenerator() {

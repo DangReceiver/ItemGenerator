@@ -13,6 +13,7 @@ import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
 import de.cruelambition.listener.function.GameModeChange;
 import de.cruelambition.listener.function.ItemDrop;
+import de.cruelambition.listener.function.Timber;
 import de.cruelambition.worlds.SpawnWorld;
 
 import java.io.File;
@@ -73,6 +74,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new GameModeChange(), this);
 		pm.registerEvents(new InvSee(), this);
 		pm.registerEvents(new ItemDrop(), this);
+		pm.registerEvents(new Timber(), this);
 
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();

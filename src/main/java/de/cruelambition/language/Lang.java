@@ -76,31 +76,16 @@ public class Lang extends Language {
 		if (!s.contains("$")) return s;
 		int r = 0, g = 0, b = 0;
 
-		ConsoleCommandSender cs = Bukkit.getConsoleSender();
-		cs.sendMessage(s);
-
 		try {
-			r = Integer.parseInt(
-					s.split("\\$")[1]
-							.split(",")[0]);
-			s = s.replace("§"+r, "");
-			cs.sendMessage(s);
+			r = Integer.parseInt(s.split("\\$")[1].split(",")[0]);
+			g = Integer.parseInt(s.split("\\$" + r + ",")[1].split(",")[0]);
 
-			g = Integer.parseInt(s.split(",")[1]
-					.split(",")[0]);
-			s = s.replace(",", "").replace(g + "", "");
-			cs.sendMessage(s);
-
-			b = Integer.parseInt(s.split(",")[1]
-					.split("; ")[0]);
-			s = s.replace(",", "").replace(b + "", "").replace("; ", "§");
-			cs.sendMessage(s);
+			b = Integer.parseInt( s.split("\\$" + r + "," + g + ",")[1].split("; ")[0]);
+			s = s.replace("$" + r + "," + g + "," + b + "; ", "");
 
 		} catch (NumberFormatException ex) {
 			ex.printStackTrace();
 		}
-		cs.sendMessage(s);
-
 		return s.replace("$", colorFromRGB(r, g, b) + "");
 	}
 
