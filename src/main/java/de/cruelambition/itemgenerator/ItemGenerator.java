@@ -4,6 +4,7 @@ import de.cruelambition.cmd.moderation.CheckMessage;
 import de.cruelambition.cmd.moderation.Fly;
 import de.cruelambition.cmd.moderation.GeneratorFrequencies;
 import de.cruelambition.cmd.moderation.InvSee;
+import de.cruelambition.cmd.user.Backpack;
 import de.cruelambition.cmd.user.Info;
 import de.cruelambition.cmd.user.Language;
 import de.cruelambition.cmd.user.PlayTime;
@@ -64,6 +65,7 @@ public final class ItemGenerator extends JavaPlugin {
 		Objects.requireNonNull(getCommand("playtime")).setExecutor(new PlayTime());
 		Objects.requireNonNull(getCommand("chat")).setExecutor(new de.cruelambition.cmd.moderation.Chat());
 		Objects.requireNonNull(getCommand("generatorfrequencies")).setExecutor(new GeneratorFrequencies());
+		Objects.requireNonNull(getCommand("backpack")).setExecutor(new Backpack());
 
 		Objects.requireNonNull(getCommand("language")).setTabCompleter(new Language());
 		Objects.requireNonNull(getCommand("generatorfrequencies")).setTabCompleter(new GeneratorFrequencies());
@@ -75,6 +77,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new InvSee(), this);
 		pm.registerEvents(new ItemDrop(), this);
 		pm.registerEvents(new Timber(), this);
+		pm.registerEvents(new Backpack(), this);
 
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();

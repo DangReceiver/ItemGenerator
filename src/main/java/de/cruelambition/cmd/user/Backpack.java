@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
 
 public class Backpack implements CommandExecutor, Listener {
 
@@ -41,6 +42,7 @@ public class Backpack implements CommandExecutor, Listener {
 
 		PC pc = new PC(p);
 		p.openInventory(pc.getBackpack());
+		p.sendMessage(Lang.PRE + new Lang(p).getString("backpack_opened"));
 
 		return false;
 	}
@@ -50,9 +52,16 @@ public class Backpack implements CommandExecutor, Listener {
 		HumanEntity he = e.getPlayer();
 		if (he instanceof Player p) {
 
+			Lang l = new Lang(p);
+			if (!p.getOpenInventory().getTitle().equals(l.getString("backpack_inventory"))) return;
+
 			PC pc = new PC(p);
-			pc.setBackpack(e.getInventory());
+			Inventory ti = p.getOpenInventory().getTopInventory();
+
+			pc.setBackpack(ti);
 			pc.savePCon();
+
+			p.sendMessage(Lang.PRE + l.getString("backpack_saved"));
 		}
 	}
 }

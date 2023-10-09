@@ -167,8 +167,7 @@ public class Generator {
 
 	public void removeAllForbiddenItemsFromMaterialList() {
 		if (material.isEmpty() || material == null) return;
-
-		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+//		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 
 		for (Material m : Material.values())
 			for (String s : forbidden)
@@ -219,6 +218,8 @@ public class Generator {
 	}
 
 	public void giveAll() {
+		Lang.broadcast("generator_give_all");
+
 		for (Player ap : Bukkit.getOnlinePlayers()) {
 			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
 			ap.playSound(ap.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.2f, 1.6f);

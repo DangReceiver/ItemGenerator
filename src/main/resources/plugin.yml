@@ -24,3 +24,5 @@ commands:
     description: Adjust the generator settings in game!
   chat:
     description: Customize your chat experience
+  backpack:
+    description: Expand your inventory

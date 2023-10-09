@@ -142,7 +142,7 @@ public class PC {
 
 	public void setBackpack(Inventory inv) {
 		for (int i = 0; i <= getBackpackSize() * 9 - 1; i++)
-			inv.setItem(i, inv.getItem(i));
+			c.set("Backpack.Content." + i, inv.getItem(i));
 	}
 
 	public int getBackpackSize() {
