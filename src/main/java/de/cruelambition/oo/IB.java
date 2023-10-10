@@ -1,7 +1,11 @@
 package de.cruelambition.oo;
 
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +18,41 @@ public class IB {
 	public IB() {
 	}
 
+	public boolean hasMaterial(Material m, Inventory in) {
+		for (int t = 0; t < in.getSize(); ++t)
+			if (in.getItem(t) != null && in.getItem(t).getType() == m) return true;
+		return false;
+	}
+
+	public static void singleAdds(ItemStack item, Inventory inv, int amount) {
+		for (int times = 0; times < amount; ++times) inv.addItem(item);
+	}
+
+	public static int getMaterialAmount(final Material mat, final Inventory in) {
+		int amount = 0;
+		for (int t = 0; t < in.getSize(); ++t)
+			if (in.getItem(t) != null && in.getItem(t).getType() == mat)
+				amount += in.getItem(t).getAmount();
+		return amount;
+	}
+
+	public static void removeItems(final Material mat, int amount, final Inventory inv) {
+		ItemStack item = new ItemStack(mat), air = new ItemStack(Material.AIR);
+		for (int times = 0; times <= inv.getSize(); ++times) {
+			if (!(inv.getItem(times) != null && inv.getItem(times).getType() == mat)) continue;
+			if (inv.getItem(times).getAmount() >= amount) {
+				final int amo = inv.getItem(times).getAmount() - amount;
+				item.setAmount(amo);
+				inv.setItem(times, item);
+				return;
+			}
+			if (inv.getItem(times).getAmount() <= amount) {
+				amount -= inv.getItem(times).getAmount();
+				inv.setItem(times, air);
+			}
+		}
+	}
+
 	public static ItemStack getFiller(Material m, boolean def, boolean glint, String name, String lore) {
 		ItemStack i = new ItemStack(m);
 		if (!def) {
@@ -21,11 +60,9 @@ public class IB {
 		} else {
 			lore(name(i, " §0 "), " §0 ");
 		}
-
 		if (glint) {
 			flag(ench(i, Enchantment.DURABILITY, 0), ItemFlag.HIDE_ENCHANTS);
 		}
-
 		return i;
 	}
 
@@ -63,7 +100,6 @@ public class IB {
 		if (loreBefore == null) {
 			loreBefore = getLore(item);
 		}
-
 		loreBefore.addAll(addedLore);
 		itemM.setLore(addedLore);
 		item.setItemMeta(itemM);
@@ -97,10 +133,8 @@ public class IB {
 
 	public static void invFiller(Inventory in, ItemStack filler) {
 		int inventorySize = in.getSize() - 1;
-
 		for (int times = 0; times <= inventorySize; ++times) {
 			in.setItem(times, filler);
 		}
-
 	}
 }

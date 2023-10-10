@@ -1,7 +1,11 @@
 package de.cruelambition.listener.function;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
+import de.cruelambition.language.Lang;
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -11,12 +15,16 @@ public class ItemDrop implements Listener {
 
 	@EventHandler
 	public void handle(ItemSpawnEvent e) {
-		e.getEntity().setPickupDelay(25);
+		Item en = e.getEntity();
+		CreatureSpawnEvent.SpawnReason spr = en.getEntitySpawnReason();
 
-		if (e.getEntity().getEntitySpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM) {
+		en.setPickupDelay(18);
+
+		if (spr == CreatureSpawnEvent.SpawnReason.CUSTOM) {
 			Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
-					() -> e.getEntity().remove(), 20 * 20);
+					() -> en.remove(), 120 * 20);
+		} else if (spr == CreatureSpawnEvent.SpawnReason.DEFAULT) {
+			en.setPickupDelay(10);
 		}
 	}
-
 }

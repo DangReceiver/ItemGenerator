@@ -15,6 +15,7 @@ import de.cruelambition.listener.essential.Chat;
 import de.cruelambition.listener.function.GameModeChange;
 import de.cruelambition.listener.function.ItemDrop;
 import de.cruelambition.listener.function.Timber;
+import de.cruelambition.oo.Sb;
 import de.cruelambition.worlds.SpawnWorld;
 
 import java.io.File;
@@ -92,12 +93,10 @@ public final class ItemGenerator extends JavaPlugin {
 		cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(), "modules_success"));
 		cs.sendMessage(Lang.PRE + String.format(Lang.getMessage(
 				Lang.getServerLang(), "running_version"), VERSION));
-		Lang.prefix();
 	}
 
 
 	public void onDisable() {
-		Lang.prefix();
 
 		if (g != null) {
 			g.cancelCheck();

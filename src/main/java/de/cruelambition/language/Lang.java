@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 
 public class Lang extends Language {
 
-	public static int PRE_VALUE;
-	public static String PRE = "",
+	public static String PRE = colorFromRGB(230, 60, 150) + "ItemGenerator§8: "
+			+ colorFromRGB(180, 180, 180),
 			CHAT = colorFromRGB(230, 60, 160) + "IG§8: ";
 
 	private File lf;
@@ -25,32 +25,6 @@ public class Lang extends Language {
 		lang = new Language();
 		p = player;
 		lf = lang.getLang(p != null ? p : null);
-	}
-
-	public static void prefix() {
-		switch (PRE_VALUE) {
-
-			// Before Start / After End
-			// While Running
-			default:
-			case 2:
-				PRE = colorFromRGB(230, 60, 160) + "ItemGenerator§8: "
-						+ colorFromRGB(180, 180, 180);
-				break;
-
-			// Setup / Main
-			case 1:
-				PRE = colorFromRGB(45, 220, 150) + "ItemGenerator§8: "
-						+ colorFromRGB(180, 180, 180);
-				break;
-
-			// Shutdown
-			case 3:
-				PRE = colorFromRGB(225, 20, 100) + "ItemGenerator§8: "
-						+ colorFromRGB(160, 160, 160);
-				break;
-		}
-		PRE_VALUE++;
 	}
 
 	public static File getServerLang() {
@@ -80,7 +54,7 @@ public class Lang extends Language {
 			r = Integer.parseInt(s.split("\\$")[1].split(",")[0]);
 			g = Integer.parseInt(s.split("\\$" + r + ",")[1].split(",")[0]);
 
-			b = Integer.parseInt( s.split("\\$" + r + "," + g + ",")[1].split("; ")[0]);
+			b = Integer.parseInt(s.split("\\$" + r + "," + g + ",")[1].split("; ")[0]);
 			s = s.replace("$" + r + "," + g + "," + b + "; ", "");
 
 		} catch (NumberFormatException ex) {

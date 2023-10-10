@@ -8,18 +8,15 @@ import org.bukkit.scoreboard.*;
 
 public class Sb {
 
-	private Player p;
-
-	public Sb(Player pP) {
-		p = pP;
+	public static void setAllScoreBoards() {
+		for (Player ap : Bukkit.getOnlinePlayers()) setDefaultScoreBoard(ap);
 	}
 
 	public static void setDefaultScoreBoard(Player p) {
-		Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
 		Lang l = new Lang(p);
-
 		if (Lang.PRE.length() >= 17) Lang.PRE = "§cInvalid String";
 
+		Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective obj = sb.registerNewObjective("  " + Lang.PRE, "abc", Lang.PRE + "  ");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 
@@ -72,12 +69,11 @@ public class Sb {
 		obj.getScore("" + ChatColor.DARK_AQUA).setScore(6);
 
 		p.setScoreboard(sb);
-		updateTime(p);
+//		updateTime(p);
 	}
 
 	public static void unsetAllScoreboards() {
 		Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
-
 		Objective obj = sb.registerNewObjective(Lang.PRE.replace(": ", ""),
 				"abc", Lang.PRE.replace(": ", "") + "      ");
 
@@ -91,8 +87,7 @@ public class Sb {
 	}
 
 	public static void updateFullScoreBoard(Player p) {
-		Scoreboard sb = p.getScoreboard();
-
+		Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
 		sb.getTeam("dTime").setPrefix("    §e➥ \u26C3 " + "%s");
 		sb.getTeam("dWorld").setPrefix("    §b➥ \u06E9 " + p.getWorld().getName());
 		sb.getTeam("dDeaths").setPrefix("    §2➥ \u2692 §c " + "%s");
@@ -100,12 +95,12 @@ public class Sb {
 	}
 
 	public static void updateTime(Player p) {
-		Scoreboard sb = p.getScoreboard();
+		Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
 		sb.getTeam("dTime").setPrefix("    §e➥ \u26C3 " + "%s");
 	}
 
 	public static void updateWorld(Player p) {
-		Scoreboard sb = p.getScoreboard();
+		Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
 		sb.getTeam("dWorld").setPrefix("    §b➥ \u06E9 " + p.getWorld().getName());
 	}
 }
