@@ -111,6 +111,7 @@ public class Language {
 		try {
 			if (!file.exists() && !file.createNewFile())
 				throw new RuntimeException("The resulting lang file does not exist!");
+
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -128,7 +129,7 @@ public class Language {
 
 	public static void loadResources() {
 		ItemGenerator ig = ItemGenerator.getItemGenerator();
-		List<File> resources = new ArrayList<>(List.of(getLangFile("en"), getLangFile("de")));
+		List<File> resources = new ArrayList<>(List.of(getLangFile("en"), getLangFile("de"), getLangFile("ch")));
 
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 		for (File f : resources) {

@@ -2,6 +2,7 @@ prefixes:
   broadcast: "§3Broadcast §8‖ §7"
 
 motd:
+  using_motd: "Using motd %s."
   motd_0: "$200,255,20; Hab dich lieb <3"
   motd_1: "$100,255,100; Today: actually including rules!"
   motd_2: "$40,120,120; That's it! I Quit >:c"

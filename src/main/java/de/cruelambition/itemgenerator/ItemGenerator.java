@@ -41,7 +41,6 @@ public final class ItemGenerator extends JavaPlugin {
 
 	public void onEnable() {
 		ig = this;
-		Lang.prefix();
 
 //		BukkitScheduler bs = Bukkit.getScheduler();
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
@@ -91,8 +90,9 @@ public final class ItemGenerator extends JavaPlugin {
 //		if (getVersion() != null) VERSION = getVersion();
 
 		cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(), "modules_success"));
-		cs.sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),
-				"running_version"), VERSION));
+		cs.sendMessage(Lang.PRE + String.format(Lang.getMessage(
+				Lang.getServerLang(), "running_version"), VERSION));
+		Lang.prefix();
 	}
 
 
