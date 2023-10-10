@@ -1,39 +1,33 @@
 package de.cruelambition.generator;
 
 import java.util.*;
-import java.util.List;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
-import de.cruelambition.oo.IB;
-import org.bukkit.*;
+import de.cruelambition.language.Language;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
 public class Generator {
 
 	private List<String> material, forbidden;
 	private BukkitTask generatorLoop, checkLoop;
-	private List<String> editable;
 
 	public Generator() {
 		material = new ArrayList<>();
 		forbidden = new ArrayList<>();
-
-		editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(),
-				Material.POTION.toString(), "CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET",
-				"_SWORD", "_PICKAXE", "_AXE", "_SHOVEL"));
-
-		for (int i = 0; i <= 4; i++) // Total: 4
-			addMaterialToLoop(Material.POTION);
-		for (int i = 0; i <= 4; i++) // Total: 4
-			addMaterialToLoop(Material.ENCHANTED_BOOK);
 	}
 
 	public List<String> getForbiddenList() {
@@ -51,13 +45,12 @@ public class Generator {
 		g.listForbiddenItems();
 	}
 
-	public void addMaterialToLoop(Material m) {
-		material.add(m.toString());
-	}
-
 	public List<Integer> getFrequencies() {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		int csi = c.getInt("Loops.Check.StartIn", 60), cf = c.getInt("Loops.Check.Frequency", 80), gsi = c.getInt("Loops.Generator.StartIn", 6), gf = c.getInt("Loops.Generator.Frequency", 30);
+		int csi = c.getInt("Loops.Check.StartIn", 60),
+				cf = c.getInt("Loops.Check.Frequency", 80),
+				gsi = c.getInt("Loops.Generator.StartIn", 6),
+				gf = c.getInt("Loops.Generator.Frequency", 30);
 
 		return new ArrayList<>(Arrays.asList(csi, cf, gsi, gf));
 	}
@@ -91,7 +84,8 @@ public class Generator {
 		stopLoop();
 		setFrequencies(csi, cf, gsi, gf);
 
-		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> start(new Generator(), csi, cf, gsi, gf), 5);
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () ->
+				start(new Generator(), csi, cf, gsi, gf), 5);
 	}
 
 	public void fillList() {
@@ -123,7 +117,9 @@ public class Generator {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
 
 		if (!c.isSet("Item.List.Forbidden")) {
-			c.set("Item.List.Forbidden", new ArrayList<>(List.of(Material.AIR.toString(), Material.COMMAND_BLOCK.toString(), Material.JIGSAW.toString(), Material.STRUCTURE_BLOCK.toString())));
+			c.set("Item.List.Forbidden", new ArrayList<>(List.of(Material.AIR.toString(),
+					Material.COMMAND_BLOCK.toString(), Material.JIGSAW.toString(),
+					Material.STRUCTURE_BLOCK.toString())));
 			ItemGenerator.getItemGenerator().saveConfig();
 		}
 
@@ -140,11 +136,13 @@ public class Generator {
 		for (Material mt : Material.values())
 			if (mt.toString().contains(m)) forbidden.add(m);
 
-		Bukkit.getConsoleSender().sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(), "itemgenerator_forbiddenlist_add_item"), m.toLowerCase()));
+		Bukkit.getConsoleSender().sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),
+				"itemgenerator_forbiddenlist_add_item"), m.toLowerCase()));
 	}
 
 	public void listForbiddenItems() {
-		Lang.broadcastArg("itemgenerator_forbidden_listing", getForbiddenList().toString().replace("[", "").replace("]", ""));
+		Lang.broadcastArg("itemgenerator_forbidden_listing", getForbiddenList().toString()
+				.replace("[", "").replace("]", ""));
 	}
 
 	public void addItemToPermanentForbiddenList(Material m) {
@@ -200,19 +198,23 @@ public class Generator {
 	}
 
 	public void startGeneratorLoop(int startIn, int frequency) {
-		this.generatorLoop = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), this::giveAll, 20L * startIn, 20L * frequency);
+		this.generatorLoop = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
+				this::giveAll, 20L * startIn, 20L * frequency);
 	}
 
 	public void checkForForbiddenItemsLoop(int startIn, int frequency) {
-		this.checkLoop = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), this::removeAllForbiddenItemsFromAllPlayers, 20L * startIn, 20L * frequency);
+		this.checkLoop = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
+				this::removeAllForbiddenItemsFromAllPlayers, 20L * startIn, 20L * frequency);
 	}
 
 	public void cancelGenerator() {
-		if (generatorLoop != null) generatorLoop.cancel();
+		if (generatorLoop != null)
+			generatorLoop.cancel();
 	}
 
 	public void cancelCheck() {
-		if (checkLoop != null) checkLoop.cancel();
+		if (checkLoop != null)
+			checkLoop.cancel();
 	}
 
 	public void giveAll() {
@@ -222,66 +224,8 @@ public class Generator {
 			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
 			ap.playSound(ap.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.2f, 1.6f);
 
-			ItemStack is = new ItemStack(getRandomMaterial());
-
-			if (canEdit(is.getType())) edit(is);
-			if (is.getType().isBlock()) if (new Random().nextInt(4) == 0) is.setAmount(2);
-
-
-			if (ap.getInventory().firstEmpty() != -1) ap.getInventory().addItem(is);
-			else ap.getWorld().dropItemNaturally(ap.getLocation(), is);
+			if (ap.getInventory().firstEmpty() != -1) ap.getInventory().addItem(new ItemStack(getRandomMaterial()));
+			else ap.getWorld().dropItemNaturally(ap.getLocation(), new ItemStack(getRandomMaterial()));
 		}
-	}
-
-	public boolean canEdit(Material m) {
-		for (String s : editable) if (m.toString().contains(s)) return true;
-		return false;
-	}
-
-	public void edit(ItemStack item) {
-		if (item.getType() == Material.POTION) effect(item);
-		else enchant(item);
-	}
-
-	public void effect(ItemStack item) {
-		if (!(item.getItemMeta() instanceof PotionMeta pm)) return;
-
-		Random r = new Random();
-		pm.setColor(Color.fromRGB(r.nextInt(256), r.nextInt(256), r.nextInt(256)));
-
-		int d = r.nextInt(241);
-		int a = r.nextInt(3);
-
-		PotionEffect pe = new PotionEffect(PotionEffectType.values()[r.nextInt(PotionEffectType.values().length)],
-				((d >= 121 && r.nextInt(2) == 0) ? d / 2 : d), ((a > 0 && r.nextInt(3) == 0) ? a - 1 : a),
-				true, true, true);
-
-		pm.addCustomEffect(pe, true);
-		item.setItemMeta(pm);
-
-	}
-
-	public void enchant(ItemStack item) {
-		Random r = new Random();
-		int l = r.nextInt(5), c = r.nextInt(3);
-		if (!(l - c <= 0 || l - c >= 3)) return;
-
-		int lvl = r.nextInt(3);
-		IB.ench(item, reEnch(item), (lvl == 0 ? lvl + 1 : lvl));
-
-		if (l - c <= -1)
-			IB.ench(item, reEnch(item), (lvl == 0 ? lvl + 1 : lvl));
-	}
-
-	public Enchantment reEnch(ItemStack item) {
-		Random r = new Random();
-		Enchantment ench = Enchantment.values()[r.nextInt(Enchantment.values().length)];
-
-		while (!applicable(item, ench)) ench = Enchantment.values()[r.nextInt(Enchantment.values().length)];
-		return ench;
-	}
-
-	public boolean applicable(ItemStack item, Enchantment ench) {
-		return ench.getItemTarget().includes(item) && ench.canEnchantItem(item);
 	}
 }

@@ -146,18 +146,7 @@ public class PC {
 	}
 
 	public int getBackpackSize() {
-		return c.isSet("Backpack.Size") ? c.getInt("Backpack.Size") : 0;
-	}
-
-	public void setBackpackSize(int size) {
-		c.set("Backpack.Size", Math.min(size, 6));
-	}
-
-	public boolean increaseBackpackSize() {
-		if (getBackpackSize() >= 6) return false;
-
-		c.set("Backpack.Size", getBackpackSize() + 1);
-		return true;
+		return c.isSet("Backpack.Size") ? c.getInt("Backpack.Size") : 1;
 	}
 
 	public boolean isSet(String pPath) {

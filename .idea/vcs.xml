@@ -2,5 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/SkyForce-1.16.5" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Waves-1.16.5" vcs="Git" />
   </component>
 </project>
