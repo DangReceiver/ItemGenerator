@@ -9,28 +9,24 @@ import org.bukkit.entity.Player;
 
 public class Info implements CommandExecutor {
 	public boolean onCommand(CommandSender sen, Command cmd, String lab, String[] args) {
-		Player p;
+		Player p = null;
 		Lang l = new Lang(null);
 
 		if (sen instanceof Player) {
 			p = (Player) sen;
+			l.setPlayer(p);
 
-		} else {
-			sen.sendMessage(Lang.PRE + Lang.getMessage(l.getLang(null), "info"));
-			return false;
 		}
 
-		p.sendMessage(Lang.PRE + Lang.getMessage(l.getLang(p), "info"));
+		sen.sendMessage(Lang.PRE + l.getString("info"));
+		if (p == null) return false;
 
-		int i = 0, ping = 0;
-		for (Player ap : Bukkit.getOnlinePlayers()) {
+		int ping = 0;
+		for (Player ap : Bukkit.getOnlinePlayers())
 			ping += ap.getPing();
-			i++;
-		}
 
-		double d = Math.round((ping / i * 10000));
-		p.sendMessage(Lang.PRE + Lang.getMessage(l.getLang(p), "ping"));
-
+		double d = Math.round((ping / Bukkit.getOnlinePlayers().size() * 10000));
+		p.sendMessage(Lang.PRE + String.format(l.getString("average_ping"), p.getPing(), d / 10000));
 		return false;
 	}
 }

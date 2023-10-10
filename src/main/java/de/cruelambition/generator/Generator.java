@@ -25,6 +25,9 @@ public class Generator {
 	private List<String> material, forbidden;
 	private BukkitTask generatorLoop, checkLoop;
 
+	/**
+	 *  Access only via ItemGenerator.g (@Main)
+	 */
 	public Generator() {
 		material = new ArrayList<>();
 		forbidden = new ArrayList<>();
@@ -76,7 +79,7 @@ public class Generator {
 
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
 			List<Integer> f = getFrequencies();
-			start(new Generator(), f.get(0), f.get(1), f.get(2), f.get(3));
+			start(this, f.get(0), f.get(1), f.get(2), f.get(3));
 		}, 5);
 	}
 
@@ -85,7 +88,7 @@ public class Generator {
 		setFrequencies(csi, cf, gsi, gf);
 
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () ->
-				start(new Generator(), csi, cf, gsi, gf), 5);
+				start(this, csi, cf, gsi, gf), 5);
 	}
 
 	public void fillList() {
@@ -115,16 +118,14 @@ public class Generator {
 
 	public void syncForbiddenItems() {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-
 		if (!c.isSet("Item.List.Forbidden")) {
-			c.set("Item.List.Forbidden", new ArrayList<>(List.of(Material.AIR.toString(),
-					Material.COMMAND_BLOCK.toString(), Material.JIGSAW.toString(),
-					Material.STRUCTURE_BLOCK.toString())));
+
+			c.set("Item.List.Forbidden", new ArrayList<>(List.of(Material.AIR.toString(), Material.JIGSAW.toString(),
+					Material.COMMAND_BLOCK.toString(), Material.STRUCTURE_BLOCK.toString())));
 			ItemGenerator.getItemGenerator().saveConfig();
 		}
 
-		List<String> sl = c.getStringList("Item.List.Forbidden");
-		List<String> newForbidden = new ArrayList<>(sl);
+		List<String> sl = c.getStringList("Item.List.Forbidden"), newForbidden = new ArrayList<>(sl);
 
 		for (String m : newForbidden) addItemToForbiddenList(m.toString());
 		removeAllForbiddenItemsFromMaterialList();
@@ -132,9 +133,7 @@ public class Generator {
 
 	public void addItemToForbiddenList(String m) {
 		if (forbidden.contains(m)) return;
-
-		for (Material mt : Material.values())
-			if (mt.toString().contains(m)) forbidden.add(m);
+		for (Material mt : Material.values()) if (mt.toString().contains(m)) forbidden.add(m);
 
 		Bukkit.getConsoleSender().sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),
 				"itemgenerator_forbiddenlist_add_item"), m.toLowerCase()));
@@ -167,14 +166,13 @@ public class Generator {
 
 	public void removeAllForbiddenItemsFromMaterialList() {
 		if (material.isEmpty() || material == null) return;
-//		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 
 		for (Material m : Material.values())
-			for (String s : forbidden)
-				if (m.toString().contains(s) && material.contains(m.toString())) {
-//					cs.sendMessage( "§9Removed Item: " + m);
-					removeItemFromList(m);
-				}
+			for (String s : forbidden) {
+
+				if (!(m.toString().contains(s) && material.contains(m.toString()))) continue;
+				removeItemFromList(m);
+			}
 	}
 
 	public void removeItemFromList(Material m) {
@@ -198,34 +196,32 @@ public class Generator {
 	}
 
 	public void startGeneratorLoop(int startIn, int frequency) {
-		this.generatorLoop = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
+		generatorLoop = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
 				this::giveAll, 20L * startIn, 20L * frequency);
 	}
 
 	public void checkForForbiddenItemsLoop(int startIn, int frequency) {
-		this.checkLoop = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
+		checkLoop = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
 				this::removeAllForbiddenItemsFromAllPlayers, 20L * startIn, 20L * frequency);
 	}
 
 	public void cancelGenerator() {
-		if (generatorLoop != null)
-			generatorLoop.cancel();
+		generatorLoop.cancel();
 	}
 
 	public void cancelCheck() {
-		if (checkLoop != null)
-			checkLoop.cancel();
+		checkLoop.cancel();
 	}
 
 	public void giveAll() {
 		Lang.broadcast("generator_give_all");
-
 		for (Player ap : Bukkit.getOnlinePlayers()) {
+
 			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
-			ap.playSound(ap.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.2f, 1.6f);
+			ap.playSound(ap.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 0.25f, 0.8f);
 
 			if (ap.getInventory().firstEmpty() != -1) ap.getInventory().addItem(new ItemStack(getRandomMaterial()));
-			else ap.getWorld().dropItemNaturally(ap.getLocation(), new ItemStack(getRandomMaterial()));
+			else ap.getWorld().dropItemNaturally(ap.getLocation().add(0, 1.2, 0), new ItemStack(getRandomMaterial()));
 		}
 	}
 }

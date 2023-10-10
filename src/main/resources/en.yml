@@ -1,31 +1,74 @@
 prefixes:
   broadcast: "§3Broadcast §8‖ §7"
-  info: "§9Info §8‖ §7"
-  error: "§cError §8‖ §7"
-  warn: "§6Warn §8‖ §7"
 
-fly:
-  flight_updated: "Your target's flight mode was toggled."
-  flight_updated_target: "Your flight mode was toggled."
-
-generator:
-  generatorfrequencies_before: "Generator Timings before Change - CheckStart: %s, CheckFrequency: %s,
-   GeneratorStart: %s, GeneratorFrequency: %s"
-  generatorfrequencies_after: "Generator Timings after Change - CheckStart: %s, CheckFrequency: %s,
-   GeneratorStart: %s, GeneratorFrequency: %s"
-
-info:
-  info: "Test 1234"
-  info_version: "§7Plugin version %s"
-  info_author: "§7Plugin author %s"
-  info_ping: "§7Your ping: §%c%s"
-  info_average_ping: "§7Average ping: §%c%s"
+motd:
   motd_0: "$200,255,20; Hab dich lieb <3"
   motd_1: "$100,255,100; Today: actually including rules!"
   motd_2: "$40,120,120; That's it! I Quit >:c"
   motd_3: "$200,100,150; ily"
   motd_4: "$50,200,200; lasagna"
   motd_5: "$30,200,220; Minequaft"
+  motd_6: "$50,255,150; This doesn't seem to work out!"
+
+chat:
+  chat_customization_link: "Chat Link"
+  chat_customization_link_lore: "Click to view available Chat Links"
+  chat_customization_counter: "Chat Counter Link"
+  chat_customization_counter_lore: "Click to view available Chat Counter Links"
+
+checkmessage:
+  no_missing_keys: "Currently there are no known missing strings§8."
+  listing_missing_keys: "Listing missing keys§8..."
+  list_missing_keys: "Key§8:§2 %s"
+
+fly:
+  flight_updated: "Your target's flight mode was toggled."
+  flight_updated_target: "Your flight mode was toggled."
+
+generatorfrequencies:
+  generatorfrequencies_before: "Generator Timings before Change - CheckStart: %s, CheckFrequency: %s,
+   GeneratorStart: %s, GeneratorFrequency: %s"
+  generatorfrequencies_after: "Generator Timings after Change - CheckStart: %s, CheckFrequency: %s,
+   GeneratorStart: %s, GeneratorFrequency: %s"
+
+invsee:
+  invsee_target: "Now viewing %s's inventory"
+
+backpack:
+  backpack_opened: "Now viewing your personal backpack."
+  backpack_inventory: "§8» $175,120,50; Backpack"
+  backpack_saved: "Your backpack inventory was saved."
+
+info:
+  info: "Ram usage: §e%s/§a%s. "
+  info_version: "§7Plugin version %s"
+  info_author: "§7Plugin author %s"
+  average_ping: "§7Your ping: §a%s§8. §7Average Ping§8: §e%s§8."
+
+language_cmd:
+  not_a_lang_file: "The given argument does not link to a valid language file."
+  language_changed: "Your language was changed to §b%s§8."
+
+playtime:
+  playtime: "You've played for %s"
+  target_hasnt_yet_played: "%s has never played on this server."
+  targets_play_time: "%s has played for %s"
+
+generator:
+  itemgenerator_forbiddenlist_add_item: "§6Item %s was added to the forbidden item list."
+  itemgenerator_forbidden_listing: "§6Currently forbidden items§8: §e"
+
+itemgenerator:
+  modules_success: "All modules were loaded sucessfully!"
+  running_version: "Running on Plugin Version %s."
+
+language:
+  string_not_found: "The string %s could not be determined§8."
+  language_loaded: "The language %s was loaded§8."
+  replacing_lang_file: "The language file %s was replaced by its resource, since it was estimated more up to date§8."
+  creating_lang_resource: "The language file %s was created from the resource§8."
+  invalid_lang_resource: "The provided language resource file %s could not be accessed."
+  language_changed: "The server language was set to English"
 
 pronouns:
   example: "@pc0 @pc1 @pc2 @pc3 @pc4 @name"
@@ -74,20 +117,9 @@ cm:
   player_rejoin_2: "Here we go again, %s. Welcome back ⌈§5§l↺§8⌋"
   player_rejoin_3: "You must be fooling me! %s, I almost thought we lost you :c ⌈§5§l↺§8⌋"
 
-language:
-  string_not_found: "The string %s could not be determined§8."
-  language_loaded: "The language %s was loaded§8."
-  replacing_lang_file: "The language file %s was replaced by its resource, since it was estimated more up to date§8."
-  creating_lang_resource: "The language file %s was created from the resource§8."
-  invalid_lang_resource: "The provided language resource file %s could not be accessed."
-  language_changed: "The server language was set to English"
-
-genrator:
-  itemgenerator_forbiddenlist_add_item: "§6Item %s was added to the forbidden item list."
-
-itemgenerator:
-  modules_success: "All modules were loaded sucessfully!"
-  running_version: "Running on Plugin Version %s."
+gamemode:
+  gamemode_changed_survival: "You will now receive items (again)."
+  gamemode_changed_non_survival: "You will not receive items while not in survival mode!"
 
 frequent:
   not_implemented_yet: "You are looking into the future! This feature has not been implemented yet!"
@@ -103,7 +135,3 @@ frequent:
   no_player: "This feature is exclusively available to players§8."
   change_attribute_target: "The target's attribute was changed from %s to %s successfully."
   change_attribute: "Your attribute was changed from %s to %s successfully."
-
-checkmessage:
-  missing_keys: ""
-  list_missing_keys: ""

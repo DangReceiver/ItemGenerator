@@ -45,7 +45,8 @@ public class Language implements CommandExecutor, TabCompleter {
 //		p.sendMessage("§b" + l.getLang(p) + " || " + l.getLanguage());
 
 		pc.savePCon();
-		p.sendMessage(Lang.PRE + l.getString("language_changed"));
+		p.sendMessage(Lang.PRE + String.format(l.getString("language_changed"),
+				lf.getName().split(".yml")[0]));
 		return false;
 	}
 

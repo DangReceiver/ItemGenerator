@@ -50,9 +50,9 @@ public class Chat implements CommandExecutor, Listener {
 		p.openInventory(i);
 
 		i.setItem(3, IB.lore(IB.name(new ItemStack(Material.YELLOW_BANNER), l.getString(
-				"chat_customization_link")), l.getString("").split("//")));
+				"chat_customization_link")), l.getString("chat_customization_link_lore").split("//")));
 		i.setItem(5, IB.lore(IB.name(new ItemStack(Material.GREEN_BANNER), l.getString(
-				"chat_customization_counter")), l.getString("").split("//")));
+				"chat_customization_counter")), l.getString("chat_customization_counter_lore").split("//")));
 		return false;
 	}
 
@@ -64,8 +64,13 @@ public class Chat implements CommandExecutor, Listener {
 		ItemStack item = e.getCurrentItem();
 
 		if (!(he instanceof Player p)) return;
-		if (topInv != clickInv) return;
 		if (item == null) return;
+		if (topInv != clickInv) return;
+
+		PC pc = new PC(p);
+
+		if (p.getOpenInventory().getTitle().equals(de.cruelambition.listener.essential.Chat.
+				replaceChat(pc, de.cruelambition.listener.essential.Chat.format, ""))) e.setCancelled(true);
 
 		if (item.getType().toString().contains("BANNER")) {
 			if (!IB.isEnch(item)) IB.ench(item, Enchantment.DURABILITY, 0);
@@ -78,8 +83,6 @@ public class Chat implements CommandExecutor, Listener {
 
 
 			}
-
-
 		}
 	}
 }

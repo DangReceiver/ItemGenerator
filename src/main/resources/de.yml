@@ -1,38 +1,93 @@
 prefixes:
   broadcast: "§3Broadcast §8‖ §7"
-  info: "§9Info §8‖ §7"
-  error: "§cFehler §8‖ §7"
-  warn: "§6Warnung §8‖ §7"
+
+motd:
+  motd_0: "$200,255,20; Hab dich lieb <3"
+  motd_1: "$100,255,100; Today: actually including rules!"
+  motd_2: "$40,120,120; That's it! I Quit >:c"
+  motd_3: "$200,100,150; ily"
+  motd_4: "$50,200,200; lasagna"
+  motd_5: "$30,200,220; Minequaft"
+  motd_6: "$50,255,150; This doesn't seem to work out!"
+
+chat:
+  chat_customization_link: "Chat Link"
+  chat_customization_link_lore: "Click to view available Chat Links"
+  chat_customization_counter: "Chat Counter Link"
+  chat_customization_counter_lore: "Click to view available Chat Counter Links"
+
+checkmessage:
+  no_missing_keys: "Currently there are no known missing strings§8."
+  listing_missing_keys: "Listing missing keys§8..."
+  list_missing_keys: "Key§8:§2 %s"
 
 fly:
   flight_updated: "Your target's flight mode was toggled."
   flight_updated_target: "Your flight mode was toggled."
 
+generatorfrequencies:
+  generatorfrequencies_before: "Generator Timings before Change - CheckStart: %s, CheckFrequency: %s,
+   GeneratorStart: %s, GeneratorFrequency: %s"
+  generatorfrequencies_after: "Generator Timings after Change - CheckStart: %s, CheckFrequency: %s,
+   GeneratorStart: %s, GeneratorFrequency: %s"
+
+invsee:
+  invsee_target: "Now viewing %s's inventory"
+
+backpack:
+  backpack_opened: "Now viewing your personal backpack."
+  backpack_inventory: "§8» $175,120,50; Backpack"
+  backpack_saved: "Your backpack inventory was saved."
+
 info:
-  info: "Test 1234"
-  info_version: "§7Plugin Version %s"
-  info_author: "§7Plugin Author*in %s"
-  info_ping: "§7Dein Ping: §%c%s"
-  info_average_ping: "§7Durchschnittlicher Ping: §%c%s"
+  info: "Ram usage: §e%s/§a%s. "
+  info_version: "§7Plugin version %s"
+  info_author: "§7Plugin author %s"
+  average_ping: "§7Your ping: §a%s§8. §7Average Ping§8: §e%s§8."
+
+language_cmd:
+  not_a_lang_file: "The given argument does not link to a valid language file."
+  language_changed: "Your language was changed to §b%s§8."
+
+playtime:
+  playtime: "You've played for %s"
+  target_hasnt_yet_played: "%s has never played on this server."
+  targets_play_time: "%s has played for %s"
+
+generator:
+  itemgenerator_forbiddenlist_add_item: "§6Item %s was added to the forbidden item list."
+  itemgenerator_forbidden_listing: "§6Currently forbidden items§8: §e"
+
+itemgenerator:
+  modules_success: "All modules were loaded sucessfully!"
+  running_version: "Running on Plugin Version %s."
+
+language:
+  string_not_found: "The string %s could not be determined§8."
+  language_loaded: "The language %s was loaded§8."
+  replacing_lang_file: "The language file %s was replaced by its resource, since it was estimated more up to date§8."
+  creating_lang_resource: "The language file %s was created from the resource§8."
+  invalid_lang_resource: "The provided language resource file %s could not be accessed."
+  language_changed: "Die Serversprache wurde auf deutsch gestellt!"
 
 pronouns:
-  example: "@pc0 @pc1 @pc2 @pc3 @name"
-  example_sentence_0: "Das ist @name, @pc0 #be heute gut gekleidet!"
+  example: "@pc0 @pc1 @pc2 @pc3 @pc4 @name"
+  example_sentence_0: "This is @name, @pc0 #be well dressed today!"
 
 cm:
   welcome_back: "§7Willkommen zurück §3%s §c❤"
-  player_first_join: "%s ist das erste mal beigetreten!"
-  player_join_0: "%s ist ausgerutscht§8. ⌈§a»§8⌋"
-  player_join_1: "%s ist heute mit dabei§8. ⌈§a»§8⌋"
-  player_join_2: "Hey %s, siehst' heute gut aus§8! ⌈§a»§8⌋"
-  player_join_3: "%s begleitet uns heute§8. ⌈§a»§8⌋"
-  player_join_4: "%s's Musikgeschmack hat sich gerade verbessert§8. ⌈§a»§8⌋"
-  player_join_5: "%s möchte nur schauen, ob du weiter gekommen bist§8. ⌈§a»§8⌋"
-  player_join_6: "%s wurde gezwungen beizutreten§8. ⌈§a»§8⌋"
-  player_join_7: "%s's tägliche Dosis an Minecraft scheint hier Platz zu finden§8. ⌈§a»§8⌋"
-  player_join_8: "%s möchte @pc1 Tag schwieriger gestalten§8. ⌈§a»§8⌋"
-  player_join_9: "%s hat rausgefunden, wie man den Router repariert§8. ⌈§a»§8⌋"
-  player_join_10: "%s§8. §7Nichts mehr als das§8. ⌈§a»§8⌋"
+  player_first_join: "%s joined us for the first time!"
+  player_join_0: "%s just hopped in§8. ⌈§a»§8⌋"
+  player_join_1: "%s is now with us§8. ⌈§a»§8⌋"
+  player_join_2: "Hey %s, lookin' good today§8! ⌈§a»§8⌋"
+  player_join_3: "%s now accompanies us§8. ⌈§a»§8⌋"
+  player_join_4: "%s's taste in music just improved§8. ⌈§a»§8⌋"
+  player_join_5: "%s just wanted to take a look at how you've progressed§8. ⌈§a»§8⌋"
+  player_join_6: "%s was forced to join§8. ⌈§a»§8⌋"
+  player_join_7: "%s's daily dose of minecraft appears to take place here§8. ⌈§a»§8⌋"
+  player_join_8: "%s wants to make their day more difficult§8. ⌈§a»§8⌋"
+  player_join_9: "%s found out how to fix their router§8. ⌈§a»§8⌋"
+  player_join_10: "%s§8. §7Nothing more than that§8. ⌈§a»§8⌋"
   player_join_11: "%s was summoned§8. ⌈§a»§8⌋"
   player_join_12: "%s is now looking for diamonds§8. ⌈§a»§8⌋"
   player_join_13: "Breaking news of the day: %s§8. ⌈§a»§8⌋"
@@ -58,17 +113,13 @@ cm:
   player_quit_15: "%s figured this is a waste of time§8. ⌈§c«§8⌋"
   player_quit_16: "The last thing we've got left of %s is the idea of them§8. ⌈§c«§8⌋"
   player_rejoin_0: "Am I havin' a Deja Vu? It's %s again! ⌈§5§l↺§8⌋"
-  player_rejoin_1: "And it is... %s... I read that name today already... ⌈§5§l↺§8⌋"
+  player_rejoin_1: "And it is... %s... I read that name already today... ⌈§5§l↺§8⌋"
   player_rejoin_2: "Here we go again, %s. Welcome back ⌈§5§l↺§8⌋"
   player_rejoin_3: "You must be fooling me! %s, I almost thought we lost you :c ⌈§5§l↺§8⌋"
 
-language:
-  string_not_found: "The string %s could not be determined§8."
-  language_loaded: "The language %s was loaded§8."
-  replacing_lang_file: "The language file %s was replaced by its resource, since it was estimated more up to date§8."
-  creating_lang_resource: "The language file %s was created from the resource§8."
-  invalid_lang_resource: "The provided language resource file %s could not be accessed."
-  language_changed: "Die Serversprache wurde auf Deutsch gestellt."
+gamemode:
+  gamemode_changed_survival: "You will now receive items (again)."
+  gamemode_changed_non_survival: "You will not receive items while not in survival mode!"
 
 frequent:
   not_implemented_yet: "You are looking into the future! This feature has not been implemented yet!"

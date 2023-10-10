@@ -47,6 +47,8 @@ public class InvSee implements CommandExecutor, Listener {
 
 		PlayerInventory in = t.getInventory();
 		p.openInventory(in);
+
+		p.sendMessage(Lang.PRE + String.format(l.getString("invsee_target"), t.getName()));
 		return false;
 	}
 

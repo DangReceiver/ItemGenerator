@@ -11,7 +11,7 @@ public class ItemDrop implements Listener {
 
 	@EventHandler
 	public void handle(ItemSpawnEvent e) {
-		e.getEntity().setPickupDelay(20);
+		e.getEntity().setPickupDelay(25);
 
 		if (e.getEntity().getEntitySpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM) {
 			Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),

@@ -1,6 +1,7 @@
 package de.cruelambition.cmd.moderation;
 
 import de.cruelambition.generator.Generator;
+import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -42,8 +43,7 @@ public class GeneratorFrequencies implements CommandExecutor, TabCompleter {
 			return false;
 		}
 
-		Generator g = new Generator();
-		List<Integer> f = g.getFrequencies();
+		List<Integer> f = ItemGenerator.g.getFrequencies();
 
 		int csi = f.get(0), cf = f.get(1), gsi = f.get(2), gf = f.get(3);
 
@@ -71,12 +71,12 @@ public class GeneratorFrequencies implements CommandExecutor, TabCompleter {
 			gf = input;
 
 		} else {
-			p.sendMessage(l.PRE + String.format(l.getString("arg_invalid"), args[0]));
+			p.sendMessage(Lang.PRE + String.format(l.getString("arg_invalid"), args[0]));
 			return false;
 		}
 		p.sendMessage(Lang.PRE + String.format(l.getString("generatorfrequencies_after"), csi, cf, gsi, gf));
 
-		g.restart(csi, cf, gsi, gf);
+		ItemGenerator.g.restart(csi, cf, gsi, gf);
 		return false;
 	}
 

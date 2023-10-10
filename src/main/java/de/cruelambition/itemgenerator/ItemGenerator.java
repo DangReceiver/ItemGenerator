@@ -37,7 +37,7 @@ public final class ItemGenerator extends JavaPlugin {
 	private static ItemGenerator ig;
 	public static String VERSION;
 	private static Location ssl;
-	private Generator g;
+	public static Generator g;
 
 	public void onEnable() {
 		ig = this;
@@ -83,7 +83,7 @@ public final class ItemGenerator extends JavaPlugin {
 		List<Integer> f = g.getFrequencies();
 		Generator.start(g, f.get(0), f.get(1), f.get(2), f.get(3));
 
-		int i = new Random().nextInt(6);
+		int i = new Random().nextInt(7);
 		Bukkit.setMotd(l.getString("motd_" + i));
 		cs.sendMessage(Lang.PRE + String.format(l.getString("using_motd_x"), i));
 
