@@ -29,10 +29,10 @@ public class Generator {
 				Material.POTION.toString(), "CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET",
 				"_SWORD", "_PICKAXE", "_AXE", "_SHOVEL"));
 
-		for (int i = 0; i <= 4; i++) // Total: 4
+		for (int i = 0; i <= 6; i++) // Total: 4
 			addMaterialToLoop(Material.POTION);
 
-		for (int i = 0; i <= 4; i++) // Total: 4
+		for (int i = 0; i <= 6; i++) // Total: 4
 			addMaterialToLoop(Material.ENCHANTED_BOOK);
 	}
 
@@ -144,11 +144,13 @@ public class Generator {
 		for (Material mt : Material.values())
 			if (mt.toString().contains(m)) forbidden.add(m);
 
-		Bukkit.getConsoleSender().sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(), "itemgenerator_forbiddenlist_add_item"), m.toLowerCase()));
+		Bukkit.getConsoleSender().sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),
+				"itemgenerator_forbiddenlist_add_item"), m.toLowerCase()));
 	}
 
 	public void listForbiddenItems() {
-		Lang.broadcastArg("itemgenerator_forbidden_listing", getForbiddenList().toString().replace("[", "").replace("]", ""));
+		Lang.broadcastArg("itemgenerator_forbidden_listing", getForbiddenList().toString().replace("[",
+				"").replace("]", ""));
 	}
 
 	public void addItemToPermanentForbiddenList(Material m) {
@@ -239,22 +241,12 @@ public class Generator {
 		}
 	}
 
-	public boolean canEdit(Material m) {
-		for (String s : editable) if (m.toString().contains(s)) return true;
-		return false;
-	}
-
-	public void edit(ItemStack item) {
-		if (item.getType() == Material.POTION) effect(item);
-		else enchant(item);
-	}
-
 	public void effect(ItemStack item) {
 		if (!(item.getItemMeta() instanceof PotionMeta pm)) return;
 		Random r = new Random();
 
 		pm.setColor(Color.fromRGB(r.nextInt(256), r.nextInt(256), r.nextInt(256)));
-		int d = r.nextInt(241);
+		int d = r.nextInt(241 * 20);
 		int a = r.nextInt(3);
 
 		PotionEffect pe = new PotionEffect(PotionEffectType.values()[r.nextInt(PotionEffectType.values().length)],
@@ -263,6 +255,16 @@ public class Generator {
 
 		pm.addCustomEffect(pe, true);
 		item.setItemMeta(pm);
+	}
+
+	public boolean canEdit(Material m) {
+		for (String s : editable) if (m.toString().contains(s)) return true;
+		return false;
+	}
+
+	public void edit(ItemStack item) {
+		if (item.getType() == Material.POTION) effect(item);
+		else enchant(item);
 	}
 
 	public void enchant(ItemStack item) {
@@ -279,8 +281,14 @@ public class Generator {
 	public Enchantment reEnch(ItemStack item) {
 		Random r = new Random();
 
-		Enchantment ench = Enchantment.values()[r.nextInt(Enchantment.values().length)];
-		while (!applicable(item, ench)) ench = Enchantment.values()[r.nextInt(Enchantment.values().length)];
+		int i = r.nextInt(Enchantment.values().length);
+		Enchantment ench = Enchantment.values()[i];
+
+		while (!applicable(item, ench)) {
+			ench = Enchantment.values()[i + 1];
+			i++;
+		}
+
 		return ench;
 	}
 

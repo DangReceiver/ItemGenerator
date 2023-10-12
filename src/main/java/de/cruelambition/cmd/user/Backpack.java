@@ -60,13 +60,14 @@ public class Backpack implements CommandExecutor, Listener {
 			p.openInventory(inv);
 			Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
 
-				inv.setItem((inv.getSize() / 2 + 1), IB.lore(IB.name(new ItemStack(Material.RED_TERRACOTTA),
+				inv.setItem((inv.getSize() / 2 - 1), IB.lore(IB.name(new ItemStack(Material.LIME_TERRACOTTA),
 						l.getString("confirm_purchase")), String.format(l.getString("backpack_upgrade"),
 						bps, (4 * bps * bps + 12))));
 
 				p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_XYLOPHONE, 0.5f, 1.2f);
 			}, 30);
 
+			return false;
 		} else if (args.length != 0) {
 			p.sendMessage(Lang.PRE + String.format(l.getString("argument_range"), 0, 1));
 			return false;
@@ -88,8 +89,8 @@ public class Backpack implements CommandExecutor, Listener {
 		if (he instanceof Player p) {
 
 			Lang l = new Lang(p);
-			if (!p.getOpenInventory().getTitle().equals(l.getString("backpack_upgrade"))) return;
 			if (e.getClickedInventory() != p.getOpenInventory().getTopInventory()) return;
+			if (!p.getOpenInventory().getTitle().equals(l.getString("backpack_upgrade_inv"))) return;
 
 			e.setCancelled(true);
 

@@ -26,3 +26,5 @@ commands:
     description: Customize your chat experience
   backpack:
     description: Expand your inventory
+  arms:
+    description: Add arms to nearby armorstands

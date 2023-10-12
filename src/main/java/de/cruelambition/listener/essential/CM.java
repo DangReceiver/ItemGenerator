@@ -1,19 +1,23 @@
 package de.cruelambition.listener.essential;
 
+import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.oo.PC;
+import de.cruelambition.oo.Recipes;
 import de.cruelambition.worlds.SpawnWorld;
 
 import java.io.File;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Keyed;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Recipe;
 
 public class CM implements Listener {
 	@EventHandler
@@ -25,20 +29,12 @@ public class CM implements Listener {
 		if (pc.getLanguageString() == null)
 			pc.setLanguage(Lang.getServerLang());
 
-//		ConsoleCommandSender cs = Bukkit.getConsoleSender();
-//		cs.sendMessage("0");
-
 		Lang l = new Lang(null);
-//		cs.sendMessage("1");
 		l.setPlayerInSettings(p, pc.getLanguage());
-//		cs.sendMessage("2");
 		l.setPlayer(p);
-//		cs.sendMessage("3");
 
 //		p.sendMessage(pc.getLanguage() + "");
-//		cs.sendMessage("4");
 //		p.sendMessage("§b" + l.getLang(p) + " || " + l.getLanguage());
-//		cs.sendMessage("5");
 
 		e.setJoinMessage(null);
 		if (!p.hasPlayedBefore()) {
@@ -46,7 +42,6 @@ public class CM implements Listener {
 			Lang.broadcastArg("player_first_join", p.getName());
 			p.teleport(SpawnWorld.getSafeSpawnLocation());
 
-//			cs.sendMessage("6");
 			if (!pc.hasCon(p)) pc.createCon(p);
 			pc.savePCon();
 
@@ -55,14 +50,13 @@ public class CM implements Listener {
 
 		else Lang.broadcastArg("player_join_" + (new Random()).nextInt(17), p.getName());
 
-//		cs.sendMessage("7");
 		pc.setJoinTime(System.currentTimeMillis());
 		pc.savePCon();
 
-//		cs.sendMessage("8");
 		p.sendTitle(Lang.PRE, String.format(l.getString("welcome_back"), p.getName()), 30, 50, 50);
 //		p.sendMessage(l.getLang(p) + " || " + l.getLanguage());
-//		cs.sendMessage("9");
+
+		for (Recipe re : ItemGenerator.rec) if (re instanceof Keyed k) p.discoverRecipe(k.getKey());
 	}
 
 	@EventHandler

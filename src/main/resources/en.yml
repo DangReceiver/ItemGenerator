@@ -2,7 +2,7 @@ prefixes:
   broadcast: "§3Broadcast §8‖ §7"
 
 motd:
-  using_motd: "Using motd %s."
+  using_motd_x: "Using motd %s."
   motd_0: "$200,255,20; Hab dich lieb <3"
   motd_1: "$100,255,100; Today: actually including rules!"
   motd_2: "$40,120,120; That's it! I Quit >:c"
@@ -39,6 +39,14 @@ backpack:
   backpack_opened: "Now viewing your personal backpack."
   backpack_inventory: "§8» $175,120,50; Backpack"
   backpack_saved: "Your backpack inventory was saved."
+  backpack_upgrade_inv: "§8» $175,120,50; Upgrade the Backpack"
+  backpack_upgrade: "When clicking, you'll pay %s Emeralds and // receive 1 (more) row of space"
+  backpack_not_unlocked: "You have not yet unlocked the backpack"
+
+purchase:
+  confirm_purchase: "Click to confirm the purchase"
+  cancel_purchase: "Click to cancel the purchase"
+  cancel_purchase_lore: "Clicking will cancel everything // in terms of the purchase"
 
 info:
   info: "Ram usage: §e%s/§a%s. "

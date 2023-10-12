@@ -115,3 +115,4 @@ run/
 *.lst
 *.class
 .idea/vcs.xml
+*.class
