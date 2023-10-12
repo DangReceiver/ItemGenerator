@@ -9,10 +9,7 @@ import de.cruelambition.generator.Generator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
-import de.cruelambition.listener.function.AntiCreeper;
-import de.cruelambition.listener.function.GameModeChange;
-import de.cruelambition.listener.function.ItemDrop;
-import de.cruelambition.listener.function.Timber;
+import de.cruelambition.listener.function.*;
 import de.cruelambition.oo.Recipes;
 import de.cruelambition.oo.Sb;
 import de.cruelambition.worlds.SpawnWorld;
@@ -84,6 +81,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new Backpack(), this);
 		pm.registerEvents(new Recipes(), this);
 		pm.registerEvents(new AntiCreeper(), this);
+		pm.registerEvents(new GlassShear(), this);
 
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();

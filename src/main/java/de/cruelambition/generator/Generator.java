@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 public class Generator {
 	private List<String> material, forbidden;
@@ -25,14 +26,16 @@ public class Generator {
 		material = new ArrayList<>();
 		forbidden = new ArrayList<>();
 
-		editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(),
-				Material.POTION.toString(), "CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET",
-				"_SWORD", "_PICKAXE", "_AXE", "_SHOVEL"));
+		editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(), Material.POTION.toString(),
+				Material.SPLASH_POTION.toString(), Material.LINGERING_POTION.toString(), "CHESTPLATE",
+				"LEGGINGS", "BOOTS", "HELMET", "_SWORD", "_PICKAXE", "_AXE", "_SHOVEL"));
 
-		for (int i = 0; i <= 6; i++) // Total: 4
+		for (int i = 0; i <= 2; i++) // Total: 4
 			addMaterialToLoop(Material.POTION);
+		for (int i = 0; i <= 1; i++) // Total: 3
+			addMaterialToLoop(Material.SPLASH_POTION);
 
-		for (int i = 0; i <= 6; i++) // Total: 4
+		for (int i = 0; i <= 6; i++) // Total: 8
 			addMaterialToLoop(Material.ENCHANTED_BOOK);
 	}
 
@@ -263,7 +266,8 @@ public class Generator {
 	}
 
 	public void edit(ItemStack item) {
-		if (item.getType() == Material.POTION) effect(item);
+		if (item.getType() == Material.POTION || item.getType() == Material.SPLASH_POTION ||
+				item.getType() == Material.LINGERING_POTION) effect(item);
 		else enchant(item);
 	}
 
@@ -272,7 +276,7 @@ public class Generator {
 		int l = r.nextInt(5), c = r.nextInt(3);
 
 		if (!(l - c <= 0 || l - c >= 3)) return;
-		int lvl = r.nextInt(3);
+		int lvl = r.nextInt(4);
 
 		IB.ench(item, reEnch(item), (lvl == 0 ? lvl + 1 : lvl));
 		if (l - c <= -1) IB.ench(item, reEnch(item), (lvl == 0 ? lvl + 1 : lvl));
@@ -280,12 +284,15 @@ public class Generator {
 
 	public Enchantment reEnch(ItemStack item) {
 		Random r = new Random();
+		@NotNull Enchantment[] v = Enchantment.values();
 
-		int i = r.nextInt(Enchantment.values().length);
-		Enchantment ench = Enchantment.values()[i];
+		int i = r.nextInt(v.length);
+		Enchantment ench = v[i];
 
 		while (!applicable(item, ench)) {
-			ench = Enchantment.values()[i + 1];
+			if (i > v.length) i = -1;
+
+			ench = v[i + 1];
 			i++;
 		}
 
