@@ -62,7 +62,7 @@ public class Backpack implements CommandExecutor, Listener {
 
 				inv.setItem((inv.getSize() / 2 - 1), IB.lore(IB.name(new ItemStack(Material.LIME_TERRACOTTA),
 						l.getString("confirm_purchase")), String.format(l.getString("backpack_upgrade"),
-						bps, (4 * bps * bps + 12))));
+						(8 * bps * bps + 24))));
 
 				p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_XYLOPHONE, 0.5f, 1.2f);
 			}, 30);
@@ -101,7 +101,7 @@ public class Backpack implements CommandExecutor, Listener {
 				PC pc = new PC(p);
 
 				int bps = pc.getBackpackSize();
-				int cost = (4 * bps * bps + 12);
+				int cost = (8 * bps * bps + 24);
 
 				if (IB.getMaterialAmount(Material.EMERALD, p.getInventory()) < cost) {
 					p.sendMessage(Lang.PRE + l.getString("insufficient_funds"));
@@ -112,6 +112,10 @@ public class Backpack implements CommandExecutor, Listener {
 				pc.increaseBackpackSize();
 
 				pc.savePCon();
+				p.closeInventory();
+
+				p.playSound(p.getLocation(), Sound.ITEM_GOAT_HORN_SOUND_5, 0.5f, 1.15f);
+				p.sendMessage(Lang.PRE + l.getString("backpack_upgrade_purchased"));
 
 			} else if (e.getCurrentItem().getType().toString().contains("RED")) {
 				p.closeInventory();

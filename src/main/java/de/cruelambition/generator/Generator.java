@@ -60,7 +60,9 @@ public class Generator {
 
 	public List<Integer> getFrequencies() {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		int csi = c.getInt("Loops.Check.StartIn", 60), cf = c.getInt("Loops.Check.Frequency", 80), gsi = c.getInt("Loops.Generator.StartIn", 6), gf = c.getInt("Loops.Generator.Frequency", 30);
+		int csi = c.getInt("Loops.Check.StartIn", 60), cf = c.getInt("Loops.Check.Frequency", 80),
+				gsi = c.getInt("Loops.Generator.StartIn", 6),
+				gf = c.getInt("Loops.Generator.Frequency", 30);
 
 		return new ArrayList<>(Arrays.asList(csi, cf, gsi, gf));
 	}
@@ -130,12 +132,13 @@ public class Generator {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
 
 		if (!c.isSet("Item.List.Forbidden")) {
-			c.set("Item.List.Forbidden", new ArrayList<>(List.of(Material.AIR.toString(), Material.COMMAND_BLOCK.toString(), Material.JIGSAW.toString(), Material.STRUCTURE_BLOCK.toString())));
+			c.set("Item.List.Forbidden", new ArrayList<>(List.of(Material.AIR.toString(),
+					Material.COMMAND_BLOCK.toString(), Material.JIGSAW.toString(),
+					Material.STRUCTURE_BLOCK.toString(), Material.GOLDEN_HOE.toString())));
 			ItemGenerator.getItemGenerator().saveConfig();
 		}
 
-		List<String> sl = c.getStringList("Item.List.Forbidden");
-		List<String> newForbidden = new ArrayList<>(sl);
+		List<String> sl = c.getStringList("Item.List.Forbidden"), newForbidden = new ArrayList<>(sl);
 
 		for (String m : newForbidden) addItemToForbiddenList(m.toString());
 		removeAllForbiddenItemsFromMaterialList();
@@ -253,8 +256,8 @@ public class Generator {
 		int a = r.nextInt(3);
 
 		PotionEffect pe = new PotionEffect(PotionEffectType.values()[r.nextInt(PotionEffectType.values().length)],
-				((d >= 121 && r.nextInt(2) == 0) ? d / 2 : d), ((a > 0 && r.nextInt(3) == 0) ? a - 1 : a),
-				true, true, true);
+				((d >= 121 && r.nextInt(2) == 0) ? d / 2 : d),
+				((a > 0 && r.nextInt(3) == 0) ? a - 1 : a), true, true, true);
 
 		pm.addCustomEffect(pe, true);
 		item.setItemMeta(pm);
@@ -286,7 +289,7 @@ public class Generator {
 		Random r = new Random();
 		@NotNull Enchantment[] v = Enchantment.values();
 
-		int i = r.nextInt(v.length);
+		int i = r.nextInt(v.length - 1);
 		Enchantment ench = v[i];
 
 		while (!applicable(item, ench)) {
@@ -300,6 +303,7 @@ public class Generator {
 	}
 
 	public boolean applicable(ItemStack item, Enchantment ench) {
-		return ench.getItemTarget().includes(item) && ench.canEnchantItem(item);
+		return item.getType() == Material.ENCHANTED_BOOK ||
+				(ench.getItemTarget().includes(item) && ench.canEnchantItem(item));
 	}
 }

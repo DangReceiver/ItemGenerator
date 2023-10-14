@@ -130,6 +130,38 @@ public class PC {
 		return c.getLong(pPath);
 	}
 
+	public void increaseKills() {
+		c.set("player.stats.kills", getKills() + 1);
+	}
+
+	public int getKills() {
+		return c.isSet("player.stats.kills") ? c.getInt("player.stats.kills", 0) : 0;
+	}
+
+	public void setKills(int i) {
+		c.set("player.stats.kills", i);
+	}
+
+	public void resetKills() {
+		setKills(0);
+	}
+
+	public void increaseDeaths() {
+		c.set("player.stats.deaths", getDeaths() + 1);
+	}
+
+	public int getDeaths() {
+		return c.isSet("player.stats.deaths") ? c.getInt("player.stats.deaths", 0) : 0;
+	}
+
+	public void setDeaths(int i) {
+		c.set("player.stats.deaths", i);
+	}
+
+	public void resetDeaths() {
+		setDeaths(0);
+	}
+
 	public Inventory getBackpack() {
 		Inventory inv = Bukkit.createInventory(null, getBackpackSize() * 9,
 				new Lang((Player) op).getString("backpack_inventory"));

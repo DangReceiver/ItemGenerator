@@ -40,13 +40,13 @@ backpack:
   backpack_inventory: "§8» $175,120,50; Backpack"
   backpack_saved: "Your backpack inventory was saved."
   backpack_upgrade_inv: "§8» $175,120,50; Upgrade the Backpack"
-  backpack_upgrade: "When clicking, you'll pay %s Emeralds and // receive 1 (more) row of space"
+  backpack_upgrade: "§7When clicking, you'll pay %s Emeralds and // receive 1 (more) row of space"
   backpack_not_unlocked: "You have not yet unlocked the backpack"
 
 purchase:
-  confirm_purchase: "Click to confirm the purchase"
-  cancel_purchase: "Click to cancel the purchase"
-  cancel_purchase_lore: "Clicking will cancel everything // in terms of the purchase"
+  confirm_purchase: "§aClick to confirm the purchase"
+  cancel_purchase: "§cClick to cancel the purchase"
+  cancel_purchase_lore: "§7Clicking will cancel everything // in terms of the purchase"
 
 info:
   info: "Ram usage: §e%s/§a%s. "
@@ -130,6 +130,12 @@ cm:
 gamemode:
   gamemode_changed_survival: "You will now receive items (again)."
   gamemode_changed_non_survival: "You will not receive items while not in survival mode!"
+
+sb:
+  sb_time: "§6Current time"
+  sb_world: "§3Your world"
+  sb_deaths: "§4Deaths"
+  sb_kills: "§5Kills"
 
 frequent:
   not_implemented_yet: "You are looking into the future! This feature has not been implemented yet!"

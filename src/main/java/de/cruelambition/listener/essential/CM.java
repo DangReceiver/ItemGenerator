@@ -4,6 +4,7 @@ import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.oo.PC;
 import de.cruelambition.oo.Recipes;
+import de.cruelambition.oo.Sb;
 import de.cruelambition.worlds.SpawnWorld;
 
 import java.io.File;
@@ -25,6 +26,8 @@ public class CM implements Listener {
 		Player p = e.getPlayer();
 		PC pc = new PC(p);
 		pc.load(p);
+
+		Sb.setDefaultScoreBoard(p);
 
 		if (pc.getLanguageString() == null)
 			pc.setLanguage(Lang.getServerLang());

@@ -33,11 +33,11 @@ public class Chat implements Listener {
 		if (!p.hasPermission("Savior.Chat.Tagging")) return;
 
 		for (Player ap : Bukkit.getOnlinePlayers()) {
-			if (!f.contains(" " + ap.getName() + " ")) continue;
+			if (!f.contains(ap.getName())) continue;
 
-			f = f.replaceAll(" " + ap.getName(), " §" + Lang.colorFromRGB(20, 210, 80)
+			f = f.replaceAll(ap.getName(), "§" + Lang.colorFromRGB(25, 220, 100)
 					+ "§o@" + ap.getName() + cc);
-			ap.playSound(ap.getLocation(), Sound.BLOCK_NOTE_BLOCK_XYLOPHONE, 0.4F, 1.1F);
+			ap.playSound(ap.getLocation(), Sound.BLOCK_NOTE_BLOCK_XYLOPHONE, 0.6F, 1.1F);
 
 		}
 		e.setFormat(f);

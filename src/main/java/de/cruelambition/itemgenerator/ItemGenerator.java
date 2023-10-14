@@ -10,6 +10,7 @@ import de.cruelambition.language.Lang;
 import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
 import de.cruelambition.listener.function.*;
+import de.cruelambition.oo.Items;
 import de.cruelambition.oo.Recipes;
 import de.cruelambition.oo.Sb;
 import de.cruelambition.worlds.SpawnWorld;
@@ -82,6 +83,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new Recipes(), this);
 		pm.registerEvents(new AntiCreeper(), this);
 		pm.registerEvents(new GlassShear(), this);
+		pm.registerEvents(new KillDeath(), this);
 
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();
@@ -102,6 +104,12 @@ public final class ItemGenerator extends JavaPlugin {
 				for (Recipe re : rec) if (re instanceof Keyed k) ap.discoverRecipe(k.getKey());
 			}
 		}, 5);
+
+		Sb.setAllScoreBoards();
+		Sb.timeLoop();
+
+		Items items = new Items();
+//		items.newItem("", "");
 
 		VERSION = "0.1.1";
 //		if (getVersion() != null) VERSION = getVersion();
@@ -124,13 +132,15 @@ public final class ItemGenerator extends JavaPlugin {
 		if (l.getMissingKeys().isEmpty() || l.getMissingKeys() == null) return;
 		cs.sendMessage(Lang.PRE + l.getString("listing_missing_keys"));
 
-		for (Recipe recipe : rec) if (recipe instanceof Keyed k)
+		for (Recipe recipe : rec)
+			if (recipe instanceof Keyed k)
 				Bukkit.removeRecipe(k.getKey());
 
 		for (Player ap : Bukkit.getOnlinePlayers()) {
 			cs.sendMessage(l.getString("player_removeRecipe_recipe"));
 
-			for (Recipe re : rec) if (re instanceof Keyed k)
+			for (Recipe re : rec)
+				if (re instanceof Keyed k)
 					ap.undiscoverRecipe(k.getKey());
 		}
 

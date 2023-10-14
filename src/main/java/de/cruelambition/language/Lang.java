@@ -13,7 +13,7 @@ public class Lang extends Language {
 
 	public static String PRE = colorFromRGB(230, 60, 150) + "ItemGenerator§8: "
 			+ colorFromRGB(180, 180, 180),
-			CHAT = colorFromRGB(230, 60, 160) + "IG§8: ";
+			CHAT = "§5IG§8: ";
 
 	private File lf;
 	private Player p;

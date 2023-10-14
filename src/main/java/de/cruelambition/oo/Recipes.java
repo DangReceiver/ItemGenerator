@@ -197,12 +197,12 @@ public class Recipes implements Listener {
 		rec.add(upgradeRec);
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.LEATHER.toString() + "1");
-		ItemStack rotten = new ItemStack(Material.LEATHER);
+		ItemStack rotten = new ItemStack(Material.RABBIT_HIDE);
 
 		ShapedRecipe rottenFlesh = new ShapedRecipe(key, rotten);
 		rottenFlesh.shape("RRR",
 				"RRR",
-				"RR ");
+				"RRR");
 
 		rottenFlesh.setIngredient('R', Material.ROTTEN_FLESH);
 		rec.add(rottenFlesh);
