@@ -116,7 +116,7 @@ public class Recipes implements Listener {
 		rec.add(dirtRec2);
 
 
-		dirt.setAmount(1);
+		dirt.setAmount(2);
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(),
 				Material.DIRT.toString() + "3");
@@ -132,28 +132,61 @@ public class Recipes implements Listener {
 		ItemStack boe = new ItemStack(Material.EXPERIENCE_BOTTLE);
 		boe.setAmount(10);
 
-		int i = 1;
-		for (Material m : Material.values()) {
 
-			if (m.toString().contains("SKULL") || m.toString().contains("HEAD")) {
-				if (m == null || m.toString().contains("LEGACY") || m == Material.AIR ||
-						m == Material.SKULL_POTTERY_SHERD || m == Material.SKULL_BANNER_PATTERN) continue;
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + 1);
+		ShapedRecipe nBoeRec = new ShapedRecipe(key, boe);
 
-				if (new ItemStack(m) == null || new ItemStack(m).getType() == Material.AIR) continue;
+		nBoeRec.shape("   ",
+				" S ",
+				" B ");
 
-				key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + i);
-				ShapedRecipe nBoeRec = new ShapedRecipe(key, boe);
+		nBoeRec.setIngredient('B', Material.GLASS_BOTTLE);
+		nBoeRec.setIngredient('S', Material.SKELETON_SKULL);
+		rec.add(nBoeRec);
 
-				nBoeRec.shape("   ",
-						" S ",
-						" B ");
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + 2);
+		ShapedRecipe nBoeRec2 = new ShapedRecipe(key, boe);
 
-				nBoeRec.setIngredient('B', Material.GLASS_BOTTLE);
-				nBoeRec.setIngredient('S', m);
-				rec.add(nBoeRec);
-				i++;
-			}
-		}
+		nBoeRec2.shape("   ",
+				" S ",
+				" B ");
+
+		nBoeRec2.setIngredient('B', Material.GLASS_BOTTLE);
+		nBoeRec2.setIngredient('S', Material.WITHER_SKELETON_SKULL);
+		rec.add(nBoeRec2);
+
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + 3);
+		ShapedRecipe nBoeRec3 = new ShapedRecipe(key, boe);
+
+		nBoeRec3.shape("   ",
+				" S ",
+				" B ");
+
+		nBoeRec3.setIngredient('B', Material.GLASS_BOTTLE);
+		nBoeRec3.setIngredient('S', Material.CREEPER_HEAD);
+		rec.add(nBoeRec3);
+
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + 4);
+		ShapedRecipe nBoeRec4 = new ShapedRecipe(key, boe);
+
+		nBoeRec4.shape("   ",
+				" S ",
+				" B ");
+
+		nBoeRec4.setIngredient('B', Material.GLASS_BOTTLE);
+		nBoeRec4.setIngredient('S', Material.DRAGON_HEAD);
+		rec.add(nBoeRec4);
+
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + 5);
+		ShapedRecipe nBoeRec5 = new ShapedRecipe(key, boe);
+
+		nBoeRec5.shape("   ",
+				" S ",
+				" B ");
+
+		nBoeRec5.setIngredient('B', Material.GLASS_BOTTLE);
+		nBoeRec5.setIngredient('S', Material.PIGLIN_HEAD);
+		rec.add(nBoeRec5);
 
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.MAGMA_BLOCK.toString() + "1");
@@ -206,6 +239,33 @@ public class Recipes implements Listener {
 
 		rottenFlesh.setIngredient('R', Material.ROTTEN_FLESH);
 		rec.add(rottenFlesh);
+
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.LAPIS_ORE.toString() + "1");
+		ItemStack lapis = new ItemStack(Material.LAPIS_ORE);
+
+		ShapedRecipe lapisRec = new ShapedRecipe(key, lapis);
+		lapisRec.shape("   ",
+				"BPB",
+				"SOS");
+
+		lapisRec.setIngredient('B', Material.BLUE_DYE);
+		lapisRec.setIngredient('P', Material.PHANTOM_MEMBRANE);
+		lapisRec.setIngredient('O', Material.BOOK);
+		lapisRec.setIngredient('S', Material.STONE);
+		rec.add(lapisRec);
+
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.LAPIS_ORE.toString() + "2");
+
+		ShapedRecipe lapisRec2 = new ShapedRecipe(key, lapis);
+		lapisRec2.shape("   ",
+				"BPB",
+				"SOS");
+
+		lapisRec2.setIngredient('B', Material.LIGHT_BLUE_DYE);
+		lapisRec2.setIngredient('P', Material.PHANTOM_MEMBRANE);
+		lapisRec2.setIngredient('O', Material.BOOK);
+		lapisRec2.setIngredient('S', Material.STONE);
+		rec.add(lapisRec2);
 	}
 
 	public List<Recipe> getRec() {

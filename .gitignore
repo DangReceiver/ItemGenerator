@@ -116,3 +116,4 @@ run/
 *.class
 .idea/vcs.xml
 *.class
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst

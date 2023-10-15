@@ -14,18 +14,21 @@ public class Items {
 
 	private int damage = 1;
 
-	private List<ItemStack> items = new ArrayList<>();
+	public static List<ItemStack> ITEMS = new ArrayList<>();
 
 	public Items() {
 		List<ItemStack> l = new ArrayList<>();
 
-		ItemStack emerald_hoe = newItem("Emerald Hoe", "oki doki"),
+		ItemStack mini_jetpack = newItem("§6Mini Jetpack", "Click to bee boosted " +
+				"in the air // every time you click"),
 				sound = newItem("Sound", "Click to produce a sound"),
-				eraser = newItem("Eraser", "click to remove a set of blocks");
+				eraser = newItem("Eraser", "click to remove a set of blocks"),
+				crate = newItem("§cItem Crate", "Click to roll the lucky wheel");
 
-		l.add(emerald_hoe);
+		l.add(mini_jetpack);
 		l.add(sound);
 		l.add(eraser);
+		l.add(crate);
 
 		for (Player ap : Bukkit.getOnlinePlayers()) for (ItemStack is : l) ap.getInventory().addItem(is);
 
@@ -33,8 +36,9 @@ public class Items {
 
 	public ItemStack newItem(String name, String lore) {
 		ItemStack customItem = new ItemStack(Material.GOLDEN_HOE, 1, (short) damage);
-		ItemMeta meta = customItem.getItemMeta();
+		customItem.setDurability((short) damage);
 
+		ItemMeta meta = customItem.getItemMeta();
 		IB.name(customItem, name);
 		IB.lore(customItem, lore);
 
