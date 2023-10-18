@@ -274,10 +274,10 @@ public class Recipes implements Listener {
 
 	@EventHandler
 	public void handle(CraftItemEvent e) {
-		ConsoleCommandSender cs = Bukkit.getConsoleSender();
-
-		cs.sendMessage(e.getRecipe().getResult().toString());
-		cs.sendMessage(e.getResult().toString());
-		cs.sendMessage(e.getWhoClicked().getName());
+//		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+//
+//		cs.sendMessage(e.getRecipe().getResult().toString());
+//		cs.sendMessage(e.getResult().toString());
+//		cs.sendMessage(e.getWhoClicked().getName());
 	}
 }

@@ -30,7 +30,7 @@ public class Items {
 		l.add(eraser);
 		l.add(crate);
 
-		for (Player ap : Bukkit.getOnlinePlayers()) for (ItemStack is : l) ap.getInventory().addItem(is);
+//		for (Player ap : Bukkit.getOnlinePlayers()) for (ItemStack is : l) ap.getInventory().addItem(is);
 
 	}
 

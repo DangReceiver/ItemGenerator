@@ -84,6 +84,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new AntiCreeper(), this);
 		pm.registerEvents(new GlassShear(), this);
 		pm.registerEvents(new KillDeath(), this);
+		pm.registerEvents(new CaneCactus(), this);
 
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();
@@ -100,7 +101,7 @@ public final class ItemGenerator extends JavaPlugin {
 			for (Recipe recipe : rec) Bukkit.addRecipe(recipe);
 
 			for (Player ap : Bukkit.getOnlinePlayers()) {
-				cs.sendMessage(l.getString("player_receiving_recipe"));
+				cs.sendMessage(String.format(l.getString("player_receiving_recipe"), ap.getName()));
 				for (Recipe re : rec) if (re instanceof Keyed k) ap.discoverRecipe(k.getKey());
 			}
 		}, 5);

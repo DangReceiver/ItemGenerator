@@ -240,10 +240,14 @@ public class Generator {
 			ItemStack is = new ItemStack(getRandomMaterial());
 			if (canEdit(is.getType())) edit(is);
 
-			if (is.getType().isBlock()) if (new Random().nextInt(4) == 0) is.setAmount(2);
-			if (ap.getInventory().firstEmpty() != -1) ap.getInventory().addItem(is);
+			if (is.getType().isBlock()) if (new Random().nextInt(4) == 0)
+				is.setAmount(new Random().nextInt(5) == 0 ? 3 : 2);
 
+			if (ap.getInventory().firstEmpty() != -1) ap.getInventory().addItem(is);
 			else ap.getWorld().dropItemNaturally(ap.getLocation(), is);
+
+			ap.sendActionBar(Lang.PRE + String.format(new Lang(ap).getString("generated_item"),
+					is.getType().toString().toLowerCase()));
 		}
 	}
 
@@ -293,7 +297,7 @@ public class Generator {
 		Enchantment ench = v[i];
 
 		while (!applicable(item, ench)) {
-			if (i > v.length) i = -1;
+			if (i >= v.length) i = -1;
 
 			ench = v[i + 1];
 			i++;
