@@ -90,6 +90,14 @@ public class IB {
 		return item;
 	}
 
+	public static ItemStack cmd(ItemStack item, int cmd) {
+		ItemMeta itemM = item.getItemMeta();
+		itemM.setCustomModelData(cmd);
+
+		item.setItemMeta(itemM);
+		return item;
+	}
+
 	public static ItemStack name(ItemStack item, String name) {
 		ItemMeta itemM = item.getItemMeta();
 		itemM.setDisplayName(name);

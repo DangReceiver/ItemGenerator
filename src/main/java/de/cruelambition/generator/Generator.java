@@ -6,6 +6,7 @@ import java.util.List;
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.oo.IB;
+import de.cruelambition.oo.Items;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -37,6 +38,10 @@ public class Generator {
 
 		for (int i = 0; i <= 6; i++) // Total: 8
 			addMaterialToLoop(Material.ENCHANTED_BOOK);
+
+		for (int i = 0; i <= Items.ITEMS.size() - 1; i++)
+			addMaterialToLoop(Material.PAPER);
+
 	}
 
 	public List<String> getForbiddenList() {
@@ -123,18 +128,20 @@ public class Generator {
 
 	public void removeAllForbiddenItemsFromAllPlayers() {
 		for (Player ap : Bukkit.getOnlinePlayers())
-			for (ItemStack c : ap.getInventory().getContents())
 
+			for (ItemStack c : ap.getInventory().getContents())
 				if (c != null && forbidden.contains(c.getType().toString())) c.setType(Material.AIR);
 	}
 
 	public void syncForbiddenItems() {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-
 		if (!c.isSet("Item.List.Forbidden")) {
+
 			c.set("Item.List.Forbidden", new ArrayList<>(List.of(Material.AIR.toString(),
 					Material.COMMAND_BLOCK.toString(), Material.JIGSAW.toString(),
-					Material.STRUCTURE_BLOCK.toString(), Material.GOLDEN_HOE.toString())));
+					Material.STRUCTURE_BLOCK.toString(), Material.GOLDEN_HOE.toString(),
+					"ARMOR_TRIM_SMITHING_TEMPLATE", "_STEM", "LEGACY_", "POTTED_")));
+
 			ItemGenerator.getItemGenerator().saveConfig();
 		}
 
@@ -231,7 +238,6 @@ public class Generator {
 	}
 
 	public void giveAll() {
-		Lang.broadcast("generator_give_all");
 		for (Player ap : Bukkit.getOnlinePlayers()) {
 
 			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
@@ -256,12 +262,12 @@ public class Generator {
 		Random r = new Random();
 
 		pm.setColor(Color.fromRGB(r.nextInt(256), r.nextInt(256), r.nextInt(256)));
-		int d = r.nextInt(241 * 20);
+		int d = r.nextInt(301 * 20);
 		int a = r.nextInt(3);
 
 		PotionEffect pe = new PotionEffect(PotionEffectType.values()[r.nextInt(PotionEffectType.values().length)],
-				((d >= 121 && r.nextInt(2) == 0) ? d / 2 : d),
-				((a > 0 && r.nextInt(3) == 0) ? a - 1 : a), true, true, true);
+				((d >= 141 && r.nextInt(2) == 0) ? d / 2 : d),
+				((a > 0 && r.nextInt(4) == 0) ? a - 1 : a), true, true, true);
 
 		pm.addCustomEffect(pe, true);
 		item.setItemMeta(pm);

@@ -299,6 +299,34 @@ public class PC {
 		return false;
 	}
 
+	public void setAfk(boolean isAfk) {
+		c.set("Mechanics.Afk.isAfk", isAfk);
+	}
+
+	public boolean isAfk() {
+		return c.getBoolean("Mechanics.Afk.isAfk", false);
+	}
+
+	public void setAfkLead(long lead) {
+		c.set("Mechanics.Afk.LastAction", lead);
+	}
+
+	public long getAfkLead() {
+		return c.getLong("Mechanics.Afk.LastAction", 0);
+	}
+
+	public long getAfkTime() {
+		return c.getLong("Mechanics.Afk.AfkTime");
+	}
+
+	public void resetAfkTime() {
+		c.set("Mechanics.Afk.AfkTime", 0);
+	}
+
+	public void setAfkTime(long time) {
+		c.set("Mechanics.Afk.AfkTime", time);
+	}
+
 	public void updatePlayTime() {
 		setTotalPlayTime(getTotalPlayTime() + getQuitTime() - getJoinTime());
 		setJoinTime(-1L);
@@ -312,7 +340,7 @@ public class PC {
 		return c.getLong("Mechanics.Time.TotalPlayTime");
 	}
 
-	public long getCurrentPlayTIme() {
+	public long getCurrentPlayTime() {
 		return c.getLong("Mechanics.Time.TotalPlayTime") + System.currentTimeMillis() - getJoinTime();
 	}
 

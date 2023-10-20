@@ -7,28 +7,31 @@ import java.util.Objects;
 import java.util.Random;
 
 import de.cruelambition.language.Language;
-import org.bukkit.Bukkit;
-import org.bukkit.GameRule;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
+import de.cruelambition.oo.PC;
+import de.cruelambition.oo.Utils;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SpawnWorld
-		implements Listener {
-	public static class SpawnGen
-			extends ChunkGenerator {
+public class SpawnWorld implements Listener {
+
+	public static class SpawnGen extends ChunkGenerator {
+
 		@NotNull
-		public ChunkGenerator.ChunkData generateChunkData(@NotNull World world, @NotNull Random random,
-														  int chunkX, int chunkZ, @NotNull ChunkGenerator.BiomeGrid biome) {
+		public ChunkGenerator.ChunkData generateChunkData(@NotNull World world, @NotNull Random
+				random, int chunkX, int chunkZ, @NotNull ChunkGenerator.BiomeGrid biome) {
 
 			ChunkGenerator.ChunkData chunkData = createChunkData(world);
 			for (int x = 0; x < 24; x++)
@@ -37,22 +40,23 @@ public class SpawnWorld
 			return chunkData;
 		}
 
-		public static boolean checkExists() {
-			World w = Bukkit.getWorld("world");
+		public static boolean checkExists(String name) {
+			World w = Bukkit.getWorld(name);
 			if (w != null) return true;
 
-			WorldCreator creator = new WorldCreator("world");
+			WorldCreator creator = new WorldCreator(name);
 			creator.generator(new SpawnGen());
 			creator.createWorld();
 
-			setGameRules(Objects.<World>requireNonNull(w = Bukkit.getWorld("world")));
+			setGameRules(Objects.<World>requireNonNull(w = Bukkit.getWorld(name)));
 			return (w != null);
 
 		}
 
 		@Nullable
-		public static World getWorld() {
-			return checkExists() ? Bukkit.getWorld("world") : null;
+		public static World getWorld(String name) {
+			return checkExists(name) ?
+					Bukkit.getWorld(name) : null;
 		}
 
 		public static void setGameRules(World w) {
@@ -71,26 +75,26 @@ public class SpawnWorld
 		Location spawnLoc = c.getLocation("Locations.Spawn.Spawn");
 
 		if (spawnLoc == null) {
-			spawnLoc = new Location(Bukkit.getWorld("world"), 0.5D, 64.02, 0.5D);
+			spawnLoc = new Location(Bukkit.getWorld("Spawn"), 0.5D, 65.52, 0.5D);
 
 			c.set("Locations.Spawn.Spawn", spawnLoc);
 			c.set("Locations.Spawn.ButtonLocation", spawnLoc);
 			ItemGenerator.getItemGenerator().saveConfig();
 		}
 
-		isSpawnSafe();
-
+//		isSpawnSafe();
 		return spawnLoc;
 	}
 
 	public static boolean isSpawnSafe() {
-		boolean b = SpawnGen.checkExists();
+		boolean b = SpawnGen.checkExists("Spawn");
 
-		Location c = ItemGenerator.getItemGenerator().getConfig().getLocation("Locations.Spawn.Spawn");
+		Location c = ItemGenerator.getItemGenerator().getConfig()
+				.getLocation("Locations.Spawn.Spawn");
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 
 		if (c == null || c.getWorld() == null) {
-			Location sp = new Location(Bukkit.getWorld("world"), 0.5D, 64.02, 0.5D);
+			Location sp = new Location(Bukkit.getWorld("Spawn"), 0.5D, 65.02, 0.5D);
 			ItemGenerator.getItemGenerator().getConfig().set("Locations.Spawn.Spawn", sp);
 
 			ItemGenerator.getItemGenerator().saveConfig();
@@ -125,5 +129,51 @@ public class SpawnWorld
 		}
 
 		return b;
+	}
+
+	@EventHandler
+	public void handle(PlayerInteractEvent e) {
+		Player p = e.getPlayer();
+		Block cb = e.getClickedBlock();
+
+		if (cb == null) return;
+		if (cb.getWorld() != Bukkit.getWorld("Spawn")) return;
+
+		if (!cb.getType().toString().contains("BUTTON")) return;
+		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+
+		if (!c.isSet("Locations.Spawn.ButtonLocation")) return;
+		if (!cb.equals(c.getLocation("Locations.Spawn.ButtonLocation").getBlock())) return;
+
+		PC pc = new PC(p);
+
+		if (pc.hasLogoutLocation()) p.teleport(pc.getLogoutLocation());
+		else p.teleport(new Location(Bukkit.getWorld("world"), 0.5, 65.02, 0.5));
+
+		int i = 0;
+		Utils.oneByOne(p, Sound.BLOCK_NOTE_BLOCK_BASS, 3,
+				0.85f, 0, false, 0.35f, 4, i);
+
+		p.setGameMode(GameMode.SURVIVAL);
+	}
+
+	@EventHandler
+	public void handle(EntityDamageEvent e) {
+		Entity en = e.getEntity();
+		if (!(en instanceof Player p)) return;
+
+		if (p.getWorld() != Bukkit.getWorld("Spawn")) return;
+
+		if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+			e.setCancelled(true);
+			return;
+		}
+		if (e.getCause() != EntityDamageEvent.DamageCause.VOID) return;
+
+		e.setCancelled(true);
+		p.teleport(getSafeSpawnLocation().add(0, 1, 0));
+
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () ->
+				p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.4f, 0.8f), 2);
 	}
 }

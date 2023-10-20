@@ -28,3 +28,7 @@ commands:
     description: Expand your inventory
   arms:
     description: Add arms to nearby armorstands
+  get:
+    description: Get custom Items by this very plugin
+  spawn:
+    description: Go to the spawn

@@ -12,7 +12,6 @@ de\cruelambition\generator\Generator.class
 de\cruelambition\cmd\moderation\Fly.class
 de\cruelambition\oo\Sb.class
 de\cruelambition\cmd\user\Language.class
-de\cruelambition\worlds\SpawnGen.class
 de\cruelambition\language\ReadOut.class
 de\cruelambition\exceptions\InvalidStringException.class
 de\cruelambition\language\Lang.class

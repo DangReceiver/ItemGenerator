@@ -1,10 +1,7 @@
 package de.cruelambition.itemgenerator;
 
 import de.cruelambition.cmd.moderation.*;
-import de.cruelambition.cmd.user.Backpack;
-import de.cruelambition.cmd.user.Info;
-import de.cruelambition.cmd.user.Language;
-import de.cruelambition.cmd.user.PlayTime;
+import de.cruelambition.cmd.user.*;
 import de.cruelambition.generator.Generator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.listener.essential.CM;
@@ -53,8 +50,13 @@ public final class ItemGenerator extends JavaPlugin {
 		Lang l = new Lang(null);
 		l.loadingSequence();
 
-		World spawn = Bukkit.getWorld("world");
-		if (spawn == null) spawn.save();
+		World world = Bukkit.getWorld("world");
+		if (world == null) world.save();
+
+		World spawn = Bukkit.getWorld("Spawn");
+		if (spawn == null){
+			SpawnWorld.SpawnGen.checkExists("Spawn");
+		}
 
 		ssl = SpawnWorld.getSafeSpawnLocation();
 
@@ -68,9 +70,12 @@ public final class ItemGenerator extends JavaPlugin {
 		Objects.requireNonNull(getCommand("generatorfrequencies")).setExecutor(new GeneratorFrequencies());
 		Objects.requireNonNull(getCommand("backpack")).setExecutor(new Backpack());
 		Objects.requireNonNull(getCommand("arms")).setExecutor(new Arms());
+		Objects.requireNonNull(getCommand("get")).setExecutor(new Get());
+		Objects.requireNonNull(getCommand("spawn")).setExecutor(new Spawn());
 
 		Objects.requireNonNull(getCommand("language")).setTabCompleter(new Language());
 		Objects.requireNonNull(getCommand("generatorfrequencies")).setTabCompleter(new GeneratorFrequencies());
+		Objects.requireNonNull(getCommand("get")).setTabCompleter(new Get());
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new CM(), this);
@@ -85,6 +90,9 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new GlassShear(), this);
 		pm.registerEvents(new KillDeath(), this);
 		pm.registerEvents(new CaneCactus(), this);
+		pm.registerEvents(new SpawnWorld(), this);
+		pm.registerEvents(new Get(), this);
+		pm.registerEvents(new WorldChange(), this);
 
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();

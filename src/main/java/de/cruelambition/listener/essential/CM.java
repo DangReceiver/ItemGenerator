@@ -2,16 +2,13 @@ package de.cruelambition.listener.essential;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
-import de.cruelambition.oo.PC;
-import de.cruelambition.oo.Recipes;
-import de.cruelambition.oo.Sb;
+import de.cruelambition.oo.*;
 import de.cruelambition.worlds.SpawnWorld;
 
 import java.io.File;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Keyed;
+import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -53,6 +50,9 @@ public class CM implements Listener {
 
 		else Lang.broadcastArg("player_join_" + (new Random()).nextInt(17), p.getName());
 
+		p.setGameMode(GameMode.ADVENTURE);
+		p.teleport(SpawnWorld.getSafeSpawnLocation());
+
 		pc.setJoinTime(System.currentTimeMillis());
 		pc.savePCon();
 
@@ -73,6 +73,8 @@ public class CM implements Listener {
 
 		pc.setQuitTime(System.currentTimeMillis());
 		pc.updatePlayTime();
+
+		pc.setLogoutLocation(p.getLocation());
 		pc.savePCon();
 
 		e.setQuitMessage(null);
