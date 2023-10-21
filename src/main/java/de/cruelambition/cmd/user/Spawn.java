@@ -3,6 +3,7 @@ package de.cruelambition.cmd.user;
 import de.cruelambition.language.Lang;
 import de.cruelambition.oo.PC;
 import de.cruelambition.worlds.SpawnWorld;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -33,8 +34,10 @@ public class Spawn implements CommandExecutor {
 		Location loc = SpawnWorld.getSafeSpawnLocation();
 
 		PC pc = new PC(p);
-		pc.setLogoutLocation(p.getLocation());
-		pc.savePCon();
+		if (p.getWorld() == Bukkit.getWorld("world")) {
+			pc.setLogoutLocation(p.getLocation());
+			pc.savePCon();
+		}
 
 		p.teleport(loc);
 	}

@@ -14,7 +14,7 @@ import org.codehaus.plexus.util.ReflectionUtils;
 
 public class CaneCactus implements Listener {
 
-	//	@EventHandler
+	@EventHandler
 	public void handle(PlayerInteractEvent e) {
 		if (e.isCancelled()) return;
 		if (e.getClickedBlock() == null) return;
@@ -32,7 +32,7 @@ public class CaneCactus implements Listener {
 		if (l.getBlock().getType() != Material.AIR && l.getBlock().getType() != cb.getType()) return;
 
 		e.setCancelled(true);
-		
+
 		if (l.getBlock().getType() != cb.getType()) l.getBlock().setType(cb.getType());
 		else {
 			if (!extendGrowable(cb)) return;

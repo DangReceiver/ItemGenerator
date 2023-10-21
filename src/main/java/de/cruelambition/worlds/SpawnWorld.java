@@ -83,7 +83,7 @@ public class SpawnWorld implements Listener {
 		}
 
 //		isSpawnSafe();
-		return spawnLoc;
+		return spawnLoc.clone().add(0,0.5,0);
 	}
 
 	public static boolean isSpawnSafe() {
@@ -174,6 +174,7 @@ public class SpawnWorld implements Listener {
 		p.teleport(getSafeSpawnLocation().clone().add(0, 0.5, 0));
 
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () ->
-				p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.4f, 0.8f), 2);
+				Utils.oneByOne(p, Sound.BLOCK_NOTE_BLOCK_XYLOPHONE, 4, 0.85f,
+						0.05f, true, 0.5f, 2, 0), 3);
 	}
 }

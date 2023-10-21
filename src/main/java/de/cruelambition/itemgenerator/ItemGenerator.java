@@ -8,10 +8,7 @@ import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
 import de.cruelambition.listener.essential.Timber;
 import de.cruelambition.listener.function.*;
-import de.cruelambition.oo.Items;
-import de.cruelambition.oo.PC;
-import de.cruelambition.oo.Recipes;
-import de.cruelambition.oo.Sb;
+import de.cruelambition.oo.*;
 import de.cruelambition.worlds.SpawnWorld;
 
 import java.io.File;
@@ -96,6 +93,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new WorldChange(), this);
 		pm.registerEvents(new CustomItems(), this);
 		pm.registerEvents(new Furnace(), this);
+//		pm.registerEvents(new Afk(), this);
 
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();
@@ -119,6 +117,7 @@ public final class ItemGenerator extends JavaPlugin {
 
 		Sb.setAllScoreBoards();
 		Sb.timeLoop();
+		Sb.scoreboardLoop();
 
 		Items items = new Items();
 //		items.newItem("", "");

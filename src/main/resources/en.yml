@@ -134,11 +134,18 @@ gamemode:
   gamemode_changed_survival: "You will now receive items (again)."
   gamemode_changed_non_survival: "You will not receive items while not in survival mode!"
 
+afk:
+  afk_warn: "§7You seem to be afk... Do something!"
+
 sb:
   sb_time: "§6Current time"
   sb_world: "§3Your world"
   sb_deaths: "§4Deaths"
   sb_kills: "§5Kills"
+  sb_world_time: "§eWorld Time"
+  sb_nearby_entities: "§bNearby NPCs"
+  sb_xp: "§cXp"
+  sb_kill_level: "§dKill Level"
 
 frequent:
   not_implemented_yet: "You are looking into the future! This feature has not been implemented yet!"
@@ -154,3 +161,4 @@ frequent:
   no_player: "This feature is exclusively available to players§8."
   change_attribute_target: "The target's attribute was changed from %s to %s successfully."
   change_attribute: "Your attribute was changed from %s to %s successfully."
+  invalid_time_slot: "The chosen Value is not compatible with the chosen Slot!"
