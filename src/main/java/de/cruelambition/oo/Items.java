@@ -10,14 +10,14 @@ import java.util.List;
 public class Items {
 
 	// cmd = CustomModelData
-	private int cmd = 1;
+	private int cmd = 1, cmdd = 1, cmde = 1;
 
 	public static List<ItemStack> ITEMS = new ArrayList<>();
 
 	public Items() {
 		List<ItemStack> l = new ArrayList<>();
 
-		ItemStack mini_jetpack = newItem("§6Mini Jetpack", "Click to bee boosted " +
+		ItemStack mini_jetpack = newItem("§6Mini Jetpack", "Click to be boosted " +
 				"in the air // every time you click"),
 				sound = newItem("§eSound", "Click to produce a sound"),
 				eraser = newItem("§cEraser", "click to remove a set of blocks"),
@@ -41,6 +41,28 @@ public class Items {
 		IB.cmd(customItem, cmd);
 
 		cmd++;
+		return customItem;
+	}
+
+	public ItemStack newDamageableItem(String name, String lore) {
+		ItemStack customItem = new ItemStack(Material.IRON_HOE);
+
+		IB.name(customItem, name);
+		IB.lore(customItem, lore);
+		IB.cmd(customItem, cmdd);
+
+		cmdd++;
+		return customItem;
+	}
+
+	public ItemStack newEdibleItem(String name, String lore) {
+		ItemStack customItem = new ItemStack(Material.APPLE);
+
+		IB.name(customItem, name);
+		IB.lore(customItem, lore);
+		IB.cmd(customItem, cmde);
+
+		cmde++;
 		return customItem;
 	}
 }

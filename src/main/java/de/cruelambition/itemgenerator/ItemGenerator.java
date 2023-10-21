@@ -47,16 +47,16 @@ public final class ItemGenerator extends JavaPlugin {
 		createFolder(getDataFolder() + "/languages");
 		createFolder(getDataFolder() + "/players");
 
-		Lang l = new Lang(null);
-		l.loadingSequence();
-
 		World world = Bukkit.getWorld("world");
 		if (world == null) world.save();
 
 		World spawn = Bukkit.getWorld("Spawn");
-		if (spawn == null){
+		if (spawn == null) {
 			SpawnWorld.SpawnGen.checkExists("Spawn");
 		}
+
+		Lang l = new Lang(null);
+		l.loadingSequence();
 
 		ssl = SpawnWorld.getSafeSpawnLocation();
 
@@ -93,6 +93,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new SpawnWorld(), this);
 		pm.registerEvents(new Get(), this);
 		pm.registerEvents(new WorldChange(), this);
+		pm.registerEvents(new CustomItems(), this);
 
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();

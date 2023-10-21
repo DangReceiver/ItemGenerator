@@ -23,8 +23,8 @@ checkmessage:
   list_missing_keys: "Key§8:§2 %s"
 
 fly:
-  flight_updated: "Your target's flight mode was toggled."
-  flight_updated_target: "Your flight mode was toggled."
+  flight_updated: "Your flight mode was toggled."
+  flight_updated_target: "Your target's flight mode was toggled."
 
 generatorfrequencies:
   generatorfrequencies_before: "Generator Timings before Change - CheckStart: %s, CheckFrequency: %s,
@@ -68,6 +68,7 @@ generator:
   itemgenerator_forbidden_listing: "§6Currently forbidden items§8: §e"
   generator_give_all: "Everyone just received a new item."
   generated_item: "You received %s."
+  potion: "Potion of %s"
 
 itemgenerator:
   modules_success: "All modules were loaded sucessfully!"

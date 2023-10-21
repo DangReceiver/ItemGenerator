@@ -11,6 +11,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.rmi.server.RemoteRef;
 import java.util.Random;
 
 public class CustomItems implements Listener {
@@ -19,11 +20,12 @@ public class CustomItems implements Listener {
 	public void handle(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
 		ItemStack item = e.getItem();
+		if (item == null) return;
 
 		Action a = e.getAction();
 		Block cb = e.getClickedBlock();
 
-		if (item == Items.ITEMS.get(3)) {
+		if (item.equals(Items.ITEMS.get(3))) {
 			e.setCancelled(true);
 			p.sendMessage("Crate");
 
@@ -31,7 +33,7 @@ public class CustomItems implements Listener {
 
 			}
 
-		} else if (item == Items.ITEMS.get(2)) {
+		} else if (item.equals(Items.ITEMS.get(2))) {
 			e.setCancelled(true);
 			p.sendMessage("eraser");
 
@@ -41,23 +43,23 @@ public class CustomItems implements Listener {
 				checkNextBlocks(cb, i);
 
 			} else {
-				p.sendMessage("need to click a block");
+				p.sendMessage("need to left click a block");
 			}
 
-		} else if (item == Items.ITEMS.get(1)) {
+		} else if (item.equals(Items.ITEMS.get(1))) {
 			e.setCancelled(true);
 			p.sendMessage("sound");
 
-			if (a.toString().contains("LEFT")) {
+			if (a.toString().contains("RIGHT")) {
 				Random r = new Random();
 
 				p.playSound(p.getLocation(), Sound.values()[r.nextInt(Sound.values().length - 1)],
-						0.65f, (float) (r.nextInt(21) / 10));
+						0.75f, (float) (r.nextInt(21) / 10));
 			}
 
-		} else if (item == Items.ITEMS.get(0)) {
+		} else if (item.equals(Items.ITEMS.get(0))) {
 			e.setCancelled(true);
-			p.sendMessage("emerald hoe");
+			p.sendMessage("Mini Jetpack");
 
 		}
 	}
@@ -66,43 +68,42 @@ public class CustomItems implements Listener {
 		Material type = cb.getType();
 		cb.getWorld().dropItemNaturally(cb.getLocation().add(0, 0.5, 0), new ItemStack(type));
 
-		if (i >= 3) return;
+		if (i >= 4) return;
 
 		Block xm = cb.getLocation().add(-1, 0, 0).getBlock();
 		if (type == xm.getType()) {
-			xm.setType(Material.AIR);
 			checkNextBlocks(xm, i + 1);
+			xm.setType(Material.AIR);
 		}
 
 		Block xp = cb.getLocation().add(1, 0, 0).getBlock();
 		if (type == xp.getType()) {
-			xp.setType(Material.AIR);
 			checkNextBlocks(xp, i + 1);
+			xp.setType(Material.AIR);
 		}
 
 		Block ym = cb.getLocation().add(0, -1, 0).getBlock();
 		if (type == ym.getType()) {
-			ym.setType(Material.AIR);
 			checkNextBlocks(ym, i + 1);
+			ym.setType(Material.AIR);
 		}
 
 		Block yp = cb.getLocation().add(0, 1, 0).getBlock();
 		if (type == yp.getType()) {
-			yp.setType(Material.AIR);
 			checkNextBlocks(yp, i + 1);
+			yp.setType(Material.AIR);
 		}
 
 		Block zm = cb.getLocation().add(0, 0, -1).getBlock();
 		if (type == zm.getType()) {
-			zm.setType(Material.AIR);
 			checkNextBlocks(zm, i + 1);
+			zm.setType(Material.AIR);
 		}
 
 		Block zp = cb.getLocation().add(0, 0, 1).getBlock();
 		if (type == zp.getType()) {
-			zp.setType(Material.AIR);
 			checkNextBlocks(zp, i + 1);
+			zp.setType(Material.AIR);
 		}
-
 	}
 }

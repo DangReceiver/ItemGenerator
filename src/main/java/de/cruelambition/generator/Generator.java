@@ -27,14 +27,17 @@ public class Generator {
 		material = new ArrayList<>();
 		forbidden = new ArrayList<>();
 
-		editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(), Material.POTION.toString(),
-				Material.SPLASH_POTION.toString(), Material.LINGERING_POTION.toString(), "CHESTPLATE",
-				"LEGGINGS", "BOOTS", "HELMET", "_SWORD", "_PICKAXE", "_AXE", "_SHOVEL"));
+		editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(),
+				Material.POTION.toString(), Material.SPLASH_POTION.toString(),
+				Material.LINGERING_POTION.toString(), "CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET",
+				"_SWORD", "_PICKAXE", "_AXE", "_SHOVEL"));
 
-		for (int i = 0; i <= 2; i++) // Total: 4
+		for (int i = 0; i <= 4; i++) // Total: 6
 			addMaterialToLoop(Material.POTION);
-		for (int i = 0; i <= 1; i++) // Total: 3
+		for (int i = 0; i <= 2; i++) // Total: 4
 			addMaterialToLoop(Material.SPLASH_POTION);
+		for (int i = 0; i <= 1; i++) // Total: 3
+			addMaterialToLoop(Material.LINGERING_POTION);
 
 		for (int i = 0; i <= 6; i++) // Total: 8
 			addMaterialToLoop(Material.ENCHANTED_BOOK);
@@ -65,7 +68,8 @@ public class Generator {
 
 	public List<Integer> getFrequencies() {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		int csi = c.getInt("Loops.Check.StartIn", 60), cf = c.getInt("Loops.Check.Frequency", 80),
+		int csi = c.getInt("Loops.Check.StartIn", 60),
+				cf = c.getInt("Loops.Check.Frequency", 80),
 				gsi = c.getInt("Loops.Generator.StartIn", 6),
 				gf = c.getInt("Loops.Generator.Frequency", 30);
 
@@ -145,7 +149,8 @@ public class Generator {
 			ItemGenerator.getItemGenerator().saveConfig();
 		}
 
-		List<String> sl = c.getStringList("Item.List.Forbidden"), newForbidden = new ArrayList<>(sl);
+		List<String> sl = c.getStringList("Item.List.Forbidden"),
+				newForbidden = new ArrayList<>(sl);
 
 		for (String m : newForbidden) addItemToForbiddenList(m.toString());
 		removeAllForbiddenItemsFromMaterialList();
@@ -157,13 +162,14 @@ public class Generator {
 		for (Material mt : Material.values())
 			if (mt.toString().contains(m)) forbidden.add(m);
 
-		Bukkit.getConsoleSender().sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),
-				"itemgenerator_forbiddenlist_add_item"), m.toLowerCase()));
+		Bukkit.getConsoleSender().sendMessage(Lang.PRE + String.format(
+				Lang.getMessage(Lang.getServerLang(), "itemgenerator_forbiddenlist_add_item"),
+				m.toLowerCase()));
 	}
 
 	public void listForbiddenItems() {
-		Lang.broadcastArg("itemgenerator_forbidden_listing", getForbiddenList().toString().replace("[",
-				"").replace("]", ""));
+		Lang.broadcastArg("itemgenerator_forbidden_listing", getForbiddenList().toString()
+				.replace("[", "").replace("]", ""));
 	}
 
 	public void addItemToPermanentForbiddenList(Material m) {
@@ -241,7 +247,7 @@ public class Generator {
 		for (Player ap : Bukkit.getOnlinePlayers()) {
 
 			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
-			ap.playSound(ap.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.2f, 1.6f);
+			ap.playSound(ap.getLocation(), Sound.ENTITY_PLAYER_SWIM, 0.3f, 0.75f);
 
 			ItemStack is = new ItemStack(getRandomMaterial());
 			if (canEdit(is.getType())) edit(is);
@@ -253,7 +259,7 @@ public class Generator {
 			else ap.getWorld().dropItemNaturally(ap.getLocation(), is);
 
 			ap.sendActionBar(Lang.PRE + String.format(new Lang(ap).getString("generated_item"),
-					is.getType().toString().toLowerCase()));
+					is.getType().toString().toLowerCase().replaceAll("_", " ")));
 		}
 	}
 
@@ -261,16 +267,24 @@ public class Generator {
 		if (!(item.getItemMeta() instanceof PotionMeta pm)) return;
 		Random r = new Random();
 
-		pm.setColor(Color.fromRGB(r.nextInt(256), r.nextInt(256), r.nextInt(256)));
-		int d = r.nextInt(301 * 20);
+		Color col = Color.fromRGB(r.nextInt(256), r.nextInt(256), r.nextInt(256));
+		pm.setColor(col);
+
+		int d = r.nextInt(341 * 20);
 		int a = r.nextInt(3);
 
-		PotionEffect pe = new PotionEffect(PotionEffectType.values()[r.nextInt(PotionEffectType.values().length)],
-				((d >= 141 && r.nextInt(2) == 0) ? d / 2 : d),
-				((a > 0 && r.nextInt(4) == 0) ? a - 1 : a), true, true, true);
+		PotionEffect pe = new PotionEffect(PotionEffectType.values()[r.nextInt(PotionEffectType
+				.values().length)], ((d >= 141 && r.nextInt(3) == 0) || (d >= 200 &&
+				r.nextInt(2) == 0) ? d / 2 : d), ((a > 0 && r.nextInt(4) == 0)
+				? a - 1 : a), true, true, true);
 
 		pm.addCustomEffect(pe, true);
 		item.setItemMeta(pm);
+
+		IB.name(item, Lang.colorFromRGB(col.getRed(), col.getGreen(), col.getBlue())
+				+ String.format(Lang.getMessage(Lang.getServerLang(), "potion"),
+				pe.getType().toString().toLowerCase().replaceAll("_", " ")));
+		if (r.nextInt(4) == 0) effect(item);
 	}
 
 	public boolean canEdit(Material m) {
@@ -299,11 +313,11 @@ public class Generator {
 		Random r = new Random();
 		@NotNull Enchantment[] v = Enchantment.values();
 
-		int i = r.nextInt(v.length - 1);
+		int i = r.nextInt(v.length);
 		Enchantment ench = v[i];
 
 		while (!applicable(item, ench)) {
-			if (i >= v.length) i = -1;
+			if (i >= v.length - 1) i = -1;
 
 			ench = v[i + 1];
 			i++;

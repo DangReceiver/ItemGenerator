@@ -75,10 +75,10 @@ public class SpawnWorld implements Listener {
 		Location spawnLoc = c.getLocation("Locations.Spawn.Spawn");
 
 		if (spawnLoc == null) {
-			spawnLoc = new Location(Bukkit.getWorld("Spawn"), 0.5D, 65.52, 0.5D);
+			spawnLoc = new Location(Bukkit.getWorld("Spawn"), 0.5D, 64.52, 0.5D);
 
 			c.set("Locations.Spawn.Spawn", spawnLoc);
-			c.set("Locations.Spawn.ButtonLocation", spawnLoc);
+			c.set("Locations.Spawn.ButtonLocation", spawnLoc.add(-0.5, -0.52, +8.5));
 			ItemGenerator.getItemGenerator().saveConfig();
 		}
 
