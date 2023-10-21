@@ -10,7 +10,7 @@ import java.util.List;
 public class Items {
 
 	// cmd = CustomModelData
-	private int cmd = 1, cmdd = 1, cmde = 1;
+	private int cmd = 1, cmdd = 1, cmde = 1, cmdh = 1;
 
 	public static List<ItemStack> ITEMS = new ArrayList<>();
 
@@ -18,15 +18,17 @@ public class Items {
 		List<ItemStack> l = new ArrayList<>();
 
 		ItemStack mini_jetpack = newItem("§6Mini Jetpack", "Click to be boosted " +
-				"in the air // every time you click"),
+				"in the air every time you click"),
 				sound = newItem("§eSound", "Click to produce a sound"),
 				eraser = newItem("§cEraser", "click to remove a set of blocks"),
-				crate = newItem("§cItem Crate", "Click to roll the lucky wheel");
+				crate = newHeadItem("§cItem Crate", "Click to roll the lucky wheel"),
+				banana = newEdibleItem("§eBanana", "§e§oBanana!");
 
 		l.add(mini_jetpack);
 		l.add(sound);
 		l.add(eraser);
 		l.add(crate);
+		l.add(banana);
 
 		ITEMS.addAll(l);
 
@@ -63,6 +65,17 @@ public class Items {
 		IB.cmd(customItem, cmde);
 
 		cmde++;
+		return customItem;
+	}
+
+	public ItemStack newHeadItem(String name, String lore) {
+		ItemStack customItem = new ItemStack(Material.PLAYER_HEAD);
+
+		IB.name(customItem, name);
+		IB.lore(customItem, lore);
+		IB.cmd(customItem, cmdh);
+
+		cmdh++;
 		return customItem;
 	}
 }
