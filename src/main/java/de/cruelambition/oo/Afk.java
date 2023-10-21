@@ -7,6 +7,7 @@ import de.cruelambition.language.Lang;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -45,13 +46,13 @@ public class Afk implements Listener {
 		if (pc.getAfkTime() >= 9000 || pc.getAfkLead() - System.currentTimeMillis() <= 9000) {
 
 			warnAfk(pc);
-			return true;
+			return false;
 		}
 
 		if (pc.getAfkTime() >= 10000 || pc.getAfkLead() - System.currentTimeMillis() <= 10000)
 			setAfk(pc, true);
 
-		return false;
+		return true;
 	}
 
 	public void warnAfk(PC pc) {
@@ -87,21 +88,34 @@ public class Afk implements Listener {
 	// Afk tracking
 	@EventHandler
 	public void handle(PlayerToggleSneakEvent e) {
-
+		afkListener(e.getPlayer());
 	}
 
 	@EventHandler
 	public void handle(PlayerJumpEvent e) {
-
+		afkListener(e.getPlayer());
 	}
 
 	@EventHandler
 	public void handle(AsyncChatEvent e) {
-
+		afkListener(e.getPlayer());
 	}
 
 	@EventHandler
 	public void handle(InventoryClickEvent e) {
+		HumanEntity he = e.getWhoClicked();
+		if (!(he instanceof Player p)) return;
 
+		afkListener(p);
+	}
+
+	public void afkListener(Player p) {
+		PC pc = new PC(p);
+
+		if (isAfk(pc)) return;
+		else if (pc.isAfk()) unsetAfk(pc);
+
+		pc.setAfkLead(System.currentTimeMillis());
+		pc.savePCon();
 	}
 }
