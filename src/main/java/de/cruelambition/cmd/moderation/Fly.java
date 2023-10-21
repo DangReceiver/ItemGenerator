@@ -30,13 +30,19 @@ public class Fly implements CommandExecutor {
 		}
 
 		if (args.length == 0) {
-			p.setAllowFlight(!p.isFlying());
-			p.setFlying(!p.isFlying());
+			p.setAllowFlight(!p.getAllowFlight());
+			p.setFlying(p.getAllowFlight());
+
 			p.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "flight_updated"));
 			return false;
 
 		} else if (args.length != 1) {
 			p.sendMessage(Lang.PRE + String.format(Lang.getMessage(l.getLanguage(), "argument_range"), 0, 1));
+			return false;
+		}
+
+		if (!p.hasPermission(PERMISSION_OTHERS)) {
+			sen.sendMessage(Lang.PRE + String.format(l.getString("insufficient_permission"), PERMISSION_OTHERS));
 			return false;
 		}
 
@@ -51,8 +57,8 @@ public class Fly implements CommandExecutor {
 
 		t.setAllowFlight(!p.isFlying());
 		t.setFlying(!t.isFlying());
-		t.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "flight_updated"));
 
+		t.sendMessage(Lang.PRE + Lang.getMessage(l.getLanguage(), "flight_updated"));
 		return false;
 	}
 }
