@@ -244,7 +244,10 @@ public class Generator {
 	}
 
 	public void giveAll() {
-		for (Player ap : Bukkit.getOnlinePlayers()) {
+		List<Player> wP = Bukkit.getWorld("world").getPlayers();
+		if (wP == null) return;
+
+		for (Player ap : wP) {
 
 			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
 			ap.playSound(ap.getLocation(), Sound.ENTITY_PLAYER_SWIM, 0.3f, 0.75f);

@@ -258,6 +258,15 @@ public class PC {
 				getLink())) : new ArrayList<>(Arrays.asList("", "§8:"));
 	}
 
+	public void setJetpackUsage(boolean b) {
+		if (b) c.set("CustomItems.JetPack.inUse", b);
+		else c.set("CustomItems.JetPack.inUse", null);
+	}
+
+	public boolean getJetpackUsage() {
+		return c.isSet("CustomItems.JetPack.inUse");
+	}
+
 	public boolean hasLogoutLocation() {
 		return c.isSet("Statistics.Locations.LogOut");
 	}

@@ -1,6 +1,10 @@
 package de.cruelambition.listener.function;
 
+import de.cruelambition.itemgenerator.ItemGenerator;
+import de.cruelambition.language.Lang;
 import de.cruelambition.oo.Items;
+import de.cruelambition.oo.PC;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -10,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.rmi.server.RemoteRef;
 import java.util.Random;
@@ -25,12 +30,14 @@ public class CustomItems implements Listener {
 		Action a = e.getAction();
 		Block cb = e.getClickedBlock();
 
+		Lang l = new Lang(p);
+
 		if (item.equals(Items.ITEMS.get(3))) {
 			e.setCancelled(true);
 			p.sendMessage("Crate");
 
 			if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
-
+				p.sendMessage("some action idk yet");
 			}
 
 		} else if (item.equals(Items.ITEMS.get(2))) {
@@ -50,7 +57,7 @@ public class CustomItems implements Listener {
 			e.setCancelled(true);
 			p.sendMessage("sound");
 
-			if (a.toString().contains("RIGHT")) {
+			if (a.toString().contains("RIGHT") || a.toString().contains("LEFT")) {
 				Random r = new Random();
 
 				p.playSound(p.getLocation(), Sound.values()[r.nextInt(Sound.values().length - 1)],
@@ -59,8 +66,23 @@ public class CustomItems implements Listener {
 
 		} else if (item.equals(Items.ITEMS.get(0))) {
 			e.setCancelled(true);
-			p.sendMessage("Mini Jetpack");
 
+			PC pc = new PC(p);
+			if (a.toString().contains("RIGHT")) {
+
+				if (pc.getJetpackUsage()) {
+					p.sendTitle(Lang.PRE, "§7" + l.getString("customitems_listener_jetpack_in_use"));
+					return;
+				}
+
+				pc.setJetpackUsage(true);
+				p.setVelocity(p.getVelocity().add(new Vector(0, 0.25, 0)));
+
+				Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
+					p.setVelocity(p.getVelocity().add(new Vector(0, 0.35, 0)));
+					pc.setJetpackUsage(false);
+				}, 4);
+			}
 		}
 	}
 

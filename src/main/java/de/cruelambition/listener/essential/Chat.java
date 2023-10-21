@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.jetbrains.annotations.Nullable;
 
 public class Chat implements Listener {
 
@@ -27,7 +28,8 @@ public class Chat implements Listener {
 		List<Integer> dmc = pc.getDefaultMessageColor();
 
 		ChatColor cc = Lang.colorFromRGB(dmc.get(0), dmc.get(1), dmc.get(2));
-		e.setFormat(f = replaceChat(pc, f, e.getMessage()));
+		String msg = e.getMessage();
+		e.setFormat(f = replaceChat(pc, f, null));
 
 		if (p.hasPermission("Savior.Chat.Color")) f = f.replaceAll("&", "§");
 		if (!p.hasPermission("Savior.Chat.Tagging")) return;
@@ -35,25 +37,27 @@ public class Chat implements Listener {
 		for (Player ap : Bukkit.getOnlinePlayers()) {
 			if (!f.contains(ap.getName())) continue;
 
-			f = f.replaceAll(ap.getName(), "§" + Lang.colorFromRGB(25, 220, 100)
-					+ "§o@" + ap.getName() + cc);
+			msg = msg.replaceAll(ap.getName(), "§" + Lang.colorFromRGB(25, 220, 100) + "§o@" +
+					ap.getName() + cc);
 			ap.playSound(ap.getLocation(), Sound.BLOCK_NOTE_BLOCK_XYLOPHONE, 0.6F, 1.1F);
 
 		}
-		e.setFormat(f);
+		e.setFormat(f.replaceAll("<message>", msg));
 	}
 
-	public static String replaceChat(PC pc, String f, String message) {
+	public static String replaceChat(PC pc, String f, @Nullable String msg) {
 		List<Integer> dmc = pc.getDefaultMessageColor();
 		ChatColor cc = Lang.colorFromRGB(dmc.get(0), dmc.get(1), dmc.get(2));
 
 		Player p = (Player) pc.thisOfflinePlayer();
 
-		f = f.replaceAll("<player_name>", p.getName()).replaceAll("<player_color>", pc.getPlayerColor());
-		f = f.replaceAll("<counter_link>", pc.getCounterLink()).replaceAll("<link>", pc.getLink());
-
-		f = f.replaceAll("<message_color>", "" + cc).replaceAll("<message>", message);
 		f = f.replaceAll("<prefix>", Lang.CHAT);
+		f = f.replaceAll("<player_name>", p.getName()).replaceAll("<player_color>", pc.getPlayerColor());
+
+		f = f.replaceAll("<counter_link>", pc.getCounterLink()).replaceAll("<link>", pc.getLink());
+		f = f.replaceAll("<message_color>", "" + cc);
+
+		if (msg != null) f = f.replaceAll("<message>", msg);
 		return f;
 	}
 

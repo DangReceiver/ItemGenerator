@@ -23,7 +23,7 @@ public class Chat implements CommandExecutor, Listener {
 	public static String PERMISSION = "ItemGenerator.Chat.Customization",
 			PERMISSION_OTHERS = "ItemGenerator.Chat.Customization.Others";
 
-	@Override
+//	@Override
 	public boolean onCommand(CommandSender sen, Command cmd, String lab, String[] args) {
 		Player p;
 		Lang l = new Lang(null);

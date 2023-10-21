@@ -8,6 +8,7 @@ import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
 import de.cruelambition.listener.function.*;
 import de.cruelambition.oo.Items;
+import de.cruelambition.oo.PC;
 import de.cruelambition.oo.Recipes;
 import de.cruelambition.oo.Sb;
 import de.cruelambition.worlds.SpawnWorld;
@@ -143,19 +144,20 @@ public final class ItemGenerator extends JavaPlugin {
 		cs.sendMessage(Lang.PRE + l.getString("listing_missing_keys"));
 
 		for (Recipe recipe : rec)
-			if (recipe instanceof Keyed k)
-				Bukkit.removeRecipe(k.getKey());
+			if (recipe instanceof Keyed k) Bukkit.removeRecipe(k.getKey());
 
 		for (Player ap : Bukkit.getOnlinePlayers()) {
 			cs.sendMessage(l.getString("player_removeRecipe_recipe"));
 
 			for (Recipe re : rec)
-				if (re instanceof Keyed k)
-					ap.undiscoverRecipe(k.getKey());
+				if (re instanceof Keyed k) ap.undiscoverRecipe(k.getKey());
 		}
 
 		for (String mk : l.getMissingKeys())
 			cs.sendMessage(Lang.PRE + String.format(l.getString("list_missing_Keys"), mk));
+
+		for (Player ap : Bukkit.getOnlinePlayers())
+			new PC(ap).setJetpackUsage(false);
 	}
 
 
