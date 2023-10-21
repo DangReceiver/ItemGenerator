@@ -19,7 +19,7 @@ public class KillDeath implements Listener {
 		pc.increaseDeaths();
 		pc.savePCon();
 
-		Sb.updateDeaths(p);
+		Sb.updateDeathSlot(p);
 	}
 
 	@EventHandler
@@ -31,6 +31,6 @@ public class KillDeath implements Listener {
 		pc.increaseKills();
 		pc.savePCon();
 
-		Sb.updateKills(p);
+		Sb.updateKillSlot(p);
 	}
 }

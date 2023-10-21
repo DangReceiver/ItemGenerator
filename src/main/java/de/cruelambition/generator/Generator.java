@@ -248,6 +248,7 @@ public class Generator {
 		if (wP == null) return;
 
 		for (Player ap : wP) {
+			ap.sendMessage(ap.getWorld().getName() + " || " + wP.toString());
 
 			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
 			ap.playSound(ap.getLocation(), Sound.ENTITY_PLAYER_SWIM, 0.3f, 0.75f);
@@ -286,7 +287,7 @@ public class Generator {
 
 		IB.name(item, Lang.colorFromRGB(col.getRed(), col.getGreen(), col.getBlue())
 				+ String.format(Lang.getMessage(Lang.getServerLang(), "potion"),
-				pe.getType().toString().toLowerCase().replaceAll("_", " ")));
+				pe.getType().getName().replaceAll("_", " ")));
 		if (r.nextInt(4) == 0) effect(item);
 	}
 

@@ -6,6 +6,7 @@ import de.cruelambition.generator.Generator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
+import de.cruelambition.listener.essential.Timber;
 import de.cruelambition.listener.function.*;
 import de.cruelambition.oo.Items;
 import de.cruelambition.oo.PC;
@@ -30,7 +31,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 
 public final class ItemGenerator extends JavaPlugin {
 	private static ItemGenerator ig;
@@ -95,6 +95,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new Get(), this);
 		pm.registerEvents(new WorldChange(), this);
 		pm.registerEvents(new CustomItems(), this);
+		pm.registerEvents(new Furnace(), this);
 
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();

@@ -6,10 +6,10 @@
 
     <groupId>de.cruelambition.itemgenerator</groupId>
     <artifactId>ItemGenerator</artifactId>
-    <version>0.1.1</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
-    <name>Item Generator</name>
+    <name>ItemGenerator</name>
 
     <description>Item Generator</description>
     <properties>
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <version>1.20.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

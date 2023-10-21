@@ -1,4 +1,4 @@
-package de.cruelambition.listener.function;
+package de.cruelambition.listener.essential;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import org.bukkit.Bukkit;

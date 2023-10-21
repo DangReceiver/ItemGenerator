@@ -13,7 +13,7 @@ import org.codehaus.plexus.util.ReflectionUtils;
 
 public class CaneCactus implements Listener {
 
-	@EventHandler
+//	@EventHandler
 	public void handle(PlayerInteractEvent e) {
 		if (e.isCancelled()) return;
 

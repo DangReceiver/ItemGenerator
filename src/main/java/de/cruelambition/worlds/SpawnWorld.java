@@ -78,7 +78,7 @@ public class SpawnWorld implements Listener {
 			spawnLoc = new Location(Bukkit.getWorld("Spawn"), 0.5D, 64.52, 0.5D);
 
 			c.set("Locations.Spawn.Spawn", spawnLoc);
-			c.set("Locations.Spawn.ButtonLocation", spawnLoc.add(-0.5, -0.52, +8.5));
+			c.set("Locations.Spawn.ButtonLocation", spawnLoc.clone().add(-0.5, -0.52, +8.5));
 			ItemGenerator.getItemGenerator().saveConfig();
 		}
 
@@ -151,8 +151,8 @@ public class SpawnWorld implements Listener {
 		else p.teleport(new Location(Bukkit.getWorld("world"), 0.5, 65.02, 0.5));
 
 		int i = 0;
-		Utils.oneByOne(p, Sound.BLOCK_NOTE_BLOCK_BASS, 3,
-				0.85f, 0, false, 0.35f, 4, i);
+		Utils.oneByOne(p, Sound.BLOCK_NOTE_BLOCK_BASS, 3, 0.85f, 0,
+				false, 0.35f, 4, i);
 
 		p.setGameMode(GameMode.SURVIVAL);
 	}
@@ -171,7 +171,7 @@ public class SpawnWorld implements Listener {
 		if (e.getCause() != EntityDamageEvent.DamageCause.VOID) return;
 
 		e.setCancelled(true);
-		p.teleport(getSafeSpawnLocation().add(0, 1, 0));
+		p.teleport(getSafeSpawnLocation().clone().add(0, 0.5, 0));
 
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () ->
 				p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.4f, 0.8f), 2);

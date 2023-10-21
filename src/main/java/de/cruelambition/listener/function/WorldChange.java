@@ -13,9 +13,9 @@ public class WorldChange implements Listener {
 	@EventHandler
 	public void handle(PlayerChangedWorldEvent e) {
 		Player p = e.getPlayer();
-		Sb.updateWorld(p);
+		Sb.updateWorldSlot(p);
 
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
-				() -> Sb.updateWorld(p), 3);
+				() -> Sb.updateWorldSlot(p), 3);
 	}
 }
