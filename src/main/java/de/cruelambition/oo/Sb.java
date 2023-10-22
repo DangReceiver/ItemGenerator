@@ -163,7 +163,7 @@ public class Sb {
 		else if (timeEntry == 1) updateWorldTime(p);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
-		updateTimeHeader(p);
+//		updateTimeHeader(p);
 	}
 
 	public static void updateTimeHeader(Player p) {
@@ -188,7 +188,7 @@ public class Sb {
 		else if (worldEntry == 1) updateNearbyEntities(p);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
-		updateWorldHeader(p);
+//		updateWorldHeader(p);
 	}
 
 	public static void updateWorldHeader(Player p) {
@@ -212,7 +212,7 @@ public class Sb {
 		else if (deathEntry == 1) updateXp(p);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
-		updateDeathHeader(p);
+//		updateDeathHeader(p);
 	}
 
 	public static void updateDeathHeader(Player p) {
@@ -240,7 +240,7 @@ public class Sb {
 		else if (killEntry == 1) updateKillLevel(p);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
-		updateKillHeader(p);
+//		updateKillHeader(p);
 	}
 
 	public static void updateKillHeader(Player p) {

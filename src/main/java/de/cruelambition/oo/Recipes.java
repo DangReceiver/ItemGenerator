@@ -11,13 +11,14 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Recipes implements Listener {
 
-	private List<Recipe> rec;
+	public static List<Recipe> rec;
 
 	public Recipes() {
 		rec = new ArrayList<>();
@@ -87,7 +88,7 @@ public class Recipes implements Listener {
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.DIRT.toString());
 
 		ItemStack dirt = new ItemStack(Material.DIRT);
-		dirt.setAmount(2);
+		dirt.setAmount(3);
 
 		ShapedRecipe dirtRec1 = new ShapedRecipe(key, dirt);
 		dirtRec1.shape("GBG",
@@ -99,10 +100,11 @@ public class Recipes implements Listener {
 		dirtRec1.setIngredient('G', Material.GRASS);
 		dirtRec1.setIngredient('S', Material.STONE);
 		dirtRec1.setIngredient('B', Material.BONE_MEAL);
-		dirtRec1.setIngredient('D', Material.DIAMOND);
+		dirtRec1.setIngredient('D', Material.EMERALD_BLOCK);
 		rec.add(dirtRec1);
 
 
+		dirt.setAmount(2);
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(),
 				Material.DIRT.toString() + "2");
 		ShapedRecipe dirtRec2 = new ShapedRecipe(key, dirt);
@@ -112,7 +114,7 @@ public class Recipes implements Listener {
 
 		dirtRec2.setIngredient('W', Material.WATER_BUCKET);
 		dirtRec2.setIngredient('R', Material.ROOTED_DIRT);
-		dirtRec2.setIngredient('S', Material.SHEARS);
+		dirtRec2.setIngredient('S', Material.GOLDEN_SWORD);
 		rec.add(dirtRec2);
 
 
@@ -130,15 +132,15 @@ public class Recipes implements Listener {
 		rec.add(dirtRec3);
 
 		ItemStack boe = new ItemStack(Material.EXPERIENCE_BOTTLE);
-		boe.setAmount(10);
+		boe.setAmount(9);
 
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + 1);
 		ShapedRecipe nBoeRec = new ShapedRecipe(key, boe);
 
-		nBoeRec.shape("   ",
-				" S ",
-				" B ");
+		nBoeRec.shape("BBB",
+				"BSB",
+				"BBB");
 
 		nBoeRec.setIngredient('B', Material.GLASS_BOTTLE);
 		nBoeRec.setIngredient('S', Material.SKELETON_SKULL);
@@ -147,9 +149,9 @@ public class Recipes implements Listener {
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + 2);
 		ShapedRecipe nBoeRec2 = new ShapedRecipe(key, boe);
 
-		nBoeRec2.shape("   ",
-				" S ",
-				" B ");
+		nBoeRec2.shape("BBB",
+				"BSB",
+				"BBB");
 
 		nBoeRec2.setIngredient('B', Material.GLASS_BOTTLE);
 		nBoeRec2.setIngredient('S', Material.WITHER_SKELETON_SKULL);
@@ -158,9 +160,9 @@ public class Recipes implements Listener {
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + 3);
 		ShapedRecipe nBoeRec3 = new ShapedRecipe(key, boe);
 
-		nBoeRec3.shape("   ",
-				" S ",
-				" B ");
+		nBoeRec3.shape("BBB",
+				"BSB",
+				"BBB");
 
 		nBoeRec3.setIngredient('B', Material.GLASS_BOTTLE);
 		nBoeRec3.setIngredient('S', Material.CREEPER_HEAD);
@@ -169,9 +171,9 @@ public class Recipes implements Listener {
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + 4);
 		ShapedRecipe nBoeRec4 = new ShapedRecipe(key, boe);
 
-		nBoeRec4.shape("   ",
-				" S ",
-				" B ");
+		nBoeRec4.shape("BBB",
+				"BSB",
+				"BBB");
 
 		nBoeRec4.setIngredient('B', Material.GLASS_BOTTLE);
 		nBoeRec4.setIngredient('S', Material.DRAGON_HEAD);
@@ -180,14 +182,24 @@ public class Recipes implements Listener {
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + 5);
 		ShapedRecipe nBoeRec5 = new ShapedRecipe(key, boe);
 
-		nBoeRec5.shape("   ",
-				" S ",
-				" B ");
+		nBoeRec5.shape("BBB",
+				"BSB",
+				"BBB");
 
 		nBoeRec5.setIngredient('B', Material.GLASS_BOTTLE);
 		nBoeRec5.setIngredient('S', Material.PIGLIN_HEAD);
 		rec.add(nBoeRec5);
 
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + 6);
+		ShapedRecipe nBoeRec6 = new ShapedRecipe(key, boe);
+
+		nBoeRec6.shape("BBB",
+				"BSB",
+				"BBB");
+
+		nBoeRec6.setIngredient('B', Material.GLASS_BOTTLE);
+		nBoeRec6.setIngredient('S', Material.ZOMBIE_HEAD);
+		rec.add(nBoeRec6);
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.MAGMA_BLOCK.toString() + "1");
 		ItemStack magma = new ItemStack(Material.MAGMA_BLOCK);
@@ -240,8 +252,9 @@ public class Recipes implements Listener {
 		rottenFlesh.setIngredient('R', Material.ROTTEN_FLESH);
 		rec.add(rottenFlesh);
 
-		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.LAPIS_ORE.toString() + "1");
-		ItemStack lapis = new ItemStack(Material.LAPIS_ORE);
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.LAPIS_LAZULI.toString() + "1");
+		ItemStack lapis = new ItemStack(Material.LAPIS_LAZULI);
+		lapis.setAmount(2);
 
 		ShapedRecipe lapisRec = new ShapedRecipe(key, lapis);
 		lapisRec.shape("   ",
@@ -254,7 +267,7 @@ public class Recipes implements Listener {
 		lapisRec.setIngredient('S', Material.STONE);
 		rec.add(lapisRec);
 
-		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.LAPIS_ORE.toString() + "2");
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.LAPIS_LAZULI.toString() + "2");
 
 		ShapedRecipe lapisRec2 = new ShapedRecipe(key, lapis);
 		lapisRec2.shape("   ",
@@ -266,6 +279,59 @@ public class Recipes implements Listener {
 		lapisRec2.setIngredient('O', Material.BOOK);
 		lapisRec2.setIngredient('S', Material.STONE);
 		rec.add(lapisRec2);
+
+
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.DIAMOND.toString() + "1");
+		ItemStack diamond = new ItemStack(Material.DIAMOND);
+		diamond.setAmount(3);
+
+		ShapedRecipe diamondRec = new ShapedRecipe(key, diamond);
+		diamondRec.shape("GLG",
+				"EBE",
+				"POP");
+
+		diamondRec.setIngredient('L', Material.LIGHT_BLUE_DYE);
+		diamondRec.setIngredient('E', Material.EMERALD);
+		diamondRec.setIngredient('O', Material.OBSIDIAN);
+		diamondRec.setIngredient('G', Material.GLASS);
+		diamondRec.setIngredient('P', Material.TNT);
+		diamondRec.setIngredient('B', Material.BRUSH);
+		rec.add(diamondRec);
+
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.LIGHT_GRAY_CONCRETE_POWDER.toString() + "1");
+		ItemStack concrete = new ItemStack(Material.LIGHT_GRAY_CONCRETE_POWDER);
+		concrete.setAmount(1);
+
+		ShapedRecipe concreteRec = new ShapedRecipe(key, concrete);
+		concreteRec.shape("MMM",
+				"MFM",
+				"MMM");
+
+		concreteRec.setIngredient('M', Material.BONE_MEAL);
+		concreteRec.setIngredient('F', Material.FIRE_CHARGE);
+		rec.add(concreteRec);
+
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.BLAZE_POWDER.toString() + "1");
+		ItemStack blazePowder = new ItemStack(Material.BLAZE_POWDER);
+		blazePowder.setAmount(1);
+
+		ShapedRecipe blazePowderRec = new ShapedRecipe(key, blazePowder);
+		blazePowderRec.shape("MMM",
+				"BFB",
+				"MMM");
+
+		blazePowderRec.setIngredient('M', Material.BONE_MEAL);
+		blazePowderRec.setIngredient('B', Material.BONE_BLOCK);
+		blazePowderRec.setIngredient('F', Material.FLINT_AND_STEEL);
+		rec.add(blazePowderRec);
+
+
+//		PotionEffectType.ABSORPTION
+//		PotionEffectType.DAMAGE_RESISTANCE
+//		PotionEffectType.FAST_DIGGING
+//		PotionEffectType.GLOWING
+//		PotionEffectType.HEALTH_BOOST
+//		PotionEffectType.SATURATION
 	}
 
 	public List<Recipe> getRec() {

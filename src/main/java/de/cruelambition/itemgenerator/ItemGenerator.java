@@ -34,7 +34,6 @@ public final class ItemGenerator extends JavaPlugin {
 	public static String VERSION;
 	private static Location ssl;
 	public static Generator g;
-	public static List<Recipe> rec;
 
 	public void onEnable() {
 		ig = this;
@@ -70,10 +69,12 @@ public final class ItemGenerator extends JavaPlugin {
 		Objects.requireNonNull(getCommand("arms")).setExecutor(new Arms());
 		Objects.requireNonNull(getCommand("get")).setExecutor(new Get());
 		Objects.requireNonNull(getCommand("spawn")).setExecutor(new Spawn());
+		Objects.requireNonNull(getCommand("learnrecipes")).setExecutor(new LearnRecipes());
 
 		Objects.requireNonNull(getCommand("language")).setTabCompleter(new Language());
 		Objects.requireNonNull(getCommand("generatorfrequencies")).setTabCompleter(new GeneratorFrequencies());
 		Objects.requireNonNull(getCommand("get")).setTabCompleter(new Get());
+		Objects.requireNonNull(getCommand("learnrecipes")).setTabCompleter(new LearnRecipes());
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new CM(), this);
@@ -99,25 +100,35 @@ public final class ItemGenerator extends JavaPlugin {
 		List<Integer> f = g.getFrequencies();
 		Generator.start(g, f.get(0), f.get(1), f.get(2), f.get(3));
 
-		int i = new Random().nextInt(7);
+		int i = new Random().nextInt(15);
 		Bukkit.setMotd(l.getString("motd_" + i));
 		cs.sendMessage(Lang.PRE + String.format(l.getString("using_motd_x"), i));
 
 		Recipes r = new Recipes();
-		rec = r.getRec();
+		List<Recipe> rec = r.getRec();
 
-		Bukkit.getScheduler().runTaskLater(this, () -> {
-			for (Recipe recipe : rec) Bukkit.addRecipe(recipe);
+		if (rec.isEmpty()) cs.sendMessage(Lang.PRE + l.getString("empty_recipe_list"));
+		for (Recipe recipe : rec) Bukkit.addRecipe(recipe);
 
-			for (Player ap : Bukkit.getOnlinePlayers()) {
-				cs.sendMessage(String.format(l.getString("player_receiving_recipe"), ap.getName()));
-				for (Recipe re : rec) if (re instanceof Keyed k) ap.discoverRecipe(k.getKey());
+		for (Player ap : Bukkit.getOnlinePlayers()) {
+			cs.sendMessage(l.getString("player_removeRecipe_recipe"));
+
+			for (Recipe re : rec)
+				if (re instanceof Keyed k) ap.undiscoverRecipe(k.getKey());
+
+			for (Recipe re : Recipes.rec) {
+				ap.sendMessage("blup0");
+				if (re instanceof Keyed k) {
+					ap.discoverRecipe(k.getKey());
+					ap.sendMessage("blup1");
+				}
+				ap.sendMessage("blup2");
 			}
-		}, 5);
+		}
 
 		Sb.setAllScoreBoards();
 		Sb.timeLoop();
-		Sb.scoreboardLoop();
+//		Sb.scoreboardLoop();
 
 		Items items = new Items();
 //		items.newItem("", "");
@@ -143,15 +154,15 @@ public final class ItemGenerator extends JavaPlugin {
 		if (l.getMissingKeys().isEmpty() || l.getMissingKeys() == null) return;
 		cs.sendMessage(Lang.PRE + l.getString("listing_missing_keys"));
 
-		for (Recipe recipe : rec)
-			if (recipe instanceof Keyed k) Bukkit.removeRecipe(k.getKey());
-
 		for (Player ap : Bukkit.getOnlinePlayers()) {
 			cs.sendMessage(l.getString("player_removeRecipe_recipe"));
 
-			for (Recipe re : rec)
+			for (Recipe re : Recipes.rec)
 				if (re instanceof Keyed k) ap.undiscoverRecipe(k.getKey());
 		}
+
+		for (Recipe recipe : Recipes.rec)
+			if (recipe instanceof Keyed k) Bukkit.removeRecipe(k.getKey());
 
 		for (String mk : l.getMissingKeys())
 			cs.sendMessage(Lang.PRE + String.format(l.getString("list_missing_Keys"), mk));

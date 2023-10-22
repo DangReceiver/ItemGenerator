@@ -54,6 +54,6 @@ public class CaneCactus implements Listener {
 		loc.add(0, 1, 0);
 		loc.getBlock().setType(cb.getType());
 
-		return loc.getBlock().getType() == cb.getType();
+		return (loc.getBlock().getType() == cb.getType());
 	}
 }

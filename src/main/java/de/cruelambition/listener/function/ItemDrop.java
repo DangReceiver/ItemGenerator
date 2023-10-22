@@ -18,13 +18,13 @@ public class ItemDrop implements Listener {
 		Item en = e.getEntity();
 		CreatureSpawnEvent.SpawnReason spr = en.getEntitySpawnReason();
 
-		en.setPickupDelay(18);
+		en.setPickupDelay(22);
 
 		if (spr == CreatureSpawnEvent.SpawnReason.CUSTOM) {
 			Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
-					() -> en.remove(), 120 * 20);
+					en::remove, 120 * 20);
 		} else if (spr == CreatureSpawnEvent.SpawnReason.DEFAULT) {
-			en.setPickupDelay(10);
+			en.setPickupDelay(16);
 		}
 	}
 }

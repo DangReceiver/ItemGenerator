@@ -46,9 +46,9 @@ public class CM implements Listener {
 			pc.savePCon();
 
 		} else if (pc.getJoinTime() - pc.getQuitTime() <= 25000L)
-			Lang.broadcastArg("player_rejoin_" + (new Random()).nextInt(4), p.getName());
+			Lang.broadcastArg("player_rejoin_" + (new Random()).nextInt(6), p.getName());
 
-		else Lang.broadcastArg("player_join_" + (new Random()).nextInt(17), p.getName());
+		else Lang.broadcastArg("player_join_" + (new Random()).nextInt(18), p.getName());
 
 		p.setGameMode(GameMode.ADVENTURE);
 		p.teleport(SpawnWorld.getSafeSpawnLocation());
@@ -59,7 +59,13 @@ public class CM implements Listener {
 		p.sendTitle(Lang.PRE, String.format(l.getString("welcome_back"), p.getName()), 30, 50, 50);
 //		p.sendMessage(l.getLang(p) + " || " + l.getLanguage());
 
-		for (Recipe re : ItemGenerator.rec) if (re instanceof Keyed k) p.discoverRecipe(k.getKey());
+		for (Recipe re : Recipes.rec) {
+			if (re instanceof Keyed k) {
+				p.discoverRecipe(k.getKey());
+				p.sendMessage("blup1");
+			}
+			p.sendMessage("blup2");
+		}
 	}
 
 	@EventHandler
@@ -78,6 +84,6 @@ public class CM implements Listener {
 		pc.savePCon();
 
 		e.setQuitMessage(null);
-		Lang.broadcastArg("player_quit_" + (new Random()).nextInt(17), p.getName());
+		Lang.broadcastArg("player_quit_" + (new Random()).nextInt(18), p.getName());
 	}
 }

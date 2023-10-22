@@ -143,8 +143,8 @@ public class Generator {
 
 			c.set("Item.List.Forbidden", new ArrayList<>(List.of(Material.AIR.toString(),
 					Material.COMMAND_BLOCK.toString(), Material.JIGSAW.toString(),
-					Material.STRUCTURE_BLOCK.toString(), Material.GOLDEN_HOE.toString(),
-					"ARMOR_TRIM_SMITHING_TEMPLATE", "_STEM", "LEGACY_", "POTTED_")));
+					Material.STRUCTURE_BLOCK.toString(), "ARMOR_TRIM_SMITHING_TEMPLATE",
+					"_STEM", "LEGACY_", "POTTED_")));
 
 			ItemGenerator.getItemGenerator().saveConfig();
 		}
@@ -248,7 +248,7 @@ public class Generator {
 		if (wP == null) return;
 
 		for (Player ap : wP) {
-			ap.sendMessage(ap.getWorld().getName() + " || " + wP.toString());
+//			ap.sendMessage(ap.getWorld().getName() + " || " + wP.toString());
 
 			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
 			ap.playSound(ap.getLocation(), Sound.ENTITY_PLAYER_SWIM, 0.3f, 0.75f);

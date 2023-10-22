@@ -32,3 +32,5 @@ commands:
     description: Get custom Items by this very plugin
   spawn:
     description: Go to the spawn
+  LearnRecipes:
+    description: Get plugin specific recipes

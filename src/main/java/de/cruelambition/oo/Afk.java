@@ -47,10 +47,10 @@ public class Afk implements Listener {
 	public boolean isAfk(PC pc) {
 		if (pc.getAfkTime() >= 9000 || System.currentTimeMillis() - pc.getAfkLead() >= 9000) {
 
-			pc.thisPlayer().sendMessage((pc.getAfkTime() >= 9000) + " || "
-					+ (System.currentTimeMillis() - pc.getAfkLead() >= 9000) + " || " +
-					System.currentTimeMillis() + " - " + pc.getAfkLead() + " ==> "
-					+ (System.currentTimeMillis() - pc.getAfkLead()));
+//			pc.thisPlayer().sendMessage((pc.getAfkTime() >= 9000) + " || "
+//					+ (System.currentTimeMillis() - pc.getAfkLead() >= 9000) + " || " +
+//					System.currentTimeMillis() + " - " + pc.getAfkLead() + " ==> "
+//					+ (System.currentTimeMillis() - pc.getAfkLead()));
 
 			warnAfk(pc);
 			return false;
