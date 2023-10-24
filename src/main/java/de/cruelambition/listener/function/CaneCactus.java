@@ -35,7 +35,7 @@ public class CaneCactus implements Listener {
 
 		if (l.getBlock().getType() != cb.getType()) l.getBlock().setType(cb.getType());
 		else {
-			if (!extendGrowable(cb)) return;
+			if (!extendGrowable(cb, cb.getLocation().clone())) return;
 		}
 
 		if (hand.getAmount() > 1) hand.setAmount(hand.getAmount() - 1);
@@ -45,8 +45,7 @@ public class CaneCactus implements Listener {
 		Utils.particleOffset(l.clone().add(0.5, 0.5, 0.5), Particle.VILLAGER_HAPPY, 4, 0.65);
 	}
 
-	public boolean extendGrowable(Block cb) {
-		Location loc = cb.getLocation().clone();
+	public boolean extendGrowable(Block cb, Location loc) {
 
 		while (loc.getBlock().getType() != Material.AIR && loc.getBlock().getType() == cb.getType())
 			if (loc.getBlock().getType() != Material.AIR && loc.getBlock().getType() != cb.getType()) return false;

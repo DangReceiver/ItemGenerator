@@ -93,6 +93,13 @@ public class LearnRecipes implements CommandExecutor, TabCompleter {
 		return false;
 	}
 
+	public void discoverObo(Player p, int i) {
+
+
+		discoverObo(p, i + 1);
+
+	}
+
 	@Override
 	public @Nullable List<String> onTabComplete(CommandSender sen, Command cmd, String lab, String[] args) {
 		List<String> arg = new ArrayList<>();

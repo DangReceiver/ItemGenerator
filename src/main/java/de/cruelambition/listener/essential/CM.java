@@ -62,7 +62,7 @@ public class CM implements Listener {
 		for (Recipe re : Recipes.rec) {
 			if (re instanceof Keyed k) {
 				p.discoverRecipe(k.getKey());
-				p.sendMessage("blup1");
+				p.sendMessage("blup1 " + k.getKey());
 			}
 			p.sendMessage("blup2");
 		}

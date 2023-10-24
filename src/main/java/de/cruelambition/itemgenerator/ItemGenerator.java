@@ -108,22 +108,12 @@ public final class ItemGenerator extends JavaPlugin {
 		List<Recipe> rec = r.getRec();
 
 		if (rec.isEmpty()) cs.sendMessage(Lang.PRE + l.getString("empty_recipe_list"));
-		for (Recipe recipe : rec) Bukkit.addRecipe(recipe);
+		for (Recipe recipe : rec) Bukkit.addRecipe(recipe, true);
 
 		for (Player ap : Bukkit.getOnlinePlayers()) {
 			cs.sendMessage(l.getString("player_removeRecipe_recipe"));
 
-			for (Recipe re : rec)
-				if (re instanceof Keyed k) ap.undiscoverRecipe(k.getKey());
-
-			for (Recipe re : Recipes.rec) {
-				ap.sendMessage("blup0");
-				if (re instanceof Keyed k) {
-					ap.discoverRecipe(k.getKey());
-					ap.sendMessage("blup1");
-				}
-				ap.sendMessage("blup2");
-			}
+			LearnRecipes.discoverObo(ap, 0);
 		}
 
 		Sb.setAllScoreBoards();
