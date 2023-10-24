@@ -35,11 +35,13 @@ public class LearnRecipes implements CommandExecutor, TabCompleter {
 		}
 
 		if (!p.hasPermission(PERMISSION)) {
-			sen.sendMessage(Lang.PRE + String.format(l.getString("insufficient_permission"), PERMISSION));
+			sen.sendMessage(Lang.PRE + String.format(l.getString("insufficient_permission"),
+					PERMISSION));
 			return false;
 		}
 
-		Bukkit.getConsoleSender().sendMessage(String.format(l.getString("player_receiving_recipe"), p.getName()));
+		Bukkit.getConsoleSender().sendMessage(String.format(l.getString("player_receiving_recipe"),
+				p.getName()));
 
 		if (args.length == 0) {
 			for (Recipe re : Recipes.rec)
@@ -67,8 +69,8 @@ public class LearnRecipes implements CommandExecutor, TabCompleter {
 					if (t.hasDiscoveredRecipe(k.getKey())) t.undiscoverRecipe(k.getKey());
 
 					t.discoverRecipe(k.getKey());
-					t.sendMessage("Learned all custom recipes!");
 				}
+				t.sendMessage("Learned all custom recipes!");
 				return false;
 
 			} else {
@@ -93,34 +95,19 @@ public class LearnRecipes implements CommandExecutor, TabCompleter {
 		return false;
 	}
 
-	public void discoverObo(Player p, int i) {
-
-
-		discoverObo(p, i + 1);
-
-	}
-
 	@Override
 	public @Nullable List<String> onTabComplete(CommandSender sen, Command cmd, String lab, String[] args) {
 		List<String> arg = new ArrayList<>();
+
 		if (args.length == 2) {
+			arg.add("*");
 
 			for (Player ap : Bukkit.getOnlinePlayers())
-				if (args[1].contains(ap.getName())) arg.add(ap.getName());
+				if (ap.getName().contains(args[1])) arg.add(ap.getName());
 
-			if (args[1].equalsIgnoreCase("*")) arg.add("*");
-
-		} else if (args.length == 1) {
-			sen.sendMessage("blup0");
-			for (Recipe recipe : Recipes.rec) {
-				sen.sendMessage("blup1");
-				if (recipe instanceof Keyed k) {
-					if (args[0].contains(k.getKey().toString())) arg.add(k.getKey().toString());
-					sen.sendMessage("blup2");
-				}
-			}
-		}
-		sen.sendMessage("blup3");
+		} else if (args.length == 1)
+			for (Recipe recipe : Recipes.rec) if (recipe instanceof Keyed k)
+					if (k.getKey().toString().contains(args[0])) arg.add(k.getKey().toString());
 		return arg;
 	}
 }

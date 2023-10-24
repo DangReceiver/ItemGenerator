@@ -59,7 +59,7 @@ public class Generator {
 		g.checkForForbiddenItemsLoop(csi, cf);
 
 		g.startGeneratorLoop(gsi, gf);
-		g.listForbiddenItems();
+//		g.listForbiddenItems();
 	}
 
 	public void addMaterialToLoop(Material m) {
@@ -168,8 +168,8 @@ public class Generator {
 	}
 
 	public void listForbiddenItems() {
-		Lang.broadcastArg("itemgenerator_forbidden_listing", getForbiddenList().toString()
-				.replace("[", "").replace("]", ""));
+		Lang.broadcastArg("itemgenerator_forbidden_listing", getForbiddenList().toString().toLowerCase()
+				.replace("[", "").replace("]", "").replaceAll("_", " "));
 	}
 
 	public void addItemToPermanentForbiddenList(Material m) {

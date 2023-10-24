@@ -324,18 +324,33 @@ public class Recipes implements Listener {
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.END_PORTAL_FRAME.toString() + "1");
 		ItemStack frame = new ItemStack(Material.END_PORTAL_FRAME);
-		frame.setAmount(1);
+		frame.setAmount(2);
 
-		ShapedRecipe frameRec = new ShapedRecipe(key, blazePowder);
-		frameRec.shape("BEB",
+		ShapedRecipe frameRec = new ShapedRecipe(key, frame);
+		frameRec.shape("OEO",
 				"RNR",
-				"BBB");
+				"BOB");
 
 		frameRec.setIngredient('E', Material.ENDER_EYE);
 		frameRec.setIngredient('B', Material.CRYING_OBSIDIAN);
 		frameRec.setIngredient('R', Material.REINFORCED_DEEPSLATE);
 		frameRec.setIngredient('N', Material.NETHER_STAR);
+		frameRec.setIngredient('O', Material.OBSIDIAN);
 		rec.add(frameRec);
+
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.END_PORTAL_FRAME.toString() + "2");
+		frame.setAmount(1);
+		ShapedRecipe frameRec1 = new ShapedRecipe(key, frame);
+		frameRec1.shape("RER",
+				"ONO",
+				"BOB");
+
+		frameRec1.setIngredient('R', Material.NETHERITE_BLOCK);
+		frameRec1.setIngredient('E', Material.ENDER_EYE);
+		frameRec1.setIngredient('B', Material.BEACON);
+		frameRec1.setIngredient('N', Material.NETHER_STAR);
+		frameRec1.setIngredient('O', Material.OBSIDIAN);
+		rec.add(frameRec1);
 
 //		PotionEffectType.ABSORPTION
 //		PotionEffectType.DAMAGE_RESISTANCE

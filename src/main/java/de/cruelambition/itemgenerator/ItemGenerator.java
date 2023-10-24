@@ -113,7 +113,16 @@ public final class ItemGenerator extends JavaPlugin {
 		for (Player ap : Bukkit.getOnlinePlayers()) {
 			cs.sendMessage(l.getString("player_removeRecipe_recipe"));
 
-			LearnRecipes.discoverObo(ap, 0);
+			for (Recipe recipe : Recipes.rec) {
+				if (!(recipe instanceof Keyed k)) {
+
+					ap.sendMessage(Lang.PRE + l.getString("recipe_list_invalid"));
+					continue;
+				}
+
+				if (ap.hasDiscoveredRecipe(k.getKey())) ap.undiscoverRecipe(k.getKey());
+				ap.discoverRecipe(k.getKey());
+			}
 		}
 
 		Sb.setAllScoreBoards();
