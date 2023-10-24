@@ -1,6 +1,10 @@
 package de.cruelambition.oo;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -79,21 +83,19 @@ public class Items {
         return customItem;
     }
 
-    public ItemStack newPotionItem(String name, String lore, int i) {
-        Material potionType;
-        switch (i) {
-            default:
-            case 0:
-                potionType = Material.POTION;
-                break;
-            case 1:
-                potionType = Material.SPLASH_POTION;
-                break;
-            case 2:
-                potionType = Material.LINGERING_POTION;
-                break;
-        }
-        ItemStack customItem = new ItemStack(potionType);
+    public ItemStack newPotionItem(String name, String lore) {
+        ItemStack customItem = new ItemStack(Material.POTION);
+
+        IB.name(customItem, name);
+        IB.lore(customItem, lore);
+        IB.cmd(customItem, cmdh);
+
+        cmdh++;
+        return customItem;
+    }
+
+    public ItemStack newDisc(String name, String lore) {
+        ItemStack customItem = new ItemStack(Material.MUSIC_DISC_CAT);
 
         IB.name(customItem, name);
         IB.lore(customItem, lore);

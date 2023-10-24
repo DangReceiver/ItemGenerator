@@ -4,8 +4,10 @@ import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.oo.Items;
 import de.cruelambition.oo.PC;
+import de.cruelambition.oo.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -56,10 +58,10 @@ public class CustomItems implements Listener {
 
         } else if (item.equals(Items.ITEMS.get(1))) {
             e.setCancelled(true);
-            p.sendMessage("sound");
 
             if (a.toString().contains("RIGHT") || a.toString().contains("LEFT")) {
                 Random r = new Random();
+                p.sendTitle(Lang.PRE, l.getString("sound_playing_sound"), 20, 20, 10);
 
                 p.playSound(p.getLocation(), Sound.values()[r.nextInt(Sound.values().length - 1)],
                         0.8f, (float) (r.nextInt(21) / 10));
@@ -67,20 +69,24 @@ public class CustomItems implements Listener {
 
         } else if (item.equals(Items.ITEMS.get(0))) {
             e.setCancelled(true);
-
             PC pc = new PC(p);
-            if (a.toString().contains("RIGHT")) {
 
+            if (a.toString().contains("RIGHT")) {
                 if (pc.getJetpackUsage()) {
+
                     p.sendTitle(Lang.PRE, "§7" + l.getString("customitems_listener_jetpack_in_use"));
                     return;
                 }
 
                 pc.setJetpackUsage(true);
+
                 p.setVelocity(p.getVelocity().add(new Vector(0, 0.125, 0)).multiply(1.12f));
+                Utils.particleOffset(p.getLocation(), Particle.FLAME, 2, 0.25);
 
                 Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
                     p.setVelocity(p.getVelocity().add(new Vector(0, 0.1f, 0)).multiply(1.2f));
+
+                    Utils.particleOffset(p.getLocation(), Particle.FLAME, 3, 0.3);
                     pc.setJetpackUsage(false);
                 }, 4);
             }

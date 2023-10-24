@@ -322,6 +322,21 @@ public class Recipes implements Listener {
 		blazePowderRec.setIngredient('F', Material.FLINT_AND_STEEL);
 		rec.add(blazePowderRec);
 
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.END_PORTAL_FRAME.toString() + "1");
+		ItemStack frame = new ItemStack(Material.END_PORTAL_FRAME);
+		frame.setAmount(1);
+
+		ShapedRecipe frameRec = new ShapedRecipe(key, blazePowder);
+		frameRec.shape("BEB",
+				"RNR",
+				"BBB");
+
+		frameRec.setIngredient('E', Material.ENDER_EYE);
+		frameRec.setIngredient('B', Material.CRYING_OBSIDIAN);
+		frameRec.setIngredient('R', Material.REINFORCED_DEEPSLATE);
+		frameRec.setIngredient('N', Material.NETHER_STAR);
+		rec.add(frameRec);
+
 //		PotionEffectType.ABSORPTION
 //		PotionEffectType.DAMAGE_RESISTANCE
 //		PotionEffectType.FAST_DIGGING
