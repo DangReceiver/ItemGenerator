@@ -1,15 +1,12 @@
 package de.cruelambition.listener.essential;
 
-import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.oo.*;
 import de.cruelambition.worlds.SpawnWorld;
 
-import java.io.File;
 import java.util.Random;
 
 import org.bukkit.*;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,13 +56,7 @@ public class CM implements Listener {
 		p.sendTitle(Lang.PRE, String.format(l.getString("welcome_back"), p.getName()), 30, 50, 50);
 //		p.sendMessage(l.getLang(p) + " || " + l.getLanguage());
 
-		for (Recipe re : Recipes.rec) {
-			if (re instanceof Keyed k) {
-				p.discoverRecipe(k.getKey());
-				p.sendMessage("blup1 " + k.getKey());
-			}
-			p.sendMessage("blup2");
-		}
+		for (Recipe re : Recipes.rec) if (re instanceof Keyed k) p.discoverRecipe(k.getKey());
 	}
 
 	@EventHandler

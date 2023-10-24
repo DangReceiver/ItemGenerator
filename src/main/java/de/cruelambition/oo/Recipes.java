@@ -1,17 +1,14 @@
 package de.cruelambition.oo;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -325,6 +322,20 @@ public class Recipes implements Listener {
 		blazePowderRec.setIngredient('F', Material.FLINT_AND_STEEL);
 		rec.add(blazePowderRec);
 
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.END_PORTAL_FRAME.toString() + "1");
+		ItemStack frame = new ItemStack(Material.END_PORTAL_FRAME);
+		frame.setAmount(1);
+
+		ShapedRecipe frameRec = new ShapedRecipe(key, blazePowder);
+		frameRec.shape("BEB",
+				"RNR",
+				"BBB");
+
+		frameRec.setIngredient('E', Material.ENDER_EYE);
+		frameRec.setIngredient('B', Material.CRYING_OBSIDIAN);
+		frameRec.setIngredient('R', Material.REINFORCED_DEEPSLATE);
+		frameRec.setIngredient('N', Material.NETHER_STAR);
+		rec.add(frameRec);
 
 //		PotionEffectType.ABSORPTION
 //		PotionEffectType.DAMAGE_RESISTANCE
