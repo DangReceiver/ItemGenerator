@@ -1,17 +1,14 @@
 package de.cruelambition.oo;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -324,7 +321,6 @@ public class Recipes implements Listener {
 		blazePowderRec.setIngredient('B', Material.BONE_BLOCK);
 		blazePowderRec.setIngredient('F', Material.FLINT_AND_STEEL);
 		rec.add(blazePowderRec);
-
 
 //		PotionEffectType.ABSORPTION
 //		PotionEffectType.DAMAGE_RESISTANCE
