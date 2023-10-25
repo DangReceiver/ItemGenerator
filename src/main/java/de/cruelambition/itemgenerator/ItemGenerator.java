@@ -70,6 +70,9 @@ public final class ItemGenerator extends JavaPlugin {
 		Objects.requireNonNull(getCommand("get")).setExecutor(new Get());
 		Objects.requireNonNull(getCommand("spawn")).setExecutor(new Spawn());
 		Objects.requireNonNull(getCommand("learnrecipes")).setExecutor(new LearnRecipes());
+		Objects.requireNonNull(getCommand("fix")).setExecutor(new Fix());
+		Objects.requireNonNull(getCommand("forbidden")).setExecutor(new Forbidden());
+		Objects.requireNonNull(getCommand("rare")).setExecutor(new Rare());
 
 		Objects.requireNonNull(getCommand("language")).setTabCompleter(new Language());
 		Objects.requireNonNull(getCommand("generatorfrequencies")).setTabCompleter(new GeneratorFrequencies());

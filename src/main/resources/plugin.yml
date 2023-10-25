@@ -32,5 +32,11 @@ commands:
     description: Get custom Items by this very plugin
   spawn:
     description: Go to the spawn
-  LearnRecipes:
+  learnrecipes:
     description: Get plugin specific recipes
+  fix:
+    description: fix broken generated items
+  forbidden:
+    description: forbidden item management
+  rare:
+    description: rare item management
