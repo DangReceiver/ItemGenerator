@@ -274,6 +274,8 @@ public class Generator {
 			ItemStack is = new ItemStack(getRandomMaterial());
 			if (isRare(is.getType().toString()) && new Random().nextInt(3) <= 1)
 				new ItemStack(getRandomMaterial());
+			if (isRare(is.getType().toString()) && new Random().nextInt(4) <= 2)
+				new ItemStack(getRandomMaterial());
 
 			Material type = is.getType();
 			if (canEdit(type)) edit(is);
@@ -422,7 +424,7 @@ public class Generator {
 	}
 
 	public static boolean applicable(ItemStack item, Enchantment ench) {
-		return item.getType() == Material.ENCHANTED_BOOK && ench.canEnchantItem(item) ||
+		return item.getType() == Material.ENCHANTED_BOOK ||
 				(ench.getItemTarget().includes(item) && ench.canEnchantItem(item));
 	}
 }
