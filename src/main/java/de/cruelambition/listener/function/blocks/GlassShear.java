@@ -1,4 +1,4 @@
-package de.cruelambition.listener.function;
+package de.cruelambition.listener.function.blocks;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;

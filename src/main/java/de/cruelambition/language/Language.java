@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class Language {
+
 	private static File sLang;
 	private final Map<Player, File> settings = new HashMap<>();
 	private static File df;
@@ -334,7 +335,33 @@ public class Language {
 		}
 	}
 
-	/*
-	 			DEBUG END
-	 */
+	public void saveMissingKeys() {
+		List<String> mkl = missingKeys;
+
+		int i = 0;
+		File f = new File(df + "/languages");
+
+		File fmkf = new File(df, "missingkeys.yml");
+		YamlConfiguration mkf = YamlConfiguration.loadConfiguration(fmkf);
+
+		for (File lf : f.listFiles()) {
+			String s1 = lf.getName().split(".yml")[0];
+
+			if (mkl.isEmpty()) return;
+			for (String s : mkl) {
+
+				if (!s.contains("; " + s1)) {
+					mkf.set(s1, mkl);
+
+					mkl.remove(i);
+					i++;
+				}
+			}
+		}
+		try {
+			mkf.save(fmkf);
+		} catch (IOException ignored) {
+			Bukkit.getConsoleSender().sendMessage(getMessage(getServerLang(), "missingkey_file_save_error"));
+		}
+	}
 }

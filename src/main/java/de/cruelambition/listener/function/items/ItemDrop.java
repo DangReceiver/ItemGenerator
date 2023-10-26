@@ -1,4 +1,4 @@
-package de.cruelambition.listener.function;
+package de.cruelambition.listener.function.items;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;

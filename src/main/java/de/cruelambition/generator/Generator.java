@@ -1,6 +1,5 @@
 package de.cruelambition.generator;
 
-import java.sql.Array;
 import java.util.*;
 import java.util.List;
 

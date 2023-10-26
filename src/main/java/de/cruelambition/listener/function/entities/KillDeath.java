@@ -1,4 +1,4 @@
-package de.cruelambition.listener.function;
+package de.cruelambition.listener.function.entities;
 
 import de.cruelambition.oo.PC;
 import de.cruelambition.oo.Sb;

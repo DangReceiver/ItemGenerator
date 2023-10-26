@@ -133,4 +133,8 @@ public class Lang extends Language {
 
 		return mkl;
 	}
+
+	public void saveMissingKeys() {
+		lang.saveMissingKeys();
+	}
 }

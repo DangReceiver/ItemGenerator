@@ -32,14 +32,16 @@ public class Items {
 				eraser = newItem("§cEraser", "click to remove a set of blocks"),
 				crate = newHeadItem("§cItem Crate", "Click to roll the lucky wheel"),
 				banana = newEdibleItem("§eBanana", "§e§oBanana!"),
-				bakedBanana = newEdibleItem("§eBaked Banana", "§e§o Baked Banana o:");
+				bakedBanana = newEdibleItem("§eBaked Banana", "§e§o Baked Banana o:"),
+				disc = newDisc("§eNie Wieder Weinen - wavvyboi", "§eSpiele ein Lied 💞");
 
-		l.add(mini_jetpack);
-		l.add(sound);
-		l.add(eraser);
-		l.add(crate);
-		l.add(banana);
-		l.add(bakedBanana);
+		l.add(mini_jetpack);    // 0
+		l.add(sound);           // 1
+		l.add(eraser);          // 2
+		l.add(crate);           // 3
+		l.add(banana);          // 4
+		l.add(bakedBanana);     // 5
+		l.add(disc);            // 6
 
 		for (ItemStack is : l) if (!mats.contains(is.getType())) mats.add(is.getType());
 		amount = new int[mats.size()];

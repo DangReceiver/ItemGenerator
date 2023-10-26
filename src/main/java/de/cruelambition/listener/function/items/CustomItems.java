@@ -1,4 +1,4 @@
-package de.cruelambition.listener.function;
+package de.cruelambition.listener.function.items;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
@@ -17,6 +17,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import java.rmi.server.RemoteRef;
@@ -27,15 +28,32 @@ public class CustomItems implements Listener {
 	@EventHandler
 	public void handle(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
+
 		ItemStack item = e.getItem();
 		if (item == null) return;
+
+		ItemMeta im = item.getItemMeta();
+		if (!im.hasCustomModelData()) return;
 
 		Action a = e.getAction();
 		Block cb = e.getClickedBlock();
 
 		Lang l = new Lang(p);
 
-		if (item.equals(Items.ITEMS.get(5))) {
+		p.sendMessage(Items.ITEMS.get(im.getCustomModelData()).displayName());
+
+		if (item.equals(Items.ITEMS.get(6))) {
+			e.setCancelled(true);
+			p.sendMessage("§eNie Wieder Weinen");
+
+			if (a == Action.LEFT_CLICK_BLOCK) {
+				if (cb.getType() != Material.JUKEBOX) return;
+
+				cb.getWorld().playSound(cb.getLocation(), "");
+
+			}
+
+		} else if (item.equals(Items.ITEMS.get(5))) {
 			e.setCancelled(true);
 			p.sendMessage("Baked Banana");
 

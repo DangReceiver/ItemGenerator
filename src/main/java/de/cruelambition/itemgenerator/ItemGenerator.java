@@ -8,6 +8,14 @@ import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
 import de.cruelambition.listener.essential.Timber;
 import de.cruelambition.listener.function.*;
+import de.cruelambition.listener.function.blocks.Anvil;
+import de.cruelambition.listener.function.blocks.CaneCactus;
+import de.cruelambition.listener.function.blocks.Furnace;
+import de.cruelambition.listener.function.blocks.GlassShear;
+import de.cruelambition.listener.function.entities.AntiCreeper;
+import de.cruelambition.listener.function.entities.KillDeath;
+import de.cruelambition.listener.function.items.CustomItems;
+import de.cruelambition.listener.function.items.ItemDrop;
 import de.cruelambition.oo.*;
 import de.cruelambition.worlds.SpawnWorld;
 
@@ -167,8 +175,7 @@ public final class ItemGenerator extends JavaPlugin {
 		for (Recipe recipe : Recipes.rec)
 			if (recipe instanceof Keyed k) Bukkit.removeRecipe(k.getKey());
 
-		for (String mk : l.getMissingKeys())
-			cs.sendMessage(Lang.PRE + String.format(l.getString("list_missing_Keys"), mk));
+		l.saveMissingKeys();
 
 		for (Player ap : Bukkit.getOnlinePlayers())
 			new PC(ap).setJetpackUsage(false);

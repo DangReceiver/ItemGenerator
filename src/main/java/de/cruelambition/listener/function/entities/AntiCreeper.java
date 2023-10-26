@@ -1,4 +1,4 @@
-package de.cruelambition.listener.function;
+package de.cruelambition.listener.function.entities;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;

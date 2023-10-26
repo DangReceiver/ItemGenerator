@@ -1,4 +1,4 @@
-package de.cruelambition.listener.function;
+package de.cruelambition.listener.function.blocks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

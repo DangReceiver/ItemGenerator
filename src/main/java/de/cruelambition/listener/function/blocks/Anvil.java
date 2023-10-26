@@ -1,4 +1,4 @@
-package de.cruelambition.listener.function;
+package de.cruelambition.listener.function.blocks;
 
 import de.cruelambition.language.Lang;
 import de.cruelambition.language.Language;
