@@ -49,7 +49,7 @@ public class CustomItems implements Listener {
 			if (a == Action.LEFT_CLICK_BLOCK) {
 				if (cb.getType() != Material.JUKEBOX) return;
 
-				cb.getWorld().playSound(cb.getLocation(), "");
+				cb.getWorld().playSound(cb.getLocation(), "", 0.5f, 1);
 
 			}
 
