@@ -14,6 +14,7 @@ de\cruelambition\cmd\moderation\LearnRecipes.class
 de\cruelambition\language\Pronouns.class
 de\cruelambition\worlds\SpawnWorld.class
 de\cruelambition\language\Language.class
+de\cruelambition\cmd\moderation\Fix.class
 de\cruelambition\listener\function\CustomItems.class
 de\cruelambition\listener\function\Furnace.class
 de\cruelambition\listener\function\CaneCactus.class

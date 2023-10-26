@@ -3,6 +3,8 @@ package de.cruelambition.worlds;
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -27,6 +29,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class SpawnWorld implements Listener {
 
+	public static List<Biome> biomeHolder;
+
 	public static class SpawnGen extends ChunkGenerator {
 
 		@NotNull
@@ -40,6 +44,16 @@ public class SpawnWorld implements Listener {
 			return chunkData;
 		}
 
+		public Biome getRandomBiome() {
+			if (biomeHolder.isEmpty()) fillBiomeList();
+			return biomeHolder.get(new Random().nextInt(biomeHolder.size() - 1));
+
+		}
+
+		public static void fillBiomeList() {
+			biomeHolder.addAll(Arrays.asList(Biome.values()));
+		}
+
 		public static boolean checkExists(String name) {
 			World w = Bukkit.getWorld(name);
 			if (w != null) return true;
@@ -48,9 +62,8 @@ public class SpawnWorld implements Listener {
 			creator.generator(new SpawnGen());
 			creator.createWorld();
 
-			setGameRules(Objects.<World>requireNonNull(w = Bukkit.getWorld(name)));
+			setGameRules(Objects.requireNonNull(w = Bukkit.getWorld(name)));
 			return (w != null);
-
 		}
 
 		@Nullable
@@ -83,7 +96,7 @@ public class SpawnWorld implements Listener {
 		}
 
 //		isSpawnSafe();
-		return spawnLoc.clone().add(0,0.5,0);
+		return spawnLoc.clone().add(0, 0.5, 0);
 	}
 
 	public static boolean isSpawnSafe() {

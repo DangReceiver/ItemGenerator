@@ -2,6 +2,7 @@ package de.cruelambition.cmd.moderation;
 
 import de.cruelambition.generator.Generator;
 import de.cruelambition.language.Lang;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -40,13 +41,23 @@ public class Fix implements CommandExecutor {
 			return false;
 		}
 
+		p.sendMessage(Lang.PRE + l.getString("fix_attempt"));
+
 		if (item.getType() == Material.ENCHANTED_BOOK) {
 			Generator.enchant(item);
+
+			if (isFixed(item)) p.sendMessage(Lang.PRE + l.getString("fixed_item"));
+			else p.sendMessage(Lang.PRE + l.getString("could_not_fix_item"));
+
 			return false;
 		}
 
 		if (item.getType().toString().contains("POTION") || item.getType().toString().contains("TIPPED_ARROW")) {
 			Generator.effect(item);
+
+			if (isFixed(item)) p.sendMessage(Lang.PRE + l.getString("fixed_item"));
+			else p.sendMessage(Lang.PRE + l.getString("could_not_fix_item"));
+
 			return false;
 		}
 
@@ -54,9 +65,9 @@ public class Fix implements CommandExecutor {
 	}
 
 	public boolean isFixed(ItemStack item) {
-		boolean b = true;
+		boolean b = false;
 
-		if (item.getItemMeta() != null) b = (b && (!item.getItemMeta().getEnchants().isEmpty()));
-		return (b && ((item.getItemMeta() instanceof PotionMeta pm) && pm.hasCustomEffects()));
+		if (item.getItemMeta() != null) b = item.getItemMeta().hasEnchants();
+		return (b || ((item.getItemMeta() instanceof PotionMeta pm) && pm.hasCustomEffects()));
 	}
 }

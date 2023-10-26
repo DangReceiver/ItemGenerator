@@ -97,6 +97,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new WorldChange(), this);
 		pm.registerEvents(new CustomItems(), this);
 		pm.registerEvents(new Furnace(), this);
+		pm.registerEvents(new Anvil(), this);
 //		pm.registerEvents(new Afk(), this);
 
 		g = new Generator();

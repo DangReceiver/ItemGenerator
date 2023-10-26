@@ -20,15 +20,18 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 public class Generator {
-	private List<String> material, forbidden, rare;
+	private final List<String> material, forbidden, rare, editable;
+	private final List<Material> spawnEggs = new ArrayList<>();
 	private BukkitTask generatorLoop, checkLoop;
-	private List<String> editable;
 
 	public Generator() {
 		material = new ArrayList<>();
 		forbidden = new ArrayList<>();
+
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
 		rare = c.getStringList("Item.List.Rare");
+
+		for (Material value : Material.values()) if (value.toString().contains("SPAWN_EGG")) spawnEggs.add(value);
 
 		editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(),
 				Material.POTION.toString(), Material.SPLASH_POTION.toString(),
@@ -37,7 +40,8 @@ public class Generator {
 
 		if (rare.isEmpty()) {
 			setRareItems(new ArrayList<>(Arrays.asList("_SHULKER", "NETHERITE", "DIAMOND", "BEACON", "DIRT",
-					"SPAWN_EGG", "SPAWNER", "BARRIER", "BEDROCK", "ENCHANTMENT_TABLE", "_BUCKET", "ELYTRA", "_TRIM")));
+					"SPAWN_EGG", "SPAWNER", "BARRIER", "BEDROCK", "ENCHANTMENT_TABLE", "_BUCKET", "ELYTRA",
+					"_TRIM")));
 			ItemGenerator.getItemGenerator().saveConfig();
 		}
 
@@ -56,6 +60,7 @@ public class Generator {
 			for (int b = 0; b <= Items.amount[a]; b++)
 				addMaterialToLoop(Items.mats.get(a));
 
+		if (getForbiddenList().contains("SPAWN_EGG")) addMaterialToLoop(Material.ALLAY_SPAWN_EGG);
 	}
 
 	public int getCustomItemAmount(Material m) {
@@ -187,7 +192,8 @@ public class Generator {
 
 	public void listForbiddenItems() {
 		Lang.broadcastArg("itemgenerator_forbidden_listing", getForbiddenList().toString().toLowerCase()
-				.replace("[", "").replace("]", "").replaceAll("_", " "));
+				.replace("[", "").replace("]", "")
+				.replaceAll("_", " "));
 	}
 
 	public void addItemToPermanentForbiddenList(Material m) {
@@ -269,7 +275,7 @@ public class Generator {
 //			ap.sendMessage(ap.getWorld().getName() + " || " + wP.toString());
 
 			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
-			ap.playSound(ap.getLocation(), Sound.ENTITY_PLAYER_SWIM, 0.3f, 0.75f);
+			ap.playSound(ap.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 0.35f, 0.8f);
 
 			ItemStack is = new ItemStack(getRandomMaterial());
 			if (isRare(is.getType().toString()) && new Random().nextInt(3) <= 1)
@@ -278,10 +284,12 @@ public class Generator {
 				new ItemStack(getRandomMaterial());
 
 			Material type = is.getType();
+			if (type == Material.ALLAY_SPAWN_EGG) rollSpawnEgg(is);
 			if (canEdit(type)) edit(is);
 
-			if (type.isBlock()) if (new Random().nextInt(3) == 0)
-				is.setAmount(new Random().nextInt(4) == 0 ? 3 : 2);
+			if (type.isBlock()) if (new Random().nextInt(2) == 0)
+				is.setAmount(new Random().nextInt(2) == 0 ? (new Random().nextInt(12 + 1) - 4 >= 1
+						? new Random().nextInt(12 + 1) - 4 : 1) : new Random().nextInt(12 + 1));
 
 			moreItems(is);
 
@@ -298,19 +306,25 @@ public class Generator {
 		}
 	}
 
+	public void rollSpawnEgg(ItemStack item) {
+		item.setType(spawnEggs.get(new Random().nextInt(spawnEggs.size())));
+	}
+
 	public boolean isCustomItem(Material m) {
 		return Items.mats.contains(m);
 	}
 
 	public boolean moreItems(ItemStack item) {
 		boolean b = false;
-		List<String> l = new ArrayList<>(Arrays.asList("ARROW", "WOOL", "DEEPSLATE", "STONE"));
+		if (item.getType().getMaxStackSize() <= 1) return false;
 
+		List<String> l = new ArrayList<>(Arrays.asList("ARROW", "WOOL", "DEEPSLATE", "STONE"));
 		for (String s : l) if (item.getType().toString().contains(s)) b = true;
 
 		if (b) {
-			Random random = new Random();
-			item.setAmount(random.nextInt(16) + 1);
+			Random r = new Random();
+			int i = r.nextInt(12) + 1;
+			item.setAmount(i >= 6 && (r.nextInt(2) == 0) ? i / 2 : i);
 		}
 
 		return b;

@@ -151,6 +151,10 @@ gamemode:
 afk:
   afk_warn: "§7You seem to be afk... Do something!"
 
+mergeresult:
+  ignore_too_expensive: "Just ignore the Too Expensive statement..."
+  can_repair_expensive: "This enchantment will cost %s level."
+
 sb:
   sb_time: "§6Current time"
   sb_world: "§3Your world"
