@@ -81,11 +81,14 @@ public final class ItemGenerator extends JavaPlugin {
 		Objects.requireNonNull(getCommand("fix")).setExecutor(new Fix());
 		Objects.requireNonNull(getCommand("forbidden")).setExecutor(new Forbidden());
 		Objects.requireNonNull(getCommand("rare")).setExecutor(new Rare());
+		Objects.requireNonNull(getCommand("trail")).setExecutor(new Trail());
+		Objects.requireNonNull(getCommand("trailgui")).setExecutor(new TrailGui());
 
 		Objects.requireNonNull(getCommand("language")).setTabCompleter(new Language());
 		Objects.requireNonNull(getCommand("generatorfrequencies")).setTabCompleter(new GeneratorFrequencies());
 		Objects.requireNonNull(getCommand("get")).setTabCompleter(new Get());
 		Objects.requireNonNull(getCommand("learnrecipes")).setTabCompleter(new LearnRecipes());
+		Objects.requireNonNull(getCommand("trail")).setTabCompleter(new Trail());
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new CM(), this);
@@ -106,6 +109,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new CustomItems(), this);
 		pm.registerEvents(new Furnace(), this);
 		pm.registerEvents(new Anvil(), this);
+		pm.registerEvents(new TrailGui(), this);
 //		pm.registerEvents(new Afk(), this);
 
 		g = new Generator();

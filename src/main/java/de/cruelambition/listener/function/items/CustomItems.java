@@ -20,7 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import java.rmi.server.RemoteRef;
 import java.util.Random;
 
 public class CustomItems implements Listener {
@@ -39,18 +38,20 @@ public class CustomItems implements Listener {
 		Block cb = e.getClickedBlock();
 
 		Lang l = new Lang(p);
-
 		p.sendMessage(Items.ITEMS.get(im.getCustomModelData()).displayName());
 
 		if (item.equals(Items.ITEMS.get(6))) {
 			e.setCancelled(true);
-			p.sendMessage("§eNie Wieder Weinen");
+			p.sendMessage("§5Phantom - wavvyboi");
 
 			if (a == Action.LEFT_CLICK_BLOCK) {
 				if (cb.getType() != Material.JUKEBOX) return;
 
-				cb.getWorld().playSound(cb.getLocation(), "", 0.5f, 1);
+				for (Player ap : Bukkit.getOnlinePlayers())
+					ap.stopSound(Sound.MUSIC_DISC_CAT);
 
+				cb.getWorld().playSound(cb.getLocation(), "aa_itemgenerator_wavvyboi-Phantom", 0.5f, 1);
+//				cb.setBlockData(Bukkit.createBlockData(""));
 			}
 
 		} else if (item.equals(Items.ITEMS.get(5))) {
@@ -115,15 +116,15 @@ public class CustomItems implements Listener {
 
 				pc.setJetpackUsage(true);
 
-				p.setVelocity(p.getVelocity().add(new Vector(0, 0.125, 0)).multiply(1.12f));
+				p.setVelocity(p.getVelocity().setY(0).add(new Vector(0, 0.14, 0)).multiply(1.12f));
 				Utils.particleOffset(p.getLocation(), Particle.FLAME, 2, 0.25);
 
 				Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
-					p.setVelocity(p.getVelocity().add(new Vector(0, 0.1f, 0)).multiply(1.2f));
+					p.setVelocity(p.getVelocity().setY(0).add(new Vector(0, 0.95f, 0)).multiply(1.2f));
 
-					Utils.particleOffset(p.getLocation(), Particle.FLAME, 3, 0.3);
+					Utils.particleOffset(p.getLocation(), Particle.SOUL_FIRE_FLAME, 3, 0.3);
 					pc.setJetpackUsage(false);
-				}, 4);
+				}, 3);
 			}
 		}
 	}

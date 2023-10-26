@@ -40,3 +40,7 @@ commands:
     description: forbidden item management
   rare:
     description: rare item management
+  trail:
+    description: activate a trail
+  trailgui:
+    description: activate the trail gui

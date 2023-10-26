@@ -1,15 +1,7 @@
 package de.cruelambition.oo;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +25,7 @@ public class Items {
 				crate = newHeadItem("§cItem Crate", "Click to roll the lucky wheel"),
 				banana = newEdibleItem("§eBanana", "§e§oBanana!"),
 				bakedBanana = newEdibleItem("§eBaked Banana", "§e§o Baked Banana o:"),
-				disc = newDisc("§eNie Wieder Weinen - wavvyboi", "§eSpiele ein Lied 💞");
+				disc = newDisc("§5Phantom - wavvyboi", "§eSpiele ein Lied 💞");
 
 		l.add(mini_jetpack);    // 0
 		l.add(sound);           // 1
