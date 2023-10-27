@@ -30,7 +30,7 @@ public class Anvil implements Listener {
 //				|| e.getResult() == null || e.getResult().getType() == Material.AIR
 		) return;
 
-		int mrc = Math.min(2000, e.getInventory().getMaximumRepairCost() * 3);
+		int mrc = Math.min(2000, e.getInventory().getMaximumRepairCost() / 3);
 
 		e.getInventory().setMaximumRepairCost(mrc);
 		MergeResult mergeResult = getMergeResult(leftItem, rightItem);
@@ -60,8 +60,8 @@ public class Anvil implements Listener {
 	private MergeResult getMergeResult(ItemStack leftItem, ItemStack rightItem) {
 		return switch (getMergeType(leftItem, rightItem)) {
 			case BOOK_ON_BOOK -> mergeEnchantedBooks(leftItem, rightItem);
-			case BOOK_ON_ITEM -> mergeBookAndItem(leftItem, rightItem);
 			case ITEM_ON_ITEM -> mergeEnchantedItems(leftItem, rightItem);
+			case BOOK_ON_ITEM -> mergeBookAndItem(leftItem, rightItem);
 		};
 	}
 
@@ -173,7 +173,7 @@ public class Anvil implements Listener {
 	}
 
 	private int calRepair(Enchantment enchant, int level) {
-		return (int) ((level <= enchant.getMaxLevel()) ? 0 : ((level - enchant.getMaxLevel()) * 1.25));
+		return (int) (level <= enchant.getMaxLevel() ? 0 : (level - enchant.getMaxLevel() * 0.5));
 	}
 
 	private void addLore(ItemMeta leftMeta, ItemStack resultItem) {

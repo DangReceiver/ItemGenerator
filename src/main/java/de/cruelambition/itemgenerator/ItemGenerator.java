@@ -112,6 +112,8 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new TrailGui(), this);
 //		pm.registerEvents(new Afk(), this);
 
+		TrailGui.fillParList();
+
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();
 		Generator.start(g, f.get(0), f.get(1), f.get(2), f.get(3));

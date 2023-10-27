@@ -98,7 +98,7 @@ public class TrailGui implements CommandExecutor, Listener {
 
 			lore.add(0, c.getString("ParticleList." + par + ".lore"));
 			i.setItem(a, IB.lore(IB.name(new ItemStack(Material.valueOf(c.getString("ParticleList."
-					+ par + ".material").toUpperCase())), "§"
+					+ par + ".material").toUpperCase())), "§" // HERE
 					+ c.getString("ParticleList." + par.toString() + ".color")
 					+ par.toString().toLowerCase()), lore));
 			a++;
@@ -121,7 +121,19 @@ public class TrailGui implements CommandExecutor, Listener {
 			if (ci == null) return;
 
 			if (ci.getType().toString().contains("PANE") && !ci.getItemMeta().hasDisplayName()) return;
-			Particle tp = Particle.valueOf(ChatColor.stripColor(ci.getItemMeta().getDisplayName().toUpperCase()));
+
+			Particle tp;
+
+			try {
+				tp = Particle.valueOf(ChatColor.stripColor(ci.getItemMeta().getDisplayName().toUpperCase()));
+			} catch (Exception ex) {
+				tp = null;
+			}
+
+			if (tp == null) {
+				p.sendMessage(Lang.PRE + l.getString("arg_invalid"));
+				return;
+			}
 
 			if (p.hasPermission(parList.get(tp))) {
 				PC pc = new PC(p);
@@ -141,11 +153,12 @@ public class TrailGui implements CommandExecutor, Listener {
 
 				p.closeInventory();
 
+				Particle finalTp = tp;
 				Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
 					if (!trail.contains(p.getName())) trail.add(p.getName());
 
-					loopTrail(p, tp);
-					pc.set("Temp.particle", tp);
+					loopTrail(p, finalTp);
+					pc.set("Temp.particle", finalTp);
 					pc.savePCon();
 
 				}, 5);
@@ -183,37 +196,29 @@ public class TrailGui implements CommandExecutor, Listener {
 			double cost = c.getDouble("ParticleList." + ChatColor.stripColor(
 					parItem.getItemMeta().getDisplayName().toUpperCase()) + ".cost");
 
-			switch (ci.getType()) {
 
-				case GRAY_STAINED_GLASS_PANE:
-					break;
+			if (ci.getType().toString().contains("_GLASS_PANE")) {
+				return;
 
-				case RED_BANNER:
-					p.closeInventory();
-					break;
+			} else if (ci.getType() == Material.RED_BANNER) {
+				p.closeInventory();
 
-				case GREEN_BANNER:
-					PC pc = new PC(p);
+			} else if (ci.getType() == Material.GREEN_BANNER) {
+				PC pc = new PC(p);
 
-					if (IB.getMaterialAmount(Material.EMERALD, p.getInventory()) >= 16) {
-						IB.removeItems(Material.EMERALD, 16, p.getInventory());
-
-						pc.savePCon();
-						p.sendMessage(Lang.PRE + String.format(l.getString("trail_purchased"),
-								parItem.getItemMeta().getDisplayName(), cost));
-
-					} else {
-						p.sendMessage(Lang.PRE + l.getString("insufficient_funds"));
-						break;
-					}
-
-					p.closeInventory();
-					break;
-
-				default:
+				if (IB.getMaterialAmount(Material.EMERALD, p.getInventory()) < 16) {
 					p.sendMessage(Lang.PRE + String.format(l.getString("about_buyable_item"), cost));
-					break;
+					return;
+				}
+
+				IB.removeItems(Material.EMERALD, 16, p.getInventory());
+
+				pc.savePCon();
+				p.sendMessage(Lang.PRE + String.format(l.getString("trail_purchased"),
+						parItem.getItemMeta().getDisplayName(), cost));
+
 			}
+			p.closeInventory();
 		}
 	}
 
@@ -224,30 +229,30 @@ public class TrailGui implements CommandExecutor, Listener {
 		if (s.contains("Void")) {
 
 			if (isDirectional(par)) p.getLocation().getWorld().spawnParticle(par,
-					p.getLocation().add(0, 0.125, 0), 0, 0.1, 0.2, 0.2, 0.15);
-			else p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.125, 0), 1);
+					p.getLocation().add(0, 1.2, 0), 0, 0.1, 0.2, 0.2, 0.15);
+			else p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1);
 
 		} else if (s.contains("BlockData"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.125, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
 					Material.GOLD_BLOCK.createBlockData());
 
 		else if (s.contains("MaterialData"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.125, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
 					new MaterialData(Material.GOLD_INGOT));
 
 		else if (s.contains("DustTransition"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.125, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
 					new Particle.DustTransition(Color.YELLOW, Color.ORANGE, 0.2f));
 
 		else if (s.contains("ItemStack"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.125, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
 					new ItemStack(Material.GOLD_INGOT));
 
 		else if (s.contains("DustOptions"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.125, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
 					new Particle.DustOptions(Color.YELLOW, 0.1f));
 
-		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> loopTrail(p, par), 2);
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> loopTrail(p, par), 4);
 	}
 
 	public boolean isDirectional(Particle p) {

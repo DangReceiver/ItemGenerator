@@ -53,7 +53,7 @@ public class Trail implements CommandExecutor, TabCompleter {
 		PC pc = new PC(p);
 
 		if (!pc.isSet("Temp.particle") && args.length != 1) {
-			p.sendMessage(Lang.PRE + String.format(l.getString("args_length_exact"), 1));
+			p.sendMessage(Lang.PRE + String.format(l.getString("args_length"), 1));
 			return true;
 		}
 
@@ -67,21 +67,28 @@ public class Trail implements CommandExecutor, TabCompleter {
 			if (args.length <= 0) return false;
 		}
 
-		Particle par = Particle.valueOf(args[0]);
+		Particle par;
+		try {
+			par = Particle.valueOf(args[0].toUpperCase());
+
+		} catch (Exception ex) {
+			par = null;
+		}
 
 		if (par == null) {
-			p.sendMessage(Lang.PRE + String.format(l.getString("arg_null"), 0));
+			p.sendMessage(Lang.PRE + String.format(l.getString("arg_invalid"), 0));
 			return true;
 		}
 
+		final Particle fPar = par;
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
 
 			if (!trail.contains(p.getName())) trail.add(p.getName());
-			loop(p, par);
+			loop(p, fPar);
 
-			pc.set("Temp.particle", par);
+			pc.set("Temp.particle", fPar.toString());
 			pc.savePCon();
-		}, 5);
+		}, 8);
 
 		p.sendMessage(Lang.PRE + String.format(l.getString("particle_spawning"), par.toString().toLowerCase()));
 		return false;
@@ -92,29 +99,29 @@ public class Trail implements CommandExecutor, TabCompleter {
 
 		String s = par.getDataType().toString();
 		if (s.contains("Void")) {
-			if (isDirectional(par)) p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.3, 0),
+			if (isDirectional(par)) p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0),
 					0, 0.1, 0.2, 0.2, 0.15);
-			else p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.3, 0), 1);
+			else p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1);
 		} else if (s.contains("BlockData"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.3, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
 					Material.GOLD_BLOCK.createBlockData());
 		else if (s.contains("MaterialData"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.3, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
 					new MaterialData(Material.GOLD_INGOT));
 		else if (s.contains("DustTransition"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.3, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
 					new Particle.DustTransition(Color.YELLOW, Color.ORANGE, 0.2f));
 		else if (s.contains("ItemStack"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.3, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
 					new ItemStack(Material.GOLD_INGOT));
 		else if (s.contains("DustOptions"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.3, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
 					new Particle.DustOptions(Color.YELLOW, 0.1f));
 		else {
 			p.sendMessage(par.getDataType().toString());
 			return;
 		}
-		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> loop(p, par), 3);
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> loop(p, par), 4);
 	}
 
 	@Override
@@ -123,13 +130,10 @@ public class Trail implements CommandExecutor, TabCompleter {
 		List<String> particles = new ArrayList<>();
 
 		for (Particle s : Particle.values()) {
-			if (!s.toString().contains(args[0].toUpperCase())) continue;
 
-			if (!args[0].isEmpty()) {
-				if ((s.toString().charAt(0) + "").equalsIgnoreCase(args[0].charAt(0) + ""))
-					particles.add(s.toString());
+			if (!args[0].contains(s.toString().toLowerCase())) continue;
+			if (s.toString().toLowerCase().contains(args[0])) particles.add(s.toString().toLowerCase());
 
-			} else particles.add(s.toString());
 		}
 		return particles;
 	}
