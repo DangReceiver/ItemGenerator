@@ -1,7 +1,6 @@
 de\cruelambition\worlds\SpawnWorld$SpawnGen.class
 de\cruelambition\listener\function\blocks\Anvil$1.class
 de\cruelambition\cmd\user\Trail.class
-de\cruelambition\cmd\user\TrailGui$1.class
 de\cruelambition\language\PronounsSetup.class
 de\cruelambition\listener\function\blocks\GlassShear.class
 de\cruelambition\listener\essential\Chat.class

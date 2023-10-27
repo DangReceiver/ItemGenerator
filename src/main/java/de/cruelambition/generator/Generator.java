@@ -284,11 +284,11 @@ public class Generator {
 
 			Material type = is.getType();
 			if (type == Material.ALLAY_SPAWN_EGG) rollSpawnEgg(is);
-			if (canEdit(type)) edit(is);
+			if (new Random().nextInt(2) == 0 && canEdit(type)) edit(is);
 
 			if (type.isBlock()) if (new Random().nextInt(2) == 0)
-				is.setAmount(new Random().nextInt(2) == 0 ? (new Random().nextInt(12 + 1) - 4 >= 1
-						? new Random().nextInt(12 + 1) - 4 : 1) : new Random().nextInt(12 + 1));
+				is.setAmount(new Random().nextInt(2) == 0 ? (new Random().nextInt(10 + 1) - 4 >= 1
+						? new Random().nextInt(10 + 1) - 4 : 1) : new Random().nextInt(10 + 1));
 
 			moreItems(is);
 
@@ -322,7 +322,7 @@ public class Generator {
 
 		if (b) {
 			Random r = new Random();
-			int i = r.nextInt(12) + 1;
+			int i = r.nextInt(10) + 1;
 			item.setAmount(i >= 6 && (r.nextInt(2) == 0) ? i / 2 : i);
 		}
 

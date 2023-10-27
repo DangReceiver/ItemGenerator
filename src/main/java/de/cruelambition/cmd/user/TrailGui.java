@@ -59,7 +59,7 @@ public class TrailGui implements CommandExecutor, Listener {
 			if (!c.isSet("ParticleList." + ps)) {
 				c.set("ParticleList." + ps + ".material", Material.GOLD_BLOCK.toString());
 				c.set("ParticleList." + ps + ".group", "beginner");
-				c.set("ParticleList." + ps + ".cost", 100);
+				c.set("ParticleList." + ps + ".cost", 16);
 				c.set("ParticleList." + ps + ".color", "b");
 				c.set("ParticleList." + ps + ".lore", "§7§oA particle");
 			}
@@ -158,7 +158,7 @@ public class TrailGui implements CommandExecutor, Listener {
 					if (!trail.contains(p.getName())) trail.add(p.getName());
 
 					loopTrail(p, finalTp);
-					pc.set("Temp.particle", finalTp);
+					pc.set("Temp.particle", finalTp.toString());
 					pc.savePCon();
 
 				}, 5);
@@ -229,27 +229,27 @@ public class TrailGui implements CommandExecutor, Listener {
 		if (s.contains("Void")) {
 
 			if (isDirectional(par)) p.getLocation().getWorld().spawnParticle(par,
-					p.getLocation().add(0, 1.2, 0), 0, 0.1, 0.2, 0.2, 0.15);
-			else p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1);
+					p.getLocation().add(0, 0.5, 0), 0, 0.1, 0.2, 0.2, 0.15);
+			else p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.5, 0), 1);
 
 		} else if (s.contains("BlockData"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.5, 0), 1,
 					Material.GOLD_BLOCK.createBlockData());
 
 		else if (s.contains("MaterialData"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.5, 0), 1,
 					new MaterialData(Material.GOLD_INGOT));
 
 		else if (s.contains("DustTransition"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.5, 0), 1,
 					new Particle.DustTransition(Color.YELLOW, Color.ORANGE, 0.2f));
 
 		else if (s.contains("ItemStack"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.5, 0), 1,
 					new ItemStack(Material.GOLD_INGOT));
 
 		else if (s.contains("DustOptions"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.5, 0), 1,
 					new Particle.DustOptions(Color.YELLOW, 0.1f));
 
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> loopTrail(p, par), 4);

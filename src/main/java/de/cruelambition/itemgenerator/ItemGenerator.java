@@ -183,8 +183,13 @@ public final class ItemGenerator extends JavaPlugin {
 
 		l.saveMissingKeys();
 
-		for (Player ap : Bukkit.getOnlinePlayers())
-			new PC(ap).setJetpackUsage(false);
+		for (Player ap : Bukkit.getOnlinePlayers()) {
+			PC pc = new PC(ap);
+			pc.setJetpackUsage(false);
+
+			pc.set("Temp", null);
+			pc.savePCon();
+		}
 	}
 
 

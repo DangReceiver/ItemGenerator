@@ -352,6 +352,24 @@ public class Recipes implements Listener {
 		frameRec1.setIngredient('O', Material.OBSIDIAN);
 		rec.add(frameRec1);
 
+		int i = 1;
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.CHEST.toString() + i);
+		ItemStack chest = new ItemStack(Material.CHEST);
+		ShapedRecipe chestRec = new ShapedRecipe(key, chest);
+
+		for (Material m : Material.values()) {
+			if (!m.toString().contains("SHULKER_BOX") && m.toString().contains(Material.LEGACY_PREFIX)) return;
+
+			chestRec.shape("   ", " S ", "   ");
+			chestRec.setIngredient('S', m);
+			rec.add(chestRec);
+
+			i++;
+
+			key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.CHEST.toString() + i);
+			chestRec = new ShapedRecipe(key, chest);
+		}
+
 //		PotionEffectType.ABSORPTION
 //		PotionEffectType.DAMAGE_RESISTANCE
 //		PotionEffectType.FAST_DIGGING

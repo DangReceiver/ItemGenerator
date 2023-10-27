@@ -38,7 +38,7 @@ public class CustomItems implements Listener {
 		Block cb = e.getClickedBlock();
 
 		Lang l = new Lang(p);
-		p.sendMessage(Items.ITEMS.get(im.getCustomModelData()).displayName());
+//		p.sendMessage(Items.ITEMS.get(im.getCustomModelData() - 1).displayName());
 
 		if (item.equals(Items.ITEMS.get(6))) {
 			e.setCancelled(true);
@@ -55,7 +55,7 @@ public class CustomItems implements Listener {
 			}
 
 		} else if (item.equals(Items.ITEMS.get(5))) {
-			e.setCancelled(true);
+//			e.setCancelled(true);
 			p.sendMessage("Baked Banana");
 
 			if (a == Action.LEFT_CLICK_AIR) {
@@ -63,7 +63,7 @@ public class CustomItems implements Listener {
 			}
 
 		} else if (item.equals(Items.ITEMS.get(4))) {
-			e.setCancelled(true);
+//			e.setCancelled(true);
 			p.sendMessage("Banana");
 
 			if (a == Action.LEFT_CLICK_AIR) {
@@ -114,17 +114,22 @@ public class CustomItems implements Listener {
 					return;
 				}
 
-				pc.setJetpackUsage(true);
+				if (p.getFallDistance() > 0) p.setFallDistance(p.getFallDistance() / 2);
 
-				p.setVelocity(p.getVelocity().setY(0).add(new Vector(0, 0.14, 0)).multiply(1.12f));
-				Utils.particleOffset(p.getLocation(), Particle.FLAME, 2, 0.25);
+				pc.setJetpackUsage(true);
+				pc.savePCon();
+
+				p.setVelocity(p.getVelocity().setY(0).add(new Vector(0, 0.3, 0)).multiply(1.4f));
+				Utils.particleOffset(p.getLocation(), Particle.FLAME, 2, 0.275);
 
 				Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
-					p.setVelocity(p.getVelocity().setY(0).add(new Vector(0, 0.95f, 0)).multiply(1.2f));
 
-					Utils.particleOffset(p.getLocation(), Particle.SOUL_FIRE_FLAME, 3, 0.3);
-					pc.setJetpackUsage(false);
-				}, 3);
+					p.setVelocity(p.getVelocity().setY(0).add(new Vector(0, 0.2f, 0)).multiply(1.4f));
+					Utils.particleOffset(p.getLocation(), Particle.SOUL_FIRE_FLAME, 3, 0.35);
+
+					new PC(p).setJetpackUsage(false);
+					pc.savePCon();
+				}, 6);
 			}
 		}
 	}

@@ -99,23 +99,23 @@ public class Trail implements CommandExecutor, TabCompleter {
 
 		String s = par.getDataType().toString();
 		if (s.contains("Void")) {
-			if (isDirectional(par)) p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0),
-					0, 0.1, 0.2, 0.2, 0.15);
-			else p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1);
+			if (isDirectional(par)) p.getLocation().getWorld().spawnParticle(par, p.getLocation()
+					.add(0, 0.5, 0), 0, 0.1, 0.2, 0.2, 0.15);
+			else p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.5, 0), 1);
 		} else if (s.contains("BlockData"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.5, 0), 1,
 					Material.GOLD_BLOCK.createBlockData());
 		else if (s.contains("MaterialData"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.5, 0), 1,
 					new MaterialData(Material.GOLD_INGOT));
 		else if (s.contains("DustTransition"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.5, 0), 1,
 					new Particle.DustTransition(Color.YELLOW, Color.ORANGE, 0.2f));
 		else if (s.contains("ItemStack"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.5, 0), 1,
 					new ItemStack(Material.GOLD_INGOT));
 		else if (s.contains("DustOptions"))
-			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 1.2, 0), 1,
+			p.getLocation().getWorld().spawnParticle(par, p.getLocation().add(0, 0.5, 0), 1,
 					new Particle.DustOptions(Color.YELLOW, 0.1f));
 		else {
 			p.sendMessage(par.getDataType().toString());
@@ -129,12 +129,9 @@ public class Trail implements CommandExecutor, TabCompleter {
 		if (args.length != 1) return null;
 		List<String> particles = new ArrayList<>();
 
-		for (Particle s : Particle.values()) {
-
-			if (!args[0].contains(s.toString().toLowerCase())) continue;
+		for (Particle s : Particle.values())
 			if (s.toString().toLowerCase().contains(args[0])) particles.add(s.toString().toLowerCase());
 
-		}
 		return particles;
 	}
 
