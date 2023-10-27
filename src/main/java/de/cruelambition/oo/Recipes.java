@@ -1,8 +1,12 @@
 package de.cruelambition.oo;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
+import org.bukkit.Bukkit;
+import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -12,6 +16,7 @@ import org.bukkit.inventory.ShapedRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Recipes implements Listener {
 
@@ -358,16 +363,17 @@ public class Recipes implements Listener {
 		ShapedRecipe chestRec = new ShapedRecipe(key, chest);
 
 		for (Material m : Material.values()) {
-			if (!m.toString().contains("SHULKER_BOX") && m.toString().contains(Material.LEGACY_PREFIX)) return;
+			if (m.toString().contains("_SHULKER_")) {
 
-			chestRec.shape("   ", " S ", "   ");
-			chestRec.setIngredient('S', m);
-			rec.add(chestRec);
+				chestRec.shape("S  ", "   ", "   ");
+				chestRec.setIngredient('S', m);
+				rec.add(chestRec);
 
-			i++;
+				i++;
 
-			key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.CHEST.toString() + i);
-			chestRec = new ShapedRecipe(key, chest);
+				key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.CHEST.toString() + i);
+				chestRec = new ShapedRecipe(key, chest);
+			}
 		}
 
 //		PotionEffectType.ABSORPTION
@@ -384,10 +390,23 @@ public class Recipes implements Listener {
 
 	@EventHandler
 	public void handle(CraftItemEvent e) {
-//		ConsoleCommandSender cs = Bukkit.getConsoleSender();
-//
-//		cs.sendMessage(e.getRecipe().getResult().toString());
-//		cs.sendMessage(e.getResult().toString());
-//		cs.sendMessage(e.getWhoClicked().getName());
+		if (e.getRecipe().getResult().getType() != Material.CHEST) return;
+		if (!(e.getRecipe() instanceof Keyed k)) return;
+
+		if (!k.getKey().toString().contains("itemgenerator:")) return;
+		if (!(e.getWhoClicked() instanceof Player p)) return;
+
+		Random r = new Random();
+		int i = r.nextInt(6) + 1;
+
+		delayedSpawning(p, EntityType.THROWN_EXP_BOTTLE, 8, i, 0);
+	}
+
+	public void delayedSpawning(Player p, EntityType et, int delay, int times, int count) {
+		if (count >= times) return;
+		p.getWorld().spawnEntity(p.getLocation().add(0, 0.4, 0), et);
+
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
+				() -> delayedSpawning(p, et, delay, times, count + 1), delay);
 	}
 }

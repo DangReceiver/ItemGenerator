@@ -138,7 +138,7 @@ cm:
   player_quit_16: "The last thing we've got left of §c is the idea of them§8. ⌈§c«§8⌋"
   player_quit_17: "That's it for §c%s§8. ⌈§c«§8⌋"
   player_rejoin_0: "Am I havin' a Deja Vu§8? §7It's §a%s §7again§8! ⌈§5§l↺§8⌋"
-  player_rejoin_1: "And it is... §a%s§8... I read that name already today... ⌈§5§l↺§8⌋"
+  player_rejoin_1: "And it is... §a%s§8... §7I read that name already today... ⌈§5§l↺§8⌋"
   player_rejoin_2: "Here we go again, §a%s§8. §7Welcome back ⌈§5§l↺§8⌋"
   player_rejoin_3: "You must be fooling me§8! §a%s§8, §7I almost thought we lost you :c ⌈§5§l↺§8⌋"
   player_rejoin_4: "Nom§8, §7nom§8, §7nom §8(§a%s§8) ⌈§5§l↺§8⌋"

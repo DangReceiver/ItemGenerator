@@ -30,7 +30,7 @@ public class Anvil implements Listener {
 //				|| e.getResult() == null || e.getResult().getType() == Material.AIR
 		) return;
 
-		int mrc = Math.min(2000, e.getInventory().getMaximumRepairCost() / 3);
+		int mrc = Math.min(50, e.getInventory().getMaximumRepairCost() / 3);
 
 		e.getInventory().setMaximumRepairCost(mrc);
 		MergeResult mergeResult = getMergeResult(leftItem, rightItem);
@@ -40,15 +40,17 @@ public class Anvil implements Listener {
 			return;
 		}
 
-		p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 0.5f, 0.85f);
+		p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 0.65f, 0.9f);
 		e.setResult(mergeResult.getItem());
 
 		int repairCost = e.getInventory().getRepairCost() + mergeResult.getExtraRepairCost();
+		if (repairCost <= 0) repairCost = 2;
+
 		e.getInventory().setRepairCost(repairCost);
 
 		p.sendActionBar(Lang.PRE + Lang.getMessage(Language.getServerLang(), "ignore_too_expensive"));
 		p.sendMessage(String.format(Language.getMessage(Language.getServerLang(),
-					"can_repair_expensive"), e.getInventory().getMaximumRepairCost()));
+				"can_repair_expensive"), repairCost));
 
 //		else if (repairCost >= mrc) {
 //			p.sendMessage(Language.getMessage(Language.getServerLang(),
@@ -76,17 +78,17 @@ public class Anvil implements Listener {
 		addAttributes(leftMeta, resultItem);
 
 		leftMeta.getEnchants().forEach((enchant, level) -> {
-			int resultLevel = getResultLevel(level.intValue(), enchant, rightMeta.getEnchants());
+			int resultLevel = getResultLevel(level, enchant, rightMeta.getEnchants());
 
-			mergeResult.addRepairCost(calRepair(enchant, resultLevel) / 2);
+			mergeResult.addRepairCost(calRepair(enchant, resultLevel) / 3);
 			resultItem.addUnsafeEnchantment(enchant, resultLevel);
 		});
 		rightMeta.getEnchants().forEach((enchant, level) -> {
 			if (!resultItem.getEnchantments().containsKey(enchant) &&
 					!resultItem.getItemMeta().hasConflictingEnchant(enchant)) {
 
-				mergeResult.addRepairCost(calRepair(enchant, level.intValue()) / 2);
-				resultItem.addUnsafeEnchantment(enchant, level.intValue());
+				mergeResult.addRepairCost(calRepair(enchant, level) / 3);
+				resultItem.addUnsafeEnchantment(enchant, level);
 			}
 		});
 		return mergeResult;
@@ -101,17 +103,18 @@ public class Anvil implements Listener {
 		addAttributes(item.getItemMeta(), resultItem);
 
 		item.getEnchantments().forEach((enchant, level) -> {
-			int resultLevel = getResultLevel(level.intValue(), enchant, bookMeta.getStoredEnchants());
+			int resultLevel = getResultLevel(level, enchant, bookMeta.getStoredEnchants());
 
-			mergeResult.addRepairCost(calRepair(enchant, resultLevel) / 2);
+			mergeResult.addRepairCost(calRepair(enchant, resultLevel) / 3);
 			resultItem.addUnsafeEnchantment(enchant, resultLevel);
 		});
+
 		bookMeta.getStoredEnchants().forEach((enchant, level) -> {
 			if (enchant.canEnchantItem(resultItem) && !resultItem.getEnchantments().containsKey(enchant)
 					&& !resultItem.getItemMeta().hasConflictingEnchant(enchant)) {
 
-				mergeResult.addRepairCost(calRepair(enchant, level.intValue()) / 2);
-				resultItem.addUnsafeEnchantment(enchant, level.intValue());
+				mergeResult.addRepairCost(calRepair(enchant, level) / 3);
+				resultItem.addUnsafeEnchantment(enchant, level);
 			}
 		});
 		return mergeResult;
@@ -126,16 +129,16 @@ public class Anvil implements Listener {
 				rightMeta = (EnchantmentStorageMeta) rightBook.getItemMeta();
 
 		leftMeta.getStoredEnchants().forEach((enchant, level) -> {
-			int resultLevel = getResultLevel(level.intValue(), enchant, rightMeta.getStoredEnchants());
-			mergeResult.addRepairCost(calRepair(enchant, resultLevel) / 2);
+			int resultLevel = getResultLevel(level, enchant, rightMeta.getStoredEnchants());
+			mergeResult.addRepairCost(calRepair(enchant, resultLevel) / 3);
 			resultMeta.addStoredEnchant(enchant, resultLevel, true);
 		});
 
 		rightMeta.getStoredEnchants().forEach((enchant, level) -> {
 			if (!resultMeta.getStoredEnchants().containsKey(enchant) &&
 					!resultMeta.hasConflictingStoredEnchant(enchant)) {
-				mergeResult.addRepairCost(calRepair(enchant, level.intValue()) / 2);
-				resultMeta.addStoredEnchant(enchant, level.intValue(), true);
+				mergeResult.addRepairCost(calRepair(enchant, level) / 3);
+				resultMeta.addStoredEnchant(enchant, level, true);
 			}
 		});
 
@@ -146,10 +149,8 @@ public class Anvil implements Listener {
 	private int getResultLevel(int value, Enchantment enchant, Map<Enchantment, Integer> storedEnchants) {
 		int resultLevel = value;
 
-		if (storedEnchants.containsKey(enchant)
-//				&& enchant.getMaxLevel() != 1
-		) {
-			int rightLevel = (storedEnchants.get(enchant)).intValue();
+		if (storedEnchants.containsKey(enchant)) {
+			int rightLevel = (storedEnchants.get(enchant));
 
 			if (rightLevel == value)
 				resultLevel++;
@@ -158,7 +159,7 @@ public class Anvil implements Listener {
 				resultLevel = rightLevel;
 		}
 
-		int enchantLimitation = 9;
+		int enchantLimitation = 16;
 		return (enchantLimitation == -1) ? resultLevel : Math.min(resultLevel, enchantLimitation);
 	}
 
@@ -173,7 +174,7 @@ public class Anvil implements Listener {
 	}
 
 	private int calRepair(Enchantment enchant, int level) {
-		return (int) (level <= enchant.getMaxLevel() ? 0 : (level - enchant.getMaxLevel() * 0.5));
+		return (int) (level <= enchant.getMaxLevel() ? 0 : (level - enchant.getMaxLevel() * 0.75));
 	}
 
 	private void addLore(ItemMeta leftMeta, ItemStack resultItem) {
@@ -199,13 +200,13 @@ public class Anvil implements Listener {
 			for (Map.Entry<Enchantment, Integer> entry : ((EnchantmentStorageMeta)
 					item.getItemMeta()).getStoredEnchants().entrySet()) {
 
-				if ((entry.getKey()).getMaxLevel() < (entry.getValue()).intValue())
+				if ((entry.getKey()).getMaxLevel() < (entry.getValue()))
 					isEnhanced = true;
 			}
 
 		else
 			for (Map.Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet())
-				if ((entry.getKey()).getMaxLevel() < (entry.getValue()).intValue()) isEnhanced = true;
+				if ((entry.getKey()).getMaxLevel() < (entry.getValue())) isEnhanced = true;
 
 		return isEnhanced;
 	}
