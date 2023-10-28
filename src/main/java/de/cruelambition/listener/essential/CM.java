@@ -42,7 +42,7 @@ public class CM implements Listener {
 			if (!pc.hasCon(p)) pc.createCon(p);
 			pc.savePCon();
 
-		} else if (pc.getJoinTime() - pc.getQuitTime() <= 25000L)
+		} else if (pc.getQuitTime() - pc.getJoinTime() <= 25000L)
 			Lang.broadcastArg("player_rejoin_" + (new Random()).nextInt(6), p.getName());
 
 		else Lang.broadcastArg("player_join_" + (new Random()).nextInt(18), p.getName());
