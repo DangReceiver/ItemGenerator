@@ -1,11 +1,13 @@
 package de.cruelambition.oo;
 
+import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -25,10 +27,13 @@ public class WorldBorder implements Listener {
 
 	private ArmorStand asw, asn;
 	private Lang l;
+	private FileConfiguration c;
 
 	public WorldBorder() {
 		wb = Bukkit.getWorld("world").getWorldBorder();
 		wbn = Bukkit.getWorld("world_nether").getWorldBorder();
+
+		c = ItemGenerator.getItemGenerator().getConfig();
 
 		l = new Lang(null);
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
@@ -50,6 +55,9 @@ public class WorldBorder implements Listener {
 			spawnUpgrader(wbn.getWorld());
 		}
 
+		setDefaultWb(wb.getWorld());
+		setDefaultWb(wbn.getWorld());
+
 		asw = getSpawnUpgrader(wb.getWorld());
 		asn = getSpawnUpgrader(wbn.getWorld());
 	}
@@ -57,34 +65,39 @@ public class WorldBorder implements Listener {
 	public boolean spawnUpgraderExists(World w) {
 		for (Entity en : w.getNearbyEntities(new Location(w, 0.5, 64, 0.5), 12d, 12d, 12d))
 
-			if (en instanceof ArmorStand as && as.getCustomName().equalsIgnoreCase(
+			if (en instanceof ArmorStand as && as.getCustomName() != null && as.getCustomName().equalsIgnoreCase(
 					l.getString("as_wb"))) return true;
 
-		return true;
+		return false;
 	}
 
 	public ArmorStand getSpawnUpgrader(World w) {
 		for (Entity en : w.getNearbyEntities(new Location(w, 0.5, 64, 0.5), 12d, 12d, 12d))
-			if (en instanceof ArmorStand as && as.getCustomName().equalsIgnoreCase(l.getString("as_wb"))) return as;
+			if (en instanceof ArmorStand as && as.getCustomName() != null
+					&& as.getCustomName().equalsIgnoreCase(l.getString("as_wb"))) return as;
 
 		return null;
 	}
 
 	public void spawnUpgrader(World w) {
-		ArmorStand as = (ArmorStand) w.spawnEntity(new Location(w, 7.5, 65.5, 7.5), EntityType.ARMOR_STAND);
+		ArmorStand as = (ArmorStand) w.spawnEntity(new Location(w, 2.5, 67.0, 2.5), EntityType.ARMOR_STAND);
 
-		as.setMarker(true);
+		as.setMaxHealth(1000);
+		as.setHealth(1000);
+
 		as.setGravity(false);
+		as.setBasePlate(false);
 
 		as.setCustomName(l.getString("as_wb"));
 		as.setCustomNameVisible(true);
 
 		as.addEquipmentLock(EquipmentSlot.HEAD, ArmorStand.LockType.REMOVING_OR_CHANGING);
-		as.setHelmet(IB.ench(new ItemStack(Material.SKELETON_SKULL), Enchantment.BINDING_CURSE, 0));
+		as.setHelmet(IB.ench(new ItemStack(Material.CREEPER_HEAD), Enchantment.BINDING_CURSE, 0));
 	}
 
 	public void setDefaultWb(World w) {
 		org.bukkit.WorldBorder pwb = w.getWorldBorder();
+		if (c.isSet("Border." + w.getName() + ".hadDefaults") && pwb != null) return;
 
 		if (pwb == null) Bukkit.getConsoleSender().sendMessage(Lang.PRE
 				+ new Lang(null).getString("wb_invalid_world"));
@@ -93,21 +106,35 @@ public class WorldBorder implements Listener {
 
 	public void defaults(org.bukkit.WorldBorder pWb) {
 		pWb.setCenter(0.5, 0.5);
-		pWb.setSize(pWb.getWorld().getName().contains("_nether") ? 20 * 5 : 20);
+		pWb.setSize(pWb.getWorld().getName().contains("_nether") ? 21 * 5 : 21);
 		pWb.setDamageAmount(0.25);
 		pWb.setDamageBuffer(0.25);
 		pWb.setWarningDistance(4);
 		pWb.setWarningTime(2);
+
+		c.set("Border." + pWb.getWorld().getName() + ".hadDefaults", true);
+		c.set("Border." + pWb.getWorld().getName() + ".upgrade", 1);
+		ItemGenerator.getItemGenerator().saveConfig();
 	}
 
 	public void increase() {
-		wb.setSize(wb.getSize() + 2, 4);
-		wbn.setSize(wbn.getSize() + 10, 4);
+		wb.setSize(wb.getSize() + 4, 4);
+		wbn.setSize(wbn.getSize() + 20, 4);
 	}
 
 	public void syncWb() {
-		wb.setSize(Math.max(wb.getSize(), wbn.getSize() / 5));
-		wbn.setSize(Math.max(wb.getSize(), wbn.getSize() * 5));
+		wb.setSize(Math.max(wb.getSize(), wbn.getSize() / 5), 5);
+		wbn.setSize(Math.max(wb.getSize(), wbn.getSize() * 5), 5);
+	}
+
+	public int getUpgradeCost(World w) {
+		if (w.getName().contains("_nether")) w = Bukkit.getWorld(w.getName().split("_nether")[0]);
+		int cost;
+
+		cost = (int) (c.isSet("Border." + w.getName() + ".upgrade") ?
+				c.getInt("Border." + w.getName() + ".upgrade") * (w.getWorldBorder().getSize() / 20) : -1);
+
+		return cost;
 	}
 
 	@EventHandler
@@ -118,47 +145,83 @@ public class WorldBorder implements Listener {
 		if (!as.getCustomName().equalsIgnoreCase(l.getString("as_wb"))) return;
 		p.sendMessage("World Border Upgrader");
 
+		e.setCancelled(true);
 		Lang lp = new Lang(p);
+
+		if (c.isSet("Border." + p.getWorld().getName() + ".delay")) {
+			p.sendMessage(Lang.PRE + l.getString("wb_upgrader_on_delay"));
+			return;
+		}
 
 		Inventory inv = Bukkit.createInventory(null, 4 * 9, lp.getString("wb_upgrader_inv"));
 		IB.invFiller(inv, IB.getFiller(new PC(p).getFiller(), true, true, null, null));
 
-		inv.setItem(inv.getSize() / 2 - 2, new ItemStack(Material.RED_BANNER));
-		inv.setItem(inv.getSize() / 2 + 2, new ItemStack(Material.LIME_BANNER));
+		inv.setItem(inv.getSize() / 2 - 3, IB.lore(IB.name(new ItemStack(Material.RED_BANNER),
+				l.getString("cancel_purchase")), Utils.splitString(l.getString("cancel_purchase_lore"))));
+		inv.setItem(inv.getSize() / 2 - 5, IB.lore(IB.name(new ItemStack(Material.KNOWLEDGE_BOOK),
+				l.getString("purchase_info")), Utils.splitString(String.format(l.getString("wb_upgrade_info"),
+				getUpgradeCost(as.getWorld())))));
+		inv.setItem(inv.getSize() / 2 - 7, IB.lore(IB.name(new ItemStack(Material.LIME_BANNER),
+				l.getString("confirm_purchase"))));
 
 		p.openInventory(inv);
 	}
 
 	@EventHandler
 	public void handle(InventoryClickEvent e) {
-		if (!(e.getView() instanceof Player p)) return;
+		if (!(e.getWhoClicked() instanceof Player p)) return;
 
 		Lang lp = new Lang(p);
 		if (!p.getOpenInventory().getTitle().equalsIgnoreCase(lp.getString("wb_upgrader_inv"))) return;
 
-		ItemStack is = e.getCurrentItem();
-		if (is == null) return;
-
 		e.setCancelled(true);
+		ItemStack is = e.getCurrentItem();
+
+		if (is == null) return;
 		switch (is.getType()) {
 
 			default:
 				break;
+
 			case RED_BANNER:
 				p.sendMessage("cancel");
 				p.closeInventory();
 				break;
+
 			case LIME_BANNER:
-				p.sendMessage("proceed");
-				broadcastIncrement();
+				if (c.isSet("Border." + p.getWorld().getName() + ".delay")) {
+					p.sendMessage(Lang.PRE + l.getString("wb_upgrader_on_delay"));
+					return;
+				}
+
+				if (p.getLevel() < getUpgradeCost(p.getWorld())) {
+					p.sendMessage(Lang.PRE + l.getString("insufficient_exp_level"));
+					return;
+				}
+
+				p.setLevel(p.getLevel() - getUpgradeCost(p.getWorld()));
+				p.sendTitle(Lang.PRE, l.getString("you_upgraded_wb"), 30, 40, 60);
+
+				broadcastIncrement(p, p.getWorld());
+				increase();
+
+				c.set("Border." + p.getWorld().getName() + ".upgrade",
+						c.getInt("Border." + p.getWorld().getName() + ".upgrade") + 1);
+
+				c.set("Border." + p.getWorld().getName() + ".delay", true);
+				ItemGenerator.getItemGenerator().saveConfig();
+
+				Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
+					c.set("Border." + p.getWorld().getName() + ".delay", null);
+					ItemGenerator.getItemGenerator().saveConfig();
+				}, 4 * 20 + 1);
+
 				p.closeInventory();
 				break;
 		}
-
-		p.sendMessage("click");
 	}
 
-	public void broadcastIncrement() {
-
+	public void broadcastIncrement(Player p, World w) {
+		Lang.broadcastArg("wb_upgraded", p.getName(), getUpgradeCost(w) + "");
 	}
 }

@@ -110,9 +110,11 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new Furnace(), this);
 		pm.registerEvents(new Anvil(), this);
 		pm.registerEvents(new TrailGui(), this);
+		pm.registerEvents(new WorldBorder(), this);
 //		pm.registerEvents(new Afk(), this);
 
 		TrailGui.fillParList();
+		WorldBorder wb = new WorldBorder();
 
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();

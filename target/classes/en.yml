@@ -57,6 +57,9 @@ purchase:
   confirm_purchase: "§aClick to confirm the purchase"
   cancel_purchase: "§cClick to cancel the purchase"
   cancel_purchase_lore: "§7Clicking will cancel everything // in terms of the purchase"
+  purchase_info: "§9Purchase info§8: "
+  wb_upgrade_info: "§bClicking the banner will cost you %s xp (level) //
+   and grow the border by 2 Blocks//in time of 4 Seconds"
 
 info:
   info: "Ram usage: §e%s/§a%s. "
@@ -164,6 +167,11 @@ sb:
   sb_nearby_entities: "§bNearby NPCs"
   sb_xp: "§cXp"
   sb_kill_level: "§dKill Level"
+
+worldborder:
+  as_wb: "§2WorldBorder Upgrader"
+  wb_upgraded: "The World Border was upgraded by %s for %s xp (level)!"
+  wb_upgrader_inv: "§2WorldBorder Upgrader"
 
 frequent:
   not_implemented_yet: "You are looking into the future! This feature has not been implemented yet!"
