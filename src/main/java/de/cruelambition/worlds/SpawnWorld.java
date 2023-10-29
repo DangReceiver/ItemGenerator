@@ -56,14 +56,19 @@ public class SpawnWorld implements Listener {
 
 		public static boolean checkExists(String name) {
 			World w = Bukkit.getWorld(name);
-			if (w != null) return true;
+			return w != null;
+		}
+
+		public static void checkCreate(String name, boolean gameRules) {
+			World w = Bukkit.getWorld(name);
+			if (w != null) return;
 
 			WorldCreator creator = new WorldCreator(name);
 			creator.generator(new SpawnGen());
 			creator.createWorld();
 
-			setGameRules(Objects.requireNonNull(w = Bukkit.getWorld(name)));
-			return (w != null);
+			if (gameRules)
+				setGameRules(Objects.requireNonNull(w = Bukkit.getWorld(name)));
 		}
 
 		@Nullable

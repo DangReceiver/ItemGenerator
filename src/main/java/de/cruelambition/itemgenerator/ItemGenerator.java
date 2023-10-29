@@ -6,12 +6,10 @@ import de.cruelambition.generator.Generator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
+import de.cruelambition.listener.essential.Doors;
 import de.cruelambition.listener.essential.Timber;
 import de.cruelambition.listener.function.*;
-import de.cruelambition.listener.function.blocks.Anvil;
-import de.cruelambition.listener.function.blocks.CaneCactus;
-import de.cruelambition.listener.function.blocks.Furnace;
-import de.cruelambition.listener.function.blocks.GlassShear;
+import de.cruelambition.listener.function.blocks.*;
 import de.cruelambition.listener.function.entities.AntiCreeper;
 import de.cruelambition.listener.function.entities.KillDeath;
 import de.cruelambition.listener.function.items.CustomItems;
@@ -57,7 +55,7 @@ public final class ItemGenerator extends JavaPlugin {
 
 		World spawn = Bukkit.getWorld("Spawn");
 		if (spawn == null) {
-			SpawnWorld.SpawnGen.checkExists("Spawn");
+			SpawnWorld.SpawnGen.checkCreate("Spawn", true);
 		}
 
 		Lang l = new Lang(null);
@@ -111,6 +109,8 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new Anvil(), this);
 		pm.registerEvents(new TrailGui(), this);
 		pm.registerEvents(new WorldBorder(), this);
+		pm.registerEvents(new ClickGrowed(), this);
+		pm.registerEvents(new Doors(), this);
 //		pm.registerEvents(new Afk(), this);
 
 		TrailGui.fillParList();
