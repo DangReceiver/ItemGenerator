@@ -110,7 +110,7 @@ public class CustomItems implements Listener {
 			if (a.toString().contains("RIGHT")) {
 				if (pc.getJetpackUsage()) {
 
-					p.sendTitle(Lang.PRE, "§7" + l.getString("customitems_listener_jetpack_in_use"));
+					p.sendTitle(Lang.PRE, "§7" + l.getString("jetpack_in_use"));
 					return;
 				}
 
@@ -127,8 +127,9 @@ public class CustomItems implements Listener {
 					p.setVelocity(p.getVelocity().setY(0).add(new Vector(0, 0.2f, 0)).multiply(1.4f));
 					Utils.particleOffset(p.getLocation(), Particle.SOUL_FIRE_FLAME, 3, 0.35);
 
-					new PC(p).setJetpackUsage(false);
-					pc.savePCon();
+					PC pc1 = new PC(p);
+					pc1.setJetpackUsage(false);
+					pc1.savePCon();
 				}, 6);
 			}
 		}

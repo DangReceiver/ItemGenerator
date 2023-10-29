@@ -336,12 +336,15 @@ public class Language {
 	}
 
 	public void saveMissingKeys() {
+		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+
 		List<String> mkl = missingKeys;
+		cs.sendMessage(getMessage(getServerLang(), "saving_missing_keys"));
 
 		int i = 0;
 		File f = new File(df + "/languages");
 
-		File fmkf = new File(df, "missingkeys.yml");
+		File fmkf = new File("missingkeys.yml");
 		YamlConfiguration mkf = YamlConfiguration.loadConfiguration(fmkf);
 
 		for (File lf : f.listFiles()) {
@@ -361,7 +364,7 @@ public class Language {
 		try {
 			mkf.save(fmkf);
 		} catch (IOException ignored) {
-			Bukkit.getConsoleSender().sendMessage(getMessage(getServerLang(), "missingkey_file_save_error"));
+			cs.sendMessage(getMessage(getServerLang(), "missingkey_file_save_error"));
 		}
 	}
 }
