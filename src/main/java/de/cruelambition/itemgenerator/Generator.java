@@ -1,9 +1,8 @@
-package de.cruelambition.generator;
+package de.cruelambition.itemgenerator;
 
 import java.util.*;
 import java.util.List;
 
-import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.oo.IB;
 import de.cruelambition.oo.Items;
@@ -380,13 +379,14 @@ public class Generator {
 		Color col = Color.fromRGB(r.nextInt(256), r.nextInt(256), r.nextInt(256));
 		pm.setColor(col);
 
-		int d = r.nextInt(341 * 20);
-		int a = r.nextInt(4);
+		int d = r.nextInt(460 * 20);
+		int a = r.nextInt(5);
 
 		PotionEffect pe = new PotionEffect(PotionEffectType.values()[r.nextInt(PotionEffectType
-				.values().length)], ((d >= 141 && r.nextInt(4) == 0) || (d >= 250 &&
-				r.nextInt(3) == 0) ? d / 2 : d), ((a > 0 && r.nextInt(5) == 0)
-				? a - 1 : a), true, true, true);
+				.values().length)], ((d >= 160 && r.nextInt(4) == 0) || (d >= 280 &&
+				r.nextInt(5) == 0) || (d >= 370 && r.nextInt(6) == 0) ? d / 3 : d),
+				((a > 1 && r.nextInt(4) == 0) || (a > 3 && r.nextInt(6) == 0) ? a - 1 : a),
+				true, true, true);
 
 		pm.addCustomEffect(pe, true);
 		item.setItemMeta(pm);

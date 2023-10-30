@@ -1,6 +1,5 @@
 package de.cruelambition.cmd.moderation;
 
-import de.cruelambition.generator.Generator;
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import org.bukkit.command.Command;
@@ -8,7 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

@@ -68,7 +68,7 @@ public class CreateWorld implements CommandExecutor {
 
 		p.sendMessage(Lang.PRE + String.format(l.getString("creating_world"), s, b));
 //			UseVoid.createVoidWorld(s, b);
-		SpawnWorld.SpawnGen.checkExists(s, false);
+		SpawnWorld.SpawnGen.checkExists(s);
 
 		final String wName = s;
 		checkCreationStatus(p, l, wName);

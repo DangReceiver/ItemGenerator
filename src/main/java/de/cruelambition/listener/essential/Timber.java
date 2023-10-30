@@ -27,11 +27,11 @@ public class Timber implements Listener {
 		if (!(itemHand.getType().toString().contains("_AXE") && e.getBlock().getType().toString().contains("LOG")))
 			return;
 
-		short d = 1;
+		short d = 2;
 		for (int t = 0; t <= 48; t++) {
 			int eTimes = t;
 
-			d = (short) (d + 2);
+			d = (short) (d + 3);
 			if (!(e.getBlock().getLocation().add(0, (eTimes + 1), 0).getBlock().getType().equals(b.getType()))) return;
 
 			Bukkit.getScheduler().runTaskLater( ItemGenerator.getItemGenerator(), () -> {

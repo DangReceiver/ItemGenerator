@@ -12,7 +12,6 @@ de\cruelambition\cmd\moderation\CheckMessage.class
 de\cruelambition\cmd\user\Info.class
 de\cruelambition\worlds\Nether.class
 de\cruelambition\listener\essential\CM.class
-de\cruelambition\generator\Generator.class
 de\cruelambition\cmd\moderation\Get.class
 de\cruelambition\cmd\moderation\LearnRecipes.class
 de\cruelambition\language\Pronouns.class

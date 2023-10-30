@@ -35,6 +35,11 @@ public class ClickGrowed implements Listener {
 				}
 				p.playSound(p.getLocation(), Sound.ITEM_CROP_PLANT, 0.5f, 1.1f);
 
+				Random r = new Random();
+				if (r.nextInt(17) == 1)
+					for (int i = 0; i < r.nextInt(3); i++)
+						p.getWorld().spawnEntity(p.getLocation(), EntityType.THROWN_EXP_BOTTLE);
+
 			} else if (e.getClickedBlock().getBlockData().toString().contains("[age=3]")) {
 
 				switch (e.getClickedBlock().getType()) {
@@ -50,12 +55,12 @@ public class ClickGrowed implements Listener {
 				}
 				p.playSound(p.getLocation(), Sound.ITEM_CROP_PLANT, 0.5f, 1f);
 
+				Random r = new Random();
+				if (r.nextInt(19) == 1)
+					for (int i = 0; i < r.nextInt(3); i++)
+						p.getWorld().spawnEntity(p.getLocation(), EntityType.THROWN_EXP_BOTTLE);
 			}
 
-			Random r = new Random();
-			if (r.nextInt(17) == 1)
-				for (int i = 0; i < r.nextInt(3); i++)
-					p.getWorld().spawnEntity(p.getLocation(), EntityType.THROWN_EXP_BOTTLE);
 		}
 	}
 }

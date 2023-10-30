@@ -147,6 +147,9 @@ cm:
   player_rejoin_4: "Nom§8, §7nom§8, §7nom §8(§a%s§8) ⌈§5§l↺§8⌋"
   player_rejoin_5: "You must be fooling me! %s, I almost thought we lost you :c ⌈§5§l↺§8⌋"
 
+playerclickplayer:
+  x_loves_you: "§C%s §7loves you ^^"
+
 gamemode:
   gamemode_changed_survival: "You will now receive items (again)."
   gamemode_changed_non_survival: "You will not receive items while not in survival mode!"

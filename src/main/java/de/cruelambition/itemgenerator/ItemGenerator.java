@@ -2,7 +2,6 @@ package de.cruelambition.itemgenerator;
 
 import de.cruelambition.cmd.moderation.*;
 import de.cruelambition.cmd.user.*;
-import de.cruelambition.generator.Generator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.listener.essential.CM;
 import de.cruelambition.listener.essential.Chat;
@@ -12,6 +11,8 @@ import de.cruelambition.listener.function.*;
 import de.cruelambition.listener.function.blocks.*;
 import de.cruelambition.listener.function.entities.AntiCreeper;
 import de.cruelambition.listener.function.entities.KillDeath;
+import de.cruelambition.listener.function.entities.PlayerClickPlayer;
+import de.cruelambition.listener.function.entities.SleepPhantomAway;
 import de.cruelambition.listener.function.items.CustomItems;
 import de.cruelambition.listener.function.items.ItemDrop;
 import de.cruelambition.oo.*;
@@ -111,6 +112,8 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new WorldBorder(), this);
 		pm.registerEvents(new ClickGrowed(), this);
 		pm.registerEvents(new Doors(), this);
+		pm.registerEvents(new SleepPhantomAway(), this);
+		pm.registerEvents(new PlayerClickPlayer(), this);
 //		pm.registerEvents(new Afk(), this);
 
 		TrailGui.fillParList();
