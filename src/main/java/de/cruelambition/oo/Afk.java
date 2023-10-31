@@ -6,17 +6,32 @@ import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
+import org.bukkit.Statistic;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 public class Afk implements Listener {
+
+	@EventHandler
+	public void handle(PlayerKickEvent e) {
+		if (e.getCause() != PlayerKickEvent.Cause.IDLING) return;
+		e.setCancelled(true);
+
+		Player p = e.getPlayer();
+		Spawn.sendToSpawn(p);
+
+//		p.setIdle
+	}
+
 
 	private final BukkitTask checker;
 
