@@ -1,12 +1,11 @@
 package de.cruelambition.itemgenerator;
 
 import de.cruelambition.cmd.moderation.*;
+import de.cruelambition.cmd.moderation.Chat;
 import de.cruelambition.cmd.user.*;
 import de.cruelambition.language.Lang;
-import de.cruelambition.listener.essential.CM;
-import de.cruelambition.listener.essential.Chat;
-import de.cruelambition.listener.essential.Doors;
-import de.cruelambition.listener.essential.Timber;
+import de.cruelambition.listener.essential.*;
+import de.cruelambition.listener.function.entities.WanderingTrader;
 import de.cruelambition.listener.function.*;
 import de.cruelambition.listener.function.blocks.*;
 import de.cruelambition.listener.function.entities.AntiCreeper;
@@ -31,6 +30,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.GlowItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.PluginManager;
@@ -114,6 +114,9 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new Doors(), this);
 		pm.registerEvents(new SleepPhantomAway(), this);
 		pm.registerEvents(new PlayerClickPlayer(), this);
+		pm.registerEvents(new WanderingTrader(), this);
+		pm.registerEvents(new HoeUse(), this);
+		pm.registerEvents(new Respawn(), this);
 //		pm.registerEvents(new Afk(), this);
 
 		TrailGui.fillParList();

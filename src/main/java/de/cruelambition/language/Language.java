@@ -345,6 +345,15 @@ public class Language {
 		File f = new File(df + "/languages");
 
 		File fmkf = new File("missingkeys.yml");
+
+		if (!fmkf.exists()) {
+			try {
+				fmkf.createNewFile();
+			} catch (IOException e) {
+				cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(), "error_creating_missing_keys"));
+			}
+		}
+
 		YamlConfiguration mkf = YamlConfiguration.loadConfiguration(fmkf);
 
 		for (File lf : f.listFiles()) {

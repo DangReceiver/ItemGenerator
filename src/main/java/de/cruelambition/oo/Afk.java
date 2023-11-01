@@ -41,11 +41,11 @@ public class Afk implements Listener {
 
 			for (Player ap : Bukkit.getOnlinePlayers()) {
 				pc = new PC(ap);
+				if (!isAfk(pc)) continue;
 
-				if (isAfk(pc)) {
-					sendToSpawn(ap);
-					ap.sendMessage("detected as afk");
-				}
+				sendToSpawn(ap);
+				ap.sendMessage("detected as afk");
+
 			}
 		}, 10 * 20, 20 * 20);
 	}

@@ -45,11 +45,15 @@ public class Generator {
 
 		for (int i = 0; i <= 4; i++) // Total: 6
 			addMaterialToLoop(Material.POTION);
-		for (int i = 0; i <= 2; i++) // Total: 4
+		for (int i = 0; i <= 3; i++) // Total: 5
 			addMaterialToLoop(Material.SPLASH_POTION);
 
 		for (int i = 0; i <= 1; i++) // Total: 3
 			addMaterialToLoop(Material.LINGERING_POTION);
+		for (int i = 0; i <= 2; i++) // Total: 4
+			addMaterialToLoop(Material.TIPPED_ARROW);
+
+
 		for (int i = 0; i <= 6; i++) // Total: 8
 			addMaterialToLoop(Material.ENCHANTED_BOOK);
 

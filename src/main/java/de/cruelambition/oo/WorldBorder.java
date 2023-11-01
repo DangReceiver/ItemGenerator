@@ -2,6 +2,7 @@ package de.cruelambition.oo;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
+import io.papermc.paper.math.Rotations;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -64,17 +65,14 @@ public class WorldBorder implements Listener {
 
 	public boolean spawnUpgraderExists(World w) {
 		for (Entity en : w.getNearbyEntities(new Location(w, 0.5, 64, 0.5), 12d, 12d, 12d))
-
-			if (en instanceof ArmorStand as && as.getCustomName() != null && as.getCustomName().equalsIgnoreCase(
-					l.getString("as_wb"))) return true;
+			if (en instanceof ArmorStand as && !as.hasGravity()) return true;
 
 		return false;
 	}
 
 	public ArmorStand getSpawnUpgrader(World w) {
 		for (Entity en : w.getNearbyEntities(new Location(w, 0.5, 64, 0.5), 12d, 12d, 12d))
-			if (en instanceof ArmorStand as && as.getCustomName() != null
-					&& as.getCustomName().equalsIgnoreCase(l.getString("as_wb"))) return as;
+			if (en instanceof ArmorStand as && !as.hasGravity()) return as;
 
 		return null;
 	}
@@ -106,7 +104,7 @@ public class WorldBorder implements Listener {
 
 	public void defaults(org.bukkit.WorldBorder pWb) {
 		pWb.setCenter(0.5, 0.5);
-		pWb.setSize(pWb.getWorld().getName().contains("_nether") ? 21 * 5 : 21);
+		pWb.setSize(pWb.getWorld().getName().contains("_nether") ? 21 * 3 : 21);
 		pWb.setDamageAmount(0.25);
 		pWb.setDamageBuffer(0.25);
 		pWb.setWarningDistance(4);
@@ -123,8 +121,8 @@ public class WorldBorder implements Listener {
 	}
 
 	public void syncWb() {
-		wb.setSize(Math.max(wb.getSize(), wbn.getSize() / 5), 5);
-		wbn.setSize(Math.max(wb.getSize(), wbn.getSize() * 5), 5);
+		wb.setSize(Math.max(wb.getSize(), wbn.getSize() / 3), 6);
+		wbn.setSize(Math.max(wb.getSize(), wbn.getSize() * 3), 6);
 	}
 
 	public int getUpgradeCost(World w) {
@@ -132,7 +130,7 @@ public class WorldBorder implements Listener {
 		int cost;
 
 		cost = (int) (c.isSet("Border." + w.getName() + ".upgrade") ?
-				c.getInt("Border." + w.getName() + ".upgrade") * (w.getWorldBorder().getSize() / 20) : -1);
+				c.getInt("Border." + w.getName() + ".upgrade") * (w.getWorldBorder().getSize() / 25) : -1);
 
 		return cost;
 	}

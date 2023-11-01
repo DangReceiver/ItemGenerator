@@ -90,7 +90,7 @@ public class Recipes implements Listener {
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.DIRT.toString());
 
 		ItemStack dirt = new ItemStack(Material.DIRT);
-		dirt.setAmount(3);
+		dirt.setAmount(2);
 
 		ShapedRecipe dirtRec1 = new ShapedRecipe(key, dirt);
 		dirtRec1.shape("GBG",
@@ -102,7 +102,7 @@ public class Recipes implements Listener {
 		dirtRec1.setIngredient('G', Material.GRASS);
 		dirtRec1.setIngredient('S', Material.STONE);
 		dirtRec1.setIngredient('B', Material.BONE_MEAL);
-		dirtRec1.setIngredient('D', Material.EMERALD_BLOCK);
+		dirtRec1.setIngredient('D', Material.EMERALD);
 		rec.add(dirtRec1);
 
 
@@ -120,14 +120,14 @@ public class Recipes implements Listener {
 		rec.add(dirtRec2);
 
 
-		dirt.setAmount(2);
+		dirt.setAmount(4);
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(),
 				Material.DIRT.toString() + "3");
 		ShapedRecipe dirtRec3 = new ShapedRecipe(key, dirt);
-		dirtRec3.shape("   ",
-				" C ",
-				"CFC");
+		dirtRec3.shape(" C ",
+				"CFC",
+				" C ");
 
 		dirtRec3.setIngredient('C', Material.COARSE_DIRT);
 		dirtRec3.setIngredient('F', Material.FIRE_CHARGE);
@@ -357,13 +357,36 @@ public class Recipes implements Listener {
 		frameRec1.setIngredient('O', Material.OBSIDIAN);
 		rec.add(frameRec1);
 
+		ItemStack wheat = new ItemStack(Material.WHEAT);
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.WHEAT.toString() + "1");
+		wheat.setAmount(8);
+		ShapedRecipe wheatRec = new ShapedRecipe(key, wheat);
+		wheatRec.shape("SSS",
+				"SBS",
+				"SSS");
+
+		wheatRec.setIngredient('S', Material.WHEAT_SEEDS);
+		wheatRec.setIngredient('B', Material.BONE_BLOCK);
+		rec.add(wheatRec);
+
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.WHEAT.toString() + "2");
+		wheat.setAmount(5);
+		ShapedRecipe wheatRec2 = new ShapedRecipe(key, wheat);
+		wheatRec2.shape("SSS",
+				"BBB",
+				"SSS");
+
+		wheatRec2.setIngredient('S', Material.WHEAT_SEEDS);
+		wheatRec2.setIngredient('B', Material.BONE_MEAL);
+		rec.add(wheatRec2);
+
 		int i = 1;
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.CHEST.toString() + i);
 		ItemStack chest = new ItemStack(Material.CHEST);
 		ShapedRecipe chestRec = new ShapedRecipe(key, chest);
 
 		for (Material m : Material.values()) {
-			if (m.toString().contains("_SHULKER_")) {
+			if (m.toString().contains("SHULKER_")) {
 
 				chestRec.shape("S  ", "   ", "   ");
 				chestRec.setIngredient('S', m);
@@ -375,13 +398,6 @@ public class Recipes implements Listener {
 				chestRec = new ShapedRecipe(key, chest);
 			}
 		}
-
-//		PotionEffectType.ABSORPTION
-//		PotionEffectType.DAMAGE_RESISTANCE
-//		PotionEffectType.FAST_DIGGING
-//		PotionEffectType.GLOWING
-//		PotionEffectType.HEALTH_BOOST
-//		PotionEffectType.SATURATION
 	}
 
 	public List<Recipe> getRec() {
