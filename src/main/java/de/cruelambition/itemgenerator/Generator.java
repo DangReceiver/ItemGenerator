@@ -40,11 +40,8 @@ public class Generator {
             List<String> st = Arrays.asList("_SHULKER", "NETHERITE", "DIAMOND", "BEACON", "DIRT",
                     "SPAWN_EGG", "SPAWNER", "BARRIER", "BEDROCK", "ENCHANTMENT_TABLE", "_BUCKET", "ELYTRA",
                     "_TRIM", "EMERALD");
-            for (Material val : Material.values()) {
-                if (!val.toString().contains(st) {
-                    addCommonItem(val));
-                }
-            }
+            for (Material val : Material.values())
+                if (!val.toString().contains(st)) addCommonItem(val);
 
             ItemGenerator.getItemGenerator().saveConfig();
         }
@@ -65,8 +62,10 @@ public class Generator {
 
 
         for (int a = 0; a <= Items.mats.size() - 1; a++)
-            for (int b = 0; b <= Items.amount[a]; b++)
+            for (int b = 0; b <= Items.amount[a]; b++) {
                 addMaterialToLoop(Items.mats.get(a));
+
+            }
 
         if (getForbiddenList().contains("SPAWN_EGG")) addMaterialToLoop(Material.ALLAY_SPAWN_EGG);
     }
@@ -254,6 +253,10 @@ public class Generator {
         return Material.valueOf(material.get(new Random().nextInt(material.size() - 1)));
     }
 
+    public Material getRandomCommonMaterial() {
+        return Material.valueOf(common.get(new Random().nextInt(common.size() - 1)));
+    }
+
     public Material getMaterialFromInt(int i) {
         return Material.valueOf(material.get(i));
     }
@@ -290,26 +293,29 @@ public class Generator {
             if (ap.getGameMode() != GameMode.SURVIVAL) continue;
             ap.playSound(ap.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 0.35f, 0.8f);
 
-            ItemStack is = new ItemStack(getRandomMaterial());
-            if (isCommon(is.getType().toString()) && new Random().nextInt(3) <= 1)
-                new ItemStack(getRandomMaterial());
-            if (isCommon(is.getType().toString()) && new Random().nextInt(4) <= 2)
-                new ItemStack(getRandomMaterial());
+            ItemStack is;
+            Random r = new Random();
+
+            if (r.nextInt(4) == 0) is = new ItemStack(getRandomMaterial());
+            else is = new ItemStack(getRandomCommonMaterial());
 
             Material type = is.getType();
             if (type == Material.ALLAY_SPAWN_EGG) rollSpawnEgg(is);
-            if (new Random().nextInt(2) == 0 && canEdit(type)) edit(is);
+            if (r.nextInt(2) == 0 && canEdit(type)) edit(is);
 
-            if (type.isBlock()) if (new Random().nextInt(2) == 0)
-                is.setAmount(new Random().nextInt(2) == 0 ? (new Random().nextInt(10 + 1) - 4 >= 1
-                        ? new Random().nextInt(10 + 1) - 4 : 1) : new Random().nextInt(10 + 1));
+            if (type.isBlock()) if (r.nextInt(2) == 0)
+                is.setAmount(r.nextInt(2) == 0 ? (r.nextInt(10 + 1) - 4 >= 1
+                        ? r.nextInt(10 + 1) - 4 : 1) : r.nextInt(10 + 1));
 
-            moreItems(is);
 
             if (isCustomItem(type)) {
-                int cmd = new Random().nextInt(getCustomItemAmount(type) + 1);
+                ap.sendMessage("§5§kkk Receiving Custom Item §kkk");
+
+                int cmd = r.nextInt(getCustomItemAmount(type) + 1);
                 if (cmd != 0) IB.cmd(is, cmd);
-            }
+                ap.sendMessage("§5§kkk Receiving Custom Item §kkk");
+
+            } else moreItems(is);
 
             if (ap.getInventory().firstEmpty() != -1) ap.getInventory().addItem(is);
             else ap.getWorld().dropItemNaturally(ap.getLocation(), is);
