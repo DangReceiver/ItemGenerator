@@ -1,6 +1,7 @@
 package de.cruelambition.listener.function.blocks;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,64 +10,51 @@ import org.bukkit.event.inventory.*;
 
 public class Furnace implements Listener {
 
-	@EventHandler
-	public void handle(FurnaceStartSmeltEvent e) {
-		Bukkit.getConsoleSender().sendMessage("0");
+    private ConsoleCommandSender cs = Bukkit.getConsoleSender();
 
-		Bukkit.getConsoleSender().sendMessage("Recipe: " + e.getRecipe());
-		Bukkit.getConsoleSender().sendMessage("Total Cook Time: " + e.getTotalCookTime());
+    @EventHandler
+    public void handle(FurnaceStartSmeltEvent e) {
+        cs.sendMessage("§80: " + "Recipe: " + e.getRecipe() + " || "
+                + "Total Cook Time: " + e.getTotalCookTime() + " || "
+                + "Block (type): " + e.getBlock().getType() + " || "
+                + "Source: " + e.getSource().getType());
+    }
 
-		Bukkit.getConsoleSender().sendMessage("Block (type): " + e.getBlock().getType());
-		Bukkit.getConsoleSender().sendMessage("Source: " + e.getSource().getType());
-	}
+    @EventHandler
+    public void handle(FurnaceSmeltEvent e) {
+        cs.sendMessage("§11: " + "Recipe: " + e.getRecipe() + " || "
+                + "Result: " + e.getResult() + " || "
+                + "Block (type): " + e.getBlock().getType() + " || "
+                + "Source: " + e.getSource());
+    }
 
-	@EventHandler
-	public void handle(FurnaceSmeltEvent e) {
-		Bukkit.getConsoleSender().sendMessage("1");
+    @EventHandler
+    public void handle(FurnaceBurnEvent e) {
+        cs.sendMessage("§22: " + "Block (type): " + e.getBlock().getType() + " || "
+                + "Burn Time: " + e.getBurnTime() + " || "
+                + "Fuel: " + e.getFuel());
+    }
 
-		Bukkit.getConsoleSender().sendMessage("Recipe: " + e.getRecipe());
-		Bukkit.getConsoleSender().sendMessage("Result: " + e.getResult());
+    @EventHandler
+    public void handle(FurnaceExtractEvent e) {
+        cs.sendMessage("§33: " + "Player: " + e.getPlayer().getName() + " || "
+                + "Block (type): " + e.getBlock().getType() + " || "
+                + "Amount: " + e.getItemAmount() + " || "
+                + "Type: " + e.getItemType() + " || "
+                + "Exp: " + e.getExpToDrop());
+    }
 
-		Bukkit.getConsoleSender().sendMessage("Block (type): " + e.getBlock().getType());
-		Bukkit.getConsoleSender().sendMessage("Source: " + e.getSource());
-	}
+    @EventHandler
+    public void handle(BrewingStartEvent e) {
+        cs.sendMessage("§44: " + "Block (type): " + e.getBlock().getType() + " || "
+                + "Source: " + e.getSource() + " || "
+                + "Brew Time: " + e.getTotalBrewTime());
+    }
 
-	@EventHandler
-	public void handle(FurnaceBurnEvent e) {
-		Bukkit.getConsoleSender().sendMessage("2");
-
-		Bukkit.getConsoleSender().sendMessage("Block (type): " + e.getBlock().getType());
-		Bukkit.getConsoleSender().sendMessage("Burn Time: " + e.getBurnTime());
-		Bukkit.getConsoleSender().sendMessage("Fuel: " + e.getFuel());
-	}
-
-	@EventHandler
-	public void handle(FurnaceExtractEvent e) {
-		Bukkit.getConsoleSender().sendMessage("3");
-
-		Bukkit.getConsoleSender().sendMessage("Player: " + e.getPlayer().getName());
-		Bukkit.getConsoleSender().sendMessage("Block (type): " + e.getBlock().getType());
-
-		Bukkit.getConsoleSender().sendMessage("Amount: " + e.getItemAmount());
-		Bukkit.getConsoleSender().sendMessage("Type: " + e.getItemType());
-		Bukkit.getConsoleSender().sendMessage("Exp: " + e.getExpToDrop());
-	}
-
-	@EventHandler
-	public void handle(BrewingStartEvent e) {
-		Bukkit.getConsoleSender().sendMessage("4");
-
-		Bukkit.getConsoleSender().sendMessage("Block (type): " + e.getBlock().getType());
-		Bukkit.getConsoleSender().sendMessage("Source: " + e.getSource());
-		Bukkit.getConsoleSender().sendMessage("Brew Time: " + e.getTotalBrewTime());
-	}
-
-	@EventHandler
-	public void handle(BrewingStandFuelEvent e) {
-		Bukkit.getConsoleSender().sendMessage("5");
-
-		Bukkit.getConsoleSender().sendMessage("Fuel: " + e.getFuel());
-		Bukkit.getConsoleSender().sendMessage("Block (type): " + e.getBlock().getType());
-		Bukkit.getConsoleSender().sendMessage("Fuel Power: " + e.getFuelPower());
-	}
+    @EventHandler
+    public void handle(BrewingStandFuelEvent e) {
+        cs.sendMessage("§55: " + "Fuel: " + e.getFuel() + " || "
+                + "Block (type): " + e.getBlock().getType() + " || "
+                + "Fuel Power: " + e.getFuelPower());
+    }
 }
