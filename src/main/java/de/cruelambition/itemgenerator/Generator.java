@@ -34,9 +34,7 @@ public class Generator {
                 Material.TIPPED_ARROW.toString(), Material.LINGERING_POTION.toString(),
                 "CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET", "_SWORD", "_PICKAXE", "_AXE", "_SHOVEL"));
 
-        if (common.isEmpty()) {
-            setupCommonList();
-        }
+        if (common.isEmpty()) setupCommonList();
 
         for (int i = 0; i <= 4; i++) // Total: 6
             addMaterialToLoop(Material.POTION);
@@ -49,15 +47,13 @@ public class Generator {
             addMaterialToLoop(Material.TIPPED_ARROW);
 
 
-        for (int i = 0; i <= 6; i++) // Total: 8
+        for (int i = 0; i <= 5; i++) // Total: 7
             addMaterialToLoop(Material.ENCHANTED_BOOK);
 
 
         for (int a = 0; a <= Items.mats.size() - 1; a++)
             for (int b = 0; b <= Items.amount[a]; b++)
                 addMaterialToLoop(Items.mats.get(a));
-
-        if (getForbiddenList().contains("SPAWN_EGG")) addMaterialToLoop(Material.ALLAY_SPAWN_EGG);
     }
 
     public void setupCommonList() {
