@@ -131,7 +131,7 @@ public class WorldBorder implements Listener {
 
 	public void syncWb() {
 		wb.setSize(Math.max(wb.getSize(), wbn.getSize() / 3), 6);
-		wbn.setSize(Math.max(wb.getSize(), wbn.getSize() * 3), 6);
+		wbn.setSize(Math.max(wb.getSize() * 3, wbn.getSize()), 6);
 	}
 
 	public int getUpgradeCost(World w) {

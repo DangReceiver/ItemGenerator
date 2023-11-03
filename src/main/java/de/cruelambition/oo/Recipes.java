@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +27,9 @@ public class Recipes implements Listener {
 		NamespacedKey key = new NamespacedKey(ItemGenerator.getItemGenerator(),
 				Material.NETHERRACK.toString() + "1");
 
-		ShapedRecipe netherrack1 = new ShapedRecipe(key, item);
-		netherrack1.shape(" W ",
-				"WWW",
-				" W ");
+		ShapelessRecipe netherrack1 = new ShapelessRecipe(key, item);
 
-		netherrack1.setIngredient('W', Material.NETHER_WART);
+		netherrack1.addIngredient(5, Material.NETHER_WART);
 		rec.add(netherrack1);
 
 
@@ -39,12 +37,8 @@ public class Recipes implements Listener {
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(),
 				Material.NETHERRACK.toString() + "2");
-		ShapedRecipe netherrack2 = new ShapedRecipe(key, item);
-		netherrack2.shape("BB ",
-				"BB ",
-				"   ");
-
-		netherrack2.setIngredient('B', Material.NETHER_WART_BLOCK);
+		ShapelessRecipe netherrack2 = new ShapelessRecipe(key, item);
+		netherrack2.addIngredient(4, Material.NETHER_WART_BLOCK);
 		rec.add(netherrack2);
 
 
@@ -52,35 +46,23 @@ public class Recipes implements Listener {
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(),
 				Material.NETHERRACK.toString() + "3");
-		ShapedRecipe netherrack3 = new ShapedRecipe(key, item);
-		netherrack3.shape("OW ",
-				"WO ",
-				"   ");
-
-		netherrack3.setIngredient('O', Material.OBSIDIAN);
-		netherrack3.setIngredient('W', Material.NETHER_WART);
+		ShapelessRecipe netherrack3 = new ShapelessRecipe(key, item);
+		netherrack3.addIngredient(2, Material.OBSIDIAN);
+		netherrack3.addIngredient(2, Material.NETHER_WART);
 		rec.add(netherrack3);
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(),
 				Material.NETHERRACK.toString() + "5");
-		ShapedRecipe netherrack5 = new ShapedRecipe(key, item);
-		netherrack5.shape("G  ",
-				"   ",
-				"   ");
-
-		netherrack5.setIngredient('G', Material.NETHER_GOLD_ORE);
+		ShapelessRecipe netherrack5 = new ShapelessRecipe(key, item);
+		netherrack5.addIngredient(Material.NETHER_GOLD_ORE);
 		rec.add(netherrack5);
 
 		item.setAmount(1);
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(),
 				Material.NETHERRACK.toString() + "4");
-		ShapedRecipe netherrack4 = new ShapedRecipe(key, item);
-		netherrack4.shape("Q  ",
-				"   ",
-				"   ");
-
-		netherrack4.setIngredient('Q', Material.NETHER_QUARTZ_ORE);
+		ShapelessRecipe netherrack4 = new ShapelessRecipe(key, item);
+		netherrack4.addIngredient(1, Material.NETHER_QUARTZ_ORE);
 		rec.add(netherrack4);
 
 
@@ -106,14 +88,12 @@ public class Recipes implements Listener {
 		dirt.setAmount(2);
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(),
 				Material.DIRT.toString() + "2");
-		ShapedRecipe dirtRec2 = new ShapedRecipe(key, dirt);
-		dirtRec2.shape("RW ",
-				"SR ",
-				"   ");
+		ShapelessRecipe dirtRec2 = new ShapelessRecipe(key, dirt);
 
-		dirtRec2.setIngredient('W', Material.WATER_BUCKET);
-		dirtRec2.setIngredient('R', Material.ROOTED_DIRT);
-		dirtRec2.setIngredient('S', Material.GOLDEN_SWORD);
+
+		dirtRec2.addIngredient(Material.WATER_BUCKET);
+		dirtRec2.addIngredient(2, Material.ROOTED_DIRT);
+		dirtRec2.addIngredient(Material.GOLDEN_SWORD);
 		rec.add(dirtRec2);
 
 
@@ -200,33 +180,37 @@ public class Recipes implements Listener {
 		nBoeRec6.setIngredient('S', Material.ZOMBIE_HEAD);
 		rec.add(nBoeRec6);
 
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.EXPERIENCE_BOTTLE.toString() + 7);
+		ShapedRecipe nBoeRec7 = new ShapedRecipe(key, boe);
+
+		nBoeRec7.shape("BBB",
+				"BSB",
+				"BBB");
+
+		nBoeRec7.setIngredient('B', Material.GLASS_BOTTLE);
+		nBoeRec7.setIngredient('S', Material.PLAYER_HEAD);
+		rec.add(nBoeRec7);
+
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.MAGMA_BLOCK.toString() + "1");
 		ItemStack magma = new ItemStack(Material.MAGMA_BLOCK);
 		magma.setAmount(3);
 
-		ShapedRecipe magmaRec = new ShapedRecipe(key, magma);
-		magmaRec.shape("   ",
-				"NLN",
-				"   ");
-
-		magmaRec.setIngredient('L', Material.LAVA_BUCKET);
-		magmaRec.setIngredient('N', Material.NETHERRACK);
+		ShapelessRecipe magmaRec = new ShapelessRecipe(key, magma);
+		magmaRec.addIngredient(Material.LAVA_BUCKET);
+		magmaRec.addIngredient(2, Material.NETHERRACK);
 		rec.add(magmaRec);
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.MAGMA_BLOCK.toString() + "2");
 		magma.setAmount(2);
 
-		ShapedRecipe magmaRec2 = new ShapedRecipe(key, magma);
-		magmaRec2.shape("   ",
-				"NFN",
-				"   ");
-
-		magmaRec2.setIngredient('F', Material.FIRE_CHARGE);
-		magmaRec2.setIngredient('N', Material.NETHERRACK);
+		ShapelessRecipe magmaRec2 = new ShapelessRecipe(key, magma);
+		magmaRec2.addIngredient(Material.FIRE_CHARGE);
+		magmaRec2.addIngredient(2, Material.NETHERRACK);
 		rec.add(magmaRec2);
 
 
-		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE.toString() + "1");
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(),
+				Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE.toString() + "1");
 		ItemStack upgrade = new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE);
 
 		ShapedRecipe upgradeRec = new ShapedRecipe(key, upgrade);
@@ -297,7 +281,8 @@ public class Recipes implements Listener {
 		diamondRec.setIngredient('B', Material.BRUSH);
 		rec.add(diamondRec);
 
-		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.LIGHT_GRAY_CONCRETE_POWDER.toString() + "1");
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(),
+				Material.LIGHT_GRAY_CONCRETE_POWDER.toString() + "1");
 		ItemStack concrete = new ItemStack(Material.LIGHT_GRAY_CONCRETE_POWDER);
 		concrete.setAmount(1);
 
@@ -377,13 +362,26 @@ public class Recipes implements Listener {
 		wheatRec2.setIngredient('B', Material.BONE_MEAL);
 		rec.add(wheatRec2);
 
+		ItemStack wool = new ItemStack(Material.GREEN_WOOL);
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.GREEN_WOOL.toString() + "1");
+		wool.setAmount(2);
+		ShapedRecipe woolRec = new ShapedRecipe(key, wool);
+		woolRec.shape("LFL",
+				"FGF",
+				"LFL");
+
+		woolRec.setIngredient('F', Material.FEATHER);
+		woolRec.setIngredient('L', Material.LEATHER);
+		woolRec.setIngredient('G', Material.GREEN_DYE);
+		rec.add(woolRec);
+
 		int i = 1;
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.CHEST.toString() + i);
 		ItemStack chest = new ItemStack(Material.CHEST);
 		ShapedRecipe chestRec = new ShapedRecipe(key, chest);
 
 		for (Material m : Material.values()) {
-			if (m.toString().contains("SHULKER_")) {
+			if (m.toString().contains("SHULKER_") && !m.toString().contains("_SHELL")) {
 
 				chestRec.shape("S  ", "   ", "   ");
 				chestRec.setIngredient('S', m);
@@ -395,6 +393,15 @@ public class Recipes implements Listener {
 				chestRec = new ShapedRecipe(key, chest);
 			}
 		}
+
+		chestRec.shape("S  ", "   ", "   ");
+		chestRec.setIngredient('S', Material.SHULKER_BOX);
+		rec.add(chestRec);
+
+		i++;
+
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.CHEST.toString() + (i + 1));
+		chestRec = new ShapedRecipe(key, chest);
 	}
 
 	public List<Recipe> getRec() {
@@ -410,7 +417,7 @@ public class Recipes implements Listener {
 		if (!(e.getWhoClicked() instanceof Player p)) return;
 
 		Random r = new Random();
-		int i = r.nextInt(6) + 1;
+		int i = r.nextInt(7) + 1;
 
 		delayedSpawning(p.getLocation(), EntityType.THROWN_EXP_BOTTLE, 4, i, 0);
 	}

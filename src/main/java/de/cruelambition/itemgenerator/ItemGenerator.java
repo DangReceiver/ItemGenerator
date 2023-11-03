@@ -11,6 +11,7 @@ import de.cruelambition.listener.function.blocks.*;
 import de.cruelambition.listener.function.items.CustomItems;
 import de.cruelambition.listener.function.items.ItemDrop;
 import de.cruelambition.oo.*;
+import de.cruelambition.oo.WorldBorder;
 import de.cruelambition.worlds.SpawnWorld;
 
 import java.io.File;
@@ -20,10 +21,8 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Keyed;
-import org.bukkit.Location;
-import org.bukkit.World;
+import net.kyori.adventure.key.Key;
+import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.GlowItemFrame;
@@ -116,11 +115,8 @@ public final class ItemGenerator extends JavaPlugin {
 //		pm.registerEvents(new Afk(), this);
 
 		TrailGui.fillParList();
-		 new WorldBorder();
-
-		g = new Generator();
-		List<Integer> f = g.getFrequencies();
-		Generator.start(g, f.get(0), f.get(1), f.get(2), f.get(3));
+		WorldBorder wb = new WorldBorder();
+		wb.syncWb();
 
 		int i = new Random().nextInt(15);
 		Bukkit.setMotd(l.getString("motd_" + i));
@@ -130,6 +126,8 @@ public final class ItemGenerator extends JavaPlugin {
 		List<Recipe> rec = r.getRec();
 
 		if (rec.isEmpty()) cs.sendMessage(Lang.PRE + l.getString("empty_recipe_list"));
+
+		removeRecipes();
 		for (Recipe recipe : rec) Bukkit.addRecipe(recipe, true);
 
 		for (Player ap : Bukkit.getOnlinePlayers()) {
@@ -160,6 +158,13 @@ public final class ItemGenerator extends JavaPlugin {
 		cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(), "modules_success"));
 		cs.sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),
 				"running_version"), VERSION));
+
+
+		Bukkit.getScheduler().runTaskLater(this, () -> {
+			g = new Generator();
+			List<Integer> f = g.getFrequencies();
+			Generator.start(g, f.get(0), f.get(1), f.get(2), f.get(3));
+		}, 10);
 	}
 
 
@@ -182,9 +187,7 @@ public final class ItemGenerator extends JavaPlugin {
 				if (re instanceof Keyed k) ap.undiscoverRecipe(k.getKey());
 		}
 
-		for (Recipe recipe : Recipes.rec)
-			if (recipe instanceof Keyed k) Bukkit.removeRecipe(k.getKey());
-
+		removeRecipes();
 		l.saveMissingKeys();
 
 		for (Player ap : Bukkit.getOnlinePlayers()) {
@@ -194,6 +197,10 @@ public final class ItemGenerator extends JavaPlugin {
 			pc.set("Temp", null);
 			pc.savePCon();
 		}
+	}
+
+	public void removeRecipes() {
+		for (Recipe recipe : Recipes.rec) if (recipe instanceof Keyed k) Bukkit.removeRecipe(k.getKey());
 	}
 
 
