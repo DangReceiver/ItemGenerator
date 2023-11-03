@@ -140,7 +140,7 @@ public class Backpack implements CommandExecutor, Listener {
 			pc.setBackpack(ti);
 			pc.savePCon();
 
-			p.sendMessage(Lang.PRE + l.getString("backpack_saved"));
+			p.sendActionBar(Lang.PRE + l.getString("backpack_saved"));
 		}
 	}
 }

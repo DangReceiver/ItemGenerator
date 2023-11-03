@@ -85,14 +85,14 @@ public class Recipes implements Listener {
 		rec.add(dirtRec1);
 
 
-		dirt.setAmount(2);
+		dirt.setAmount(3);
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(),
 				Material.DIRT.toString() + "2");
 		ShapelessRecipe dirtRec2 = new ShapelessRecipe(key, dirt);
 
 
 		dirtRec2.addIngredient(Material.WATER_BUCKET);
-		dirtRec2.addIngredient(2, Material.ROOTED_DIRT);
+		dirtRec2.addIngredient(3, Material.ROOTED_DIRT);
 		dirtRec2.addIngredient(Material.GOLDEN_SWORD);
 		rec.add(dirtRec2);
 
@@ -109,6 +109,17 @@ public class Recipes implements Listener {
 		dirtRec3.setIngredient('C', Material.COARSE_DIRT);
 		dirtRec3.setIngredient('F', Material.FIRE_CHARGE);
 		rec.add(dirtRec3);
+
+		dirt.setAmount(3);
+		key = new NamespacedKey(ItemGenerator.getItemGenerator(),
+				Material.DIRT.toString() + "4");
+		ShapelessRecipe dirtRec4 = new ShapelessRecipe(key, dirt);
+
+
+		dirtRec4.addIngredient(Material.WATER_BUCKET);
+		dirtRec4.addIngredient(3, Material.ROOTED_DIRT);
+		dirtRec4.addIngredient(Material.IRON_AXE);
+		rec.add(dirtRec4);
 
 		ItemStack boe = new ItemStack(Material.EXPERIENCE_BOTTLE);
 		boe.setAmount(9);
@@ -378,30 +389,28 @@ public class Recipes implements Listener {
 		int i = 1;
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.CHEST.toString() + i);
 		ItemStack chest = new ItemStack(Material.CHEST);
-		ShapedRecipe chestRec = new ShapedRecipe(key, chest);
+		ShapelessRecipe chestRec = new ShapelessRecipe(key, chest);
 
 		for (Material m : Material.values()) {
 			if (m.toString().contains("SHULKER_") && !m.toString().contains("_SHELL")) {
 
-				chestRec.shape("S  ", "   ", "   ");
-				chestRec.setIngredient('S', m);
+				chestRec.addIngredient(m);
 				rec.add(chestRec);
 
 				i++;
 
 				key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.CHEST.toString() + i);
-				chestRec = new ShapedRecipe(key, chest);
+				chestRec = new ShapelessRecipe(key, chest);
 			}
 		}
 
-		chestRec.shape("S  ", "   ", "   ");
-		chestRec.setIngredient('S', Material.SHULKER_BOX);
+		chestRec.addIngredient(Material.SHULKER_BOX);
 		rec.add(chestRec);
 
 		i++;
 
 		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.CHEST.toString() + (i + 1));
-		chestRec = new ShapedRecipe(key, chest);
+		chestRec = new ShapelessRecipe(key, chest);
 	}
 
 	public List<Recipe> getRec() {
