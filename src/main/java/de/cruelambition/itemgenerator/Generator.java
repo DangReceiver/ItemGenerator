@@ -29,21 +29,13 @@ public class Generator {
         FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
         common = c.getStringList("Item.List.Common");
 
-        for (Material value : Material.values()) if (value.toString().contains("SPAWN_EGG")) spawnEggs.add(value);
-
         editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(),
                 Material.POTION.toString(), Material.SPLASH_POTION.toString(),
                 Material.TIPPED_ARROW.toString(), Material.LINGERING_POTION.toString(),
                 "CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET", "_SWORD", "_PICKAXE", "_AXE", "_SHOVEL"));
 
         if (common.isEmpty()) {
-            List<String> st = Arrays.asList("_SHULKER", "NETHERITE", "DIAMOND", "BEACON", "DIRT",
-                    "SPAWN_EGG", "SPAWNER", "BARRIER", "BEDROCK", "ENCHANTMENT_TABLE", "_BUCKET", "ELYTRA",
-                    "_TRIM", "EMERALD");
-            for (Material val : Material.values())
-                if (!val.toString().contains(st)) addCommonItem(val);
-
-            ItemGenerator.getItemGenerator().saveConfig();
+            setupCommonList();
         }
 
         for (int i = 0; i <= 4; i++) // Total: 6
@@ -62,12 +54,24 @@ public class Generator {
 
 
         for (int a = 0; a <= Items.mats.size() - 1; a++)
-            for (int b = 0; b <= Items.amount[a]; b++) {
+            for (int b = 0; b <= Items.amount[a]; b++)
                 addMaterialToLoop(Items.mats.get(a));
 
-            }
-
         if (getForbiddenList().contains("SPAWN_EGG")) addMaterialToLoop(Material.ALLAY_SPAWN_EGG);
+    }
+
+    public void setupCommonList() {
+        List<String> rare = Arrays.asList("_SHULKER", "NETHERITE", "DIAMOND", "BEACON", "DIRT", "SPAWN_EGG",
+                "SPAWNER", "BARRIER", "BEDROCK", "ENCHANTMENT_TABLE", "_BUCKET", "ELYTRA", "_TRIM", "EMERALD");
+
+        for (Material val : Material.values())
+            for (String st : rare)
+
+                if (!val.toString().contains(st)) addCommonItem(val.toString());
+                else if (val.toString().contains("SPAWN_EGG")) spawnEggs.add(val);
+
+        addCommonItem(Material.ALLAY_SPAWN_EGG.toString());
+        ItemGenerator.getItemGenerator().saveConfig();
     }
 
     public int getCustomItemAmount(Material m) {
@@ -291,7 +295,7 @@ public class Generator {
 //			ap.sendMessage(ap.getWorld().getName() + " || " + wP.toString());
 
             if (ap.getGameMode() != GameMode.SURVIVAL) continue;
-            ap.playSound(ap.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 0.35f, 0.8f);
+            ap.playSound(ap.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 0.45f, 0.8f);
 
             ItemStack is;
             Random r = new Random();
@@ -309,11 +313,12 @@ public class Generator {
 
 
             if (isCustomItem(type)) {
-                ap.sendMessage("§5§kkk Receiving Custom Item §kkk");
+                ap.sendMessage("§5§kkk Receiving custom item... §kkk");
 
                 int cmd = r.nextInt(getCustomItemAmount(type) + 1);
                 if (cmd != 0) IB.cmd(is, cmd);
-                ap.sendMessage("§5§kkk Receiving Custom Item §kkk");
+                ap.sendMessage("cmd: " + cmd + " || type: " + type);
+                ap.sendMessage("§5§kkk Received custom item o: §kkk");
 
             } else moreItems(is);
 
