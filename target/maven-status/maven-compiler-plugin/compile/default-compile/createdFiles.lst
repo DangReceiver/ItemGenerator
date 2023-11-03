@@ -1,3 +1,4 @@
+de\cruelambition\listener\essential\Beacon.class
 de\cruelambition\worlds\SpawnWorld$SpawnGen.class
 de\cruelambition\listener\function\blocks\Anvil$1.class
 de\cruelambition\cmd\user\Trail.class
@@ -31,7 +32,7 @@ de\cruelambition\oo\Utils.class
 de\cruelambition\oo\Sb.class
 de\cruelambition\cmd\user\Language.class
 de\cruelambition\listener\function\entities\AntiCreeper.class
+de\cruelambition\itemgenerator\Generator.class
 de\cruelambition\language\ReadOut.class
-de\cruelambition\exceptions\InvalidStringException.class
 de\cruelambition\language\Lang.class
 de\cruelambition\oo\Recipes.class

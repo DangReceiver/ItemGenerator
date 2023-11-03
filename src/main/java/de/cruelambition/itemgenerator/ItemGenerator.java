@@ -51,9 +51,7 @@ public final class ItemGenerator extends JavaPlugin {
 		if (world == null) world.save();
 
 		World spawn = Bukkit.getWorld("Spawn");
-		if (spawn == null) {
-			SpawnWorld.SpawnGen.checkCreate("Spawn", true);
-		}
+		if (spawn == null) SpawnWorld.SpawnGen.checkCreate("Spawn", true);
 
 		Lang l = new Lang(null);
 		l.loadingSequence();
@@ -118,7 +116,7 @@ public final class ItemGenerator extends JavaPlugin {
 //		pm.registerEvents(new Afk(), this);
 
 		TrailGui.fillParList();
-		WorldBorder wb = new WorldBorder();
+		 new WorldBorder();
 
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();
@@ -153,15 +151,15 @@ public final class ItemGenerator extends JavaPlugin {
 		Sb.timeLoop();
 //		Sb.scoreboardLoop();
 
-		Items items = new Items();
+		new Items();
 //		items.newItem("", "");
 
 		VERSION = "0.1.1";
 //		if (getVersion() != null) VERSION = getVersion();
 
 		cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(), "modules_success"));
-		cs.sendMessage(Lang.PRE + String.format(Lang.getMessage(
-				Lang.getServerLang(), "running_version"), VERSION));
+		cs.sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),
+				"running_version"), VERSION));
 	}
 
 

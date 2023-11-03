@@ -53,12 +53,15 @@ public class TrailGui implements CommandExecutor, Listener {
 
 	public static void fillParList() {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		for (Particle p : guiParticles) {
-			parList.put(p, "IdleSteams.trailsParticle." + p.toString().toLowerCase());
-			String ps = p.toString().toUpperCase();
+		for (Particle par : guiParticles) {
+
+			parList.put(par, "IdleSteams.trailsParticle." + par.toString().toLowerCase());
+			String ps = par.toString().toUpperCase();
+
 			if (!c.isSet("ParticleList." + ps)) {
 				c.set("ParticleList." + ps + ".material", Material.GOLD_BLOCK.toString());
 				c.set("ParticleList." + ps + ".group", "beginner");
+
 				c.set("ParticleList." + ps + ".cost", 16);
 				c.set("ParticleList." + ps + ".color", "b");
 				c.set("ParticleList." + ps + ".lore", "§7§oA particle");

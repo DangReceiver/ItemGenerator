@@ -1,18 +1,14 @@
 package de.cruelambition.listener.function.entities;
 
 import de.cruelambition.oo.Recipes;
-import io.papermc.paper.event.block.BeaconActivatedEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDropItemEvent;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.Random;
 

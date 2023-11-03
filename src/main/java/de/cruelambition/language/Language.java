@@ -1,7 +1,6 @@
 package de.cruelambition.language;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
-import de.cruelambition.exceptions.InvalidStringException;
 
 import java.io.File;
 import java.io.IOException;
@@ -225,7 +224,7 @@ public class Language {
 					String.format("§e§oString '%s' in language file '%s' not loaded yet!",
 							key, lang.getName().split(".yml")[0]);
 
-		} catch (InvalidStringException ex) {
+		} catch (Exception ex) {
 			Bukkit.getConsoleSender().sendMessage("§6" + ex.getMessage());
 			s = "§6" + ex.getMessage();
 		}
