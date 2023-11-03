@@ -1,10 +1,7 @@
 package de.cruelambition.oo;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
-import org.bukkit.Bukkit;
-import org.bukkit.Keyed;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -415,14 +412,14 @@ public class Recipes implements Listener {
 		Random r = new Random();
 		int i = r.nextInt(6) + 1;
 
-		delayedSpawning(p, EntityType.THROWN_EXP_BOTTLE, 8, i, 0);
+		delayedSpawning(p.getLocation(), EntityType.THROWN_EXP_BOTTLE, 4, i, 0);
 	}
 
-	public void delayedSpawning(Player p, EntityType et, int delay, int times, int count) {
+	public static void delayedSpawning(Location loc, EntityType type, int delay, int times, int count) {
 		if (count >= times) return;
-		p.getWorld().spawnEntity(p.getLocation().add(0, 0.4, 0), et);
+		loc.getWorld().spawnEntity(loc.clone().add(0, 0.4, 0), type);
 
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
-				() -> delayedSpawning(p, et, delay, times, count + 1), delay);
+				() -> delayedSpawning(loc, type, delay, times, count + 1), delay);
 	}
 }

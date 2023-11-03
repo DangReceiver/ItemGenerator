@@ -5,13 +5,9 @@ import de.cruelambition.cmd.moderation.Chat;
 import de.cruelambition.cmd.user.*;
 import de.cruelambition.language.Lang;
 import de.cruelambition.listener.essential.*;
-import de.cruelambition.listener.function.entities.WanderingTrader;
+import de.cruelambition.listener.function.entities.*;
 import de.cruelambition.listener.function.*;
 import de.cruelambition.listener.function.blocks.*;
-import de.cruelambition.listener.function.entities.AntiCreeper;
-import de.cruelambition.listener.function.entities.KillDeath;
-import de.cruelambition.listener.function.entities.PlayerClickPlayer;
-import de.cruelambition.listener.function.entities.SleepPhantomAway;
 import de.cruelambition.listener.function.items.CustomItems;
 import de.cruelambition.listener.function.items.ItemDrop;
 import de.cruelambition.oo.*;
@@ -117,6 +113,8 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new WanderingTrader(), this);
 		pm.registerEvents(new HoeUse(), this);
 		pm.registerEvents(new Respawn(), this);
+		pm.registerEvents(new PreConnect(), this);
+		pm.registerEvents(new Brute(), this);
 //		pm.registerEvents(new Afk(), this);
 
 		TrailGui.fillParList();

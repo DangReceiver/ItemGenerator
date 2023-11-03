@@ -64,14 +64,23 @@ public class WorldBorder implements Listener {
 	}
 
 	public boolean spawnUpgraderExists(World w) {
-		for (Entity en : w.getNearbyEntities(new Location(w, 0.5, 64, 0.5), 12d, 12d, 12d))
-			if (en instanceof ArmorStand as && !as.hasGravity()) return true;
+//		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+
+		for (Entity en : w.getNearbyEntities(new Location(w, 0.5, 64, 0.5), 8d, 8d, 8d)) {
+//			cs.sendMessage("§2en: " + en.toString() + " || dn: " + (en.getCustomName() != null
+//					? en.getCustomName() : null));
+
+			if (en instanceof ArmorStand as && !as.hasGravity()) {
+//				cs.sendMessage("§2is upgrader");
+				return true;
+			}
+		}
 
 		return false;
 	}
 
 	public ArmorStand getSpawnUpgrader(World w) {
-		for (Entity en : w.getNearbyEntities(new Location(w, 0.5, 64, 0.5), 12d, 12d, 12d))
+		for (Entity en : w.getNearbyEntities(new Location(w, 0.5, 64, 0.5), 8d, 8d, 8d))
 			if (en instanceof ArmorStand as && !as.hasGravity()) return as;
 
 		return null;
@@ -138,10 +147,9 @@ public class WorldBorder implements Listener {
 	@EventHandler
 	public void handle(EntityDamageByEntityEvent e) {
 		if (!(e.getEntity() instanceof ArmorStand as)) return;
-		if (!(e.getDamager() instanceof Player p)) return;
 
+		if (!(e.getDamager() instanceof Player p)) return;
 		if (!as.getCustomName().equalsIgnoreCase(l.getString("as_wb"))) return;
-		p.sendMessage("World Border Upgrader");
 
 		e.setCancelled(true);
 		Lang lp = new Lang(p);
@@ -182,7 +190,6 @@ public class WorldBorder implements Listener {
 				break;
 
 			case RED_BANNER:
-				p.sendMessage("cancel");
 				p.closeInventory();
 				break;
 

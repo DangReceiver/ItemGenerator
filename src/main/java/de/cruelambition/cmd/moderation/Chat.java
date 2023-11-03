@@ -23,7 +23,7 @@ public class Chat implements CommandExecutor, Listener {
 	public static String PERMISSION = "ItemGenerator.Chat.Customization",
 			PERMISSION_OTHERS = "ItemGenerator.Chat.Customization.Others";
 
-//	@Override
+	//	@Override
 	public boolean onCommand(CommandSender sen, Command cmd, String lab, String[] args) {
 		Player p;
 		Lang l = new Lang(null);
@@ -71,11 +71,13 @@ public class Chat implements CommandExecutor, Listener {
 
 		if (p.getOpenInventory().getTitle().equals(de.cruelambition.listener.essential.Chat.
 				replaceChat(pc, de.cruelambition.listener.essential.Chat.format, ""))) e.setCancelled(true);
+		else return;
 
 		if (item.getType().toString().contains("BANNER")) {
 			if (!IB.isEnch(item)) IB.ench(item, Enchantment.DURABILITY, 0);
 			else IB.disEnch(item);
 
+			if (topInv.getItem(e.getSlot() - 2) == null || topInv.getItem(e.getSlot() + 2) == null) return;
 			if (topInv.getItem(e.getSlot() + 2).getType().toString().contains("BANNER")) {
 
 
