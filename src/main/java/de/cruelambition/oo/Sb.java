@@ -38,7 +38,7 @@ public class Sb {
 
 			for (Player ap : Bukkit.getOnlinePlayers()) {
 				updateFullScoreBoard(ap);
-				ap.sendMessage("SB Updated!" + " || " + timeEntry);
+//				ap.sendMessage("SB Updated!" + " || " + timeEntry);
 			}
 
 		}, 8 * 20, 6 * 20);
@@ -53,6 +53,7 @@ public class Sb {
 
 	public static Objective getObjective(Scoreboard sb) {
 		Objective obj = sb.getObjective("  " + Lang.CHAT);
+
 		if (obj == null) obj = sb.getObjective("abc");
 		if (obj == null) obj = sb.getObjective(Lang.CHAT + "  ");
 		return obj;
@@ -60,20 +61,21 @@ public class Sb {
 
 	public static void setScore(Player p, char ch, String path, Scoreboard sb, int score) {
 		Lang l = new Lang(p);
-		getObjective(sb).unregister();
 
-		if (getObjective(sb) == null)
-			sb.registerNewObjective("  " + Lang.CHAT, "abc", Lang.CHAT + "  ").
-					getScore("  §8» §" + ch + (l.getString(path).length()
-							<= 16 ? l.getString(path) : "§8-")).setScore(score);
+		getObjective(sb).unregister();
+		if (getObjective(sb) != null) return;
+
+		sb.registerNewObjective("  " + Lang.CHAT, "abc", Lang.CHAT + "  ").getScore("  §8» §"
+				+ ch + (l.getString(path).length() <= 16 ? l.getString(path) : "§8-")).setScore(score);
 	}
 
 	public static void setDefaultScoreBoard(Player p) {
 		Lang l = new Lang(p);
 		String chat = Lang.CHAT;
-		if (chat.length() >= 17) chat = "§cInvalid String";
 
+		if (chat.length() >= 17) chat = "§cInvalid String";
 		Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
+
 		Objective obj = sb.registerNewObjective("  " + chat, "abc", chat + "  ");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 
@@ -163,19 +165,24 @@ public class Sb {
 		else if (timeEntry == 1) updateWorldTime(p);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
-//		updateTimeHeader(p);
+		updateTimeHeader(p);
 	}
 
 	public static void updateTimeHeader(Player p) {
-		if (timeEntry == 0) setScore(p, '3', "sb_time", p.getScoreboard(), TIME_SLOT);
-		else if (timeEntry == 1) setScore(p, 'b', "sb_world_time", p.getScoreboard(), TIME_SLOT);
-		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
+		if (timeEntry == 0) {
+			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_AQUA);
+			setScore(p, '3', "sb_time", p.getScoreboard(), TIME_SLOT);
+
+		} else if (timeEntry == 1) {
+			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_AQUA);
+			setScore(p, 'b', "sb_world_time", p.getScoreboard(), TIME_SLOT);
+
+		} else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 	}
 
 	public static void updateTime(Player p) {
 		Scoreboard sb = p.getScoreboard();
 		sb.getTeam("dTime").setPrefix("    §e➥ ☞ " + String.format("%s", convertTime(System.currentTimeMillis())));
-
 	}
 
 	public static void updateWorldTime(Player p) {
@@ -188,13 +195,18 @@ public class Sb {
 		else if (worldEntry == 1) updateNearbyEntities(p);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
-//		updateWorldHeader(p);
+		updateWorldHeader(p);
 	}
 
 	public static void updateWorldHeader(Player p) {
-		if (worldEntry == 0) setScore(p, '6', "sb_world", p.getScoreboard(), WORLD_SLOT);
-		else if (worldEntry == 1) setScore(p, 'e', "sb_nearby_entities", p.getScoreboard(), WORLD_SLOT);
-		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
+		if (worldEntry == 0) {
+			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_BLACK);
+			setScore(p, '6', "sb_world", p.getScoreboard(), WORLD_SLOT);
+
+		} else if (worldEntry == 1) {
+			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_BLACK);
+			setScore(p, 'e', "sb_nearby_entities", p.getScoreboard(), WORLD_SLOT);
+		} else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 	}
 
 	public static void updateWorld(Player p) {
@@ -212,13 +224,17 @@ public class Sb {
 		else if (deathEntry == 1) updateXp(p);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
-//		updateDeathHeader(p);
+		updateDeathHeader(p);
 	}
 
 	public static void updateDeathHeader(Player p) {
-		if (deathEntry == 0) setScore(p, '4', "sb_deaths", p.getScoreboard(), DEATH_SLOT);
-		else if (deathEntry == 1) setScore(p, 'c', "sb_xp", p.getScoreboard(), DEATH_SLOT);
-		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
+		if (deathEntry == 0) {
+			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_BLUE);
+			setScore(p, '4', "sb_deaths", p.getScoreboard(), DEATH_SLOT);
+		} else if (deathEntry == 1) {
+			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_BLUE);
+			setScore(p, 'c', "sb_xp", p.getScoreboard(), DEATH_SLOT);
+		} else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 	}
 
 	public static void updateDeaths(Player p) {
@@ -240,13 +256,18 @@ public class Sb {
 		else if (killEntry == 1) updateKillLevel(p);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
-//		updateKillHeader(p);
+		updateKillHeader(p);
 	}
 
 	public static void updateKillHeader(Player p) {
-		if (killEntry == 0) setScore(p, 'c', "sb_kills", p.getScoreboard(), KILL_SLOT);
-		else if (killEntry == 1) setScore(p, '4', "sb_kill_level", p.getScoreboard(), KILL_SLOT);
-		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
+		if (killEntry == 0) {
+			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_DARK_AQUA);
+			setScore(p, 'c', "sb_kills", p.getScoreboard(), KILL_SLOT);
+
+		} else if (killEntry == 1) {
+			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_DARK_AQUA);
+			setScore(p, '4', "sb_kill_level", p.getScoreboard(), KILL_SLOT);
+		} else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 	}
 
 	public static void updateKills(Player p) {

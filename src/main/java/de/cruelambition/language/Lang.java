@@ -34,8 +34,8 @@ public class Lang extends Language {
 	public void setPlayerLanguage(File pLang) {
 		if (p == null) throw new RuntimeException("Player target invalid: Cannot set new language");
 
-		lf = pLang;
 		lang.setPlayerLang(p, pLang);
+		updateLf(pLang);
 	}
 
 	public void setPlayer(Player player) {
@@ -78,17 +78,8 @@ public class Lang extends Language {
 	public String replaceString(String key, String toReplace, String... replacements) {
 		String temp = Language.getMessage(lf, (last = key));
 
-		for (String s : replacements) {
-			temp = temp.replaceAll(toReplace, s);
-		}
+		for (String s : replacements) temp = temp.replaceAll(toReplace, s);
 		return temp;
-	}
-
-	public String replaceColor(String input, Color... color) {
-		for (Color c : color)
-			input = input.replace("§c", "" +
-					colorFromRGB(c.getRed(), c.getGreen(), c.getBlue()));
-		return input;
 	}
 
 	public String formatString(String key, String... replacements) {
@@ -132,9 +123,5 @@ public class Lang extends Language {
 			}
 
 		return mkl;
-	}
-
-	public void saveMissingKeys() {
-		lang.saveMissingKeys();
 	}
 }

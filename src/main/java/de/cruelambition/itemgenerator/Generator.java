@@ -51,11 +51,14 @@ public class Generator {
 		addCommonItem(Material.ALLAY_SPAWN_EGG.toString(), base);
 
 		for (String st : rare)
-			for (String val : material)
+			for (String val : material) {
 
 				if (!val.toString().contains(st)) addCommonItem(val, base);
 				else if (val.toString().contains("SPAWN_EGG")) spawnEggs.add(Material.valueOf(val));
+				Bukkit.getConsoleSender().sendMessage(base.toString() + " || " + base.size());
+			}
 
+		Bukkit.getConsoleSender().sendMessage(base.toString() + " || " + base.size());
 		c.set("Item.List.Common", base);
 		ItemGenerator.getItemGenerator().saveConfig();
 	}

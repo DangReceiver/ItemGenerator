@@ -45,14 +45,12 @@ public class WorldBorder implements Listener {
 		}
 
 		if (!spawnUpgraderExists(wb.getWorld())) {
-			cs.sendMessage(Lang.PRE + String.format(l.getString("spawning_wb_non_existing"),
-					wb.getWorld().getName()));
+			cs.sendMessage(Lang.PRE + String.format(l.getString("spawning_wb_non_existing"), wb.getWorld().getName()));
 			spawnUpgrader(wb.getWorld());
 		}
 
 		if (!spawnUpgraderExists(wbn.getWorld())) {
-			cs.sendMessage(Lang.PRE + String.format(l.getString("spawning_wb_non_existing"),
-					wbn.getWorld().getName()));
+			cs.sendMessage(Lang.PRE + String.format(l.getString("spawning_wb_non_existing"), wbn.getWorld().getName()));
 			spawnUpgrader(wbn.getWorld());
 		}
 
@@ -106,8 +104,7 @@ public class WorldBorder implements Listener {
 		org.bukkit.WorldBorder pwb = w.getWorldBorder();
 		if (c.isSet("Border." + w.getName() + ".hadDefaults") && pwb != null) return;
 
-		if (pwb == null) Bukkit.getConsoleSender().sendMessage(Lang.PRE
-				+ new Lang(null).getString("wb_invalid_world"));
+		if (pwb == null) Bukkit.getConsoleSender().sendMessage(Lang.PRE + new Lang(null).getString("wb_invalid_world"));
 		else defaults(pwb);
 	}
 
@@ -138,9 +135,8 @@ public class WorldBorder implements Listener {
 		if (w.getName().contains("_nether")) w = Bukkit.getWorld(w.getName().split("_nether")[0]);
 		int cost;
 
-		cost = (int) (c.isSet("Border." + w.getName() + ".upgrade") ?
-				c.getInt("Border." + w.getName() + ".upgrade") * (w.getWorldBorder().getSize() / 25) : -1);
-
+		cost = (int) (c.isSet("Border." + w.getName() + ".upgrade") ? c.getInt("Border." + w.getName()
+				+ ".upgrade") * Math.min(2, w.getWorldBorder().getSize() / 25) : -1);
 		return cost;
 	}
 
@@ -162,13 +158,9 @@ public class WorldBorder implements Listener {
 		Inventory inv = Bukkit.createInventory(null, 4 * 9, lp.getString("wb_upgrader_inv"));
 		IB.invFiller(inv, IB.getFiller(new PC(p).getFiller(), true, true, null, null));
 
-		inv.setItem(inv.getSize() / 2 - 3, IB.lore(IB.name(new ItemStack(Material.RED_BANNER),
-				l.getString("cancel_purchase")), Utils.splitString(l.getString("cancel_purchase_lore"))));
-		inv.setItem(inv.getSize() / 2 - 5, IB.lore(IB.name(new ItemStack(Material.KNOWLEDGE_BOOK),
-				l.getString("purchase_info")), Utils.splitString(String.format(l.getString("wb_upgrade_info"),
-				getUpgradeCost(as.getWorld())))));
-		inv.setItem(inv.getSize() / 2 - 7, IB.lore(IB.name(new ItemStack(Material.LIME_BANNER),
-				l.getString("confirm_purchase"))));
+		inv.setItem(inv.getSize() / 2 - 3, IB.lore(IB.name(new ItemStack(Material.RED_BANNER), l.getString("cancel_purchase")), Utils.splitString(l.getString("cancel_purchase_lore"))));
+		inv.setItem(inv.getSize() / 2 - 5, IB.lore(IB.name(new ItemStack(Material.KNOWLEDGE_BOOK), l.getString("purchase_info")), Utils.splitString(String.format(l.getString("wb_upgrade_info"), getUpgradeCost(as.getWorld())))));
+		inv.setItem(inv.getSize() / 2 - 7, IB.lore(IB.name(new ItemStack(Material.LIME_BANNER), l.getString("confirm_purchase"))));
 
 		p.openInventory(inv);
 	}
@@ -210,8 +202,7 @@ public class WorldBorder implements Listener {
 				broadcastIncrement(p, p.getWorld());
 				increase();
 
-				c.set("Border." + p.getWorld().getName() + ".upgrade",
-						c.getInt("Border." + p.getWorld().getName() + ".upgrade") + 1);
+				c.set("Border." + p.getWorld().getName() + ".upgrade", c.getInt("Border." + p.getWorld().getName() + ".upgrade") + 1);
 
 				c.set("Border." + p.getWorld().getName() + ".delay", true);
 				ItemGenerator.getItemGenerator().saveConfig();

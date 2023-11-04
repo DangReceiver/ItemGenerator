@@ -188,7 +188,7 @@ public final class ItemGenerator extends JavaPlugin {
 		}
 
 		removeRecipes();
-		l.saveMissingKeys();
+		de.cruelambition.language.Language.saveMissingKeys();
 
 		for (Player ap : Bukkit.getOnlinePlayers()) {
 			PC pc = new PC(ap);

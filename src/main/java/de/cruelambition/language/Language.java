@@ -93,12 +93,15 @@ public class Language {
 
 	public void setPlayerLang(Player p, File file) {
 		if (p == null) return;
-		removePlayer(p);
 
+		removePlayer(p);
 		Bukkit.getConsoleSender().sendMessage("§5settings: §b" + p.getName() + " §e|| " + file.getName());
 
-		if (!file.exists()) settings.put(p, getServerLang());
-		else settings.put(p, file);
+		if (!file.exists()) {
+			settings.put(p, getServerLang());
+			Bukkit.getConsoleSender().sendMessage("§5Invalid language file, using server lang...");
+
+		} else settings.put(p, file);
 	}
 
 	public static boolean isLangFile(String lang) {
@@ -334,16 +337,15 @@ public class Language {
 		}
 	}
 
-	public void saveMissingKeys() {
+	public static void saveMissingKeys() {
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
-
 		List<String> mkl = missingKeys;
+
 		cs.sendMessage(getMessage(getServerLang(), "saving_missing_keys"));
-
 		int i = 0;
-		File f = new File(df + "/languages");
 
-		File fmkf = new File("missingkeys.yml");
+		File f = new File(df + "/languages");
+		File fmkf = new File(df, "missingkeys.yml");
 
 		if (!fmkf.exists()) {
 			try {
@@ -354,21 +356,20 @@ public class Language {
 		}
 
 		YamlConfiguration mkf = YamlConfiguration.loadConfiguration(fmkf);
-
 		for (File lf : f.listFiles()) {
 			String s1 = lf.getName().split(".yml")[0];
 
 			if (mkl.isEmpty()) return;
 			for (String s : mkl) {
 
-				if (!s.contains("; " + s1)) {
-					mkf.set(s1, mkl);
+				if (s.contains("; " + s1)) continue;
+				mkf.set(s1, mkl);
 
-					mkl.remove(i);
-					i++;
-				}
+				mkl.remove(i);
+				i++;
 			}
 		}
+
 		try {
 			mkf.save(fmkf);
 		} catch (IOException ignored) {

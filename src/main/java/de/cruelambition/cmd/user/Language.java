@@ -39,7 +39,12 @@ public class Language implements CommandExecutor, TabCompleter {
 		PC pc = new PC(p);
 		File lf = Lang.getLangFile(args[0]);
 
-		pc.setLanguage(lf);
+		if(lf == null){
+			p.sendMessage(Lang.PRE + l.getString("lang_file_invalid"));
+			return false;
+		}
+
+		if(!pc.setLanguage(lf)) p.sendMessage(l.getString("lang_change_failed_input"));
 		l.setPlayerLanguage(lf);
 
 //		p.sendMessage("§b" + l.getLang(p) + " || " + l.getLanguage());

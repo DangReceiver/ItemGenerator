@@ -42,16 +42,6 @@ public class PC {
 		return c;
 	}
 
-	public PC load(OfflinePlayer op) {
-		if (!hasCon(op)) createCon(op);
-		return new PC(op);
-	}
-
-	public PC load(Player p) {
-		if (!hasCon(p)) createCon(p);
-		return new PC(p);
-	}
-
 	public boolean hasCon(OfflinePlayer p) {
 		return (new File(path, p.getUniqueId() + ".yml")).exists();
 	}
@@ -86,7 +76,6 @@ public class PC {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-
 		return true;
 	}
 

@@ -19,7 +19,6 @@ public class CM implements Listener {
 	public void handle(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 		PC pc = new PC(p);
-		pc.load(p);
 
 		Sb.setDefaultScoreBoard(p);
 

@@ -406,11 +406,6 @@ public class Recipes implements Listener {
 
 		chestRec.addIngredient(Material.SHULKER_BOX);
 		rec.add(chestRec);
-
-		i++;
-
-		key = new NamespacedKey(ItemGenerator.getItemGenerator(), Material.CHEST.toString() + (i + 1));
-		chestRec = new ShapelessRecipe(key, chest);
 	}
 
 	public List<Recipe> getRec() {
