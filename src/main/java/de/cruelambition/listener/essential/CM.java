@@ -20,14 +20,14 @@ public class CM implements Listener {
 		Player p = e.getPlayer();
 		PC pc = new PC(p);
 
-		Sb.setDefaultScoreBoard(p);
-
 		if (pc.getLanguageString() == null)
 			pc.setLanguage(Lang.getServerLang());
 
 		Lang l = new Lang(null);
 		l.setPlayerInSettings(p, pc.getLanguage());
+
 		l.setPlayer(p);
+		Sb.setDefaultScoreBoard(l);
 
 //		p.sendMessage(pc.getLanguage() + "");
 //		p.sendMessage("§b" + l.getLang(p) + " || " + l.getLanguage());

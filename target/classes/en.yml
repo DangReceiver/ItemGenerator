@@ -162,14 +162,14 @@ mergeresult:
   can_repair_expensive: "This enchantment will cost %s level."
 
 sb:
-  sb_time: "§6Current time"
-  sb_world: "§3Your world"
-  sb_deaths: "§4Deaths"
-  sb_kills: "§5Kills"
-  sb_world_time: "§eWorld Time"
-  sb_nearby_entities: "§bNearby NPCs"
-  sb_xp: "§cXp"
-  sb_kill_level: "§dKill Level"
+  sb_time_0: "§6Current time"
+  sb_time_1: "§eWorld Time"
+  sb_world_0: "§3Your world"
+  sb_world_1: "§bNearby NPCs"
+  sb_deaths_0: "§4Deaths"
+  sb_deaths_1: "§cXp"
+  sb_kills_0: "§5Kills"
+  sb_kills_1: "§dKill Level"
 
 worldborder:
   as_wb: "§2WorldBorder Upgrader"

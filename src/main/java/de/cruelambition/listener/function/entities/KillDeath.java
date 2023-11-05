@@ -1,5 +1,6 @@
 package de.cruelambition.listener.function.entities;
 
+import de.cruelambition.language.Lang;
 import de.cruelambition.oo.PC;
 import de.cruelambition.oo.Sb;
 import org.bukkit.entity.Monster;
@@ -19,7 +20,7 @@ public class KillDeath implements Listener {
 		pc.increaseDeaths();
 		pc.savePCon();
 
-		Sb.updateDeathSlot(p);
+		Sb.updateDeathSlot(new Lang(p));
 	}
 
 	@EventHandler
@@ -31,6 +32,6 @@ public class KillDeath implements Listener {
 		pc.increaseKills();
 		pc.savePCon();
 
-		Sb.updateKillSlot(p);
+		Sb.updateKillSlot(new Lang(p));
 	}
 }
