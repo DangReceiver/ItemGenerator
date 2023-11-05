@@ -38,6 +38,10 @@ public class Lang extends Language {
 		updateLf(pLang);
 	}
 
+	public Player thisPlayer() {
+		return p;
+	}
+
 	public void setPlayer(Player player) {
 		lf = lang.getLang((p = player));
 	}

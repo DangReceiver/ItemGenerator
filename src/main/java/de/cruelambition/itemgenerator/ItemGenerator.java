@@ -147,12 +147,12 @@ public final class ItemGenerator extends JavaPlugin {
 
 		Sb.setAllScoreBoards();
 		Sb.timeLoop();
-//		Sb.scoreboardLoop();
+		Sb.scoreboardLoop();
 
 		new Items();
 //		items.newItem("", "");
 
-		VERSION = "0.1.1";
+		VERSION = "1.1.0";
 //		if (getVersion() != null) VERSION = getVersion();
 
 		cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(), "modules_success"));

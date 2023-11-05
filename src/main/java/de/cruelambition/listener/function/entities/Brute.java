@@ -22,11 +22,7 @@ public class Brute implements Listener {
 	@EventHandler
 	public void handle(EntityDropItemEvent e) {
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
-
-		if (e.getItemDrop().getItemStack().getType() != Material.EGG) {
-			cs.sendMessage("not an egg");
-			return;
-		}
+		if (e.getItemDrop().getItemStack().getType() != Material.EGG) return;
 
 		Random r = new Random();
 		if (r.nextInt(4) == 0) return;

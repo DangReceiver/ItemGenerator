@@ -18,7 +18,7 @@ public class Sb {
 	public static final int TIME_SLOT = 16, WORLD_SLOT = 13, DEATH_SLOT = 10, KILL_SLOT = 7;
 
 	public static void setAllScoreBoards() {
-		for (Player ap : Bukkit.getOnlinePlayers()) setDefaultScoreBoard(ap);
+		for (Player ap : Bukkit.getOnlinePlayers()) setDefaultScoreBoard(new Lang(ap));
 	}
 
 	public static void scoreboardLoop() {
@@ -37,25 +37,25 @@ public class Sb {
 			killEntry++;
 
 			for (Player ap : Bukkit.getOnlinePlayers()) {
-				updateFullScoreBoard(ap);
-//				ap.sendMessage("SB Updated!" + " || " + timeEntry);
+				updateFullScoreBoard(new Lang(ap));
+				ap.sendMessage("SB Updated!" + " || " + timeEntry);
 			}
 
-		}, 8 * 20, 6 * 20);
+		}, 8 * 20, 8 * 20);
 	}
 
 	public static void timeLoop() {
 		Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
-			for (Player ap : Bukkit.getOnlinePlayers()) Sb.updateTimeSlot(ap);
+			for (Player ap : Bukkit.getOnlinePlayers()) Sb.updateTimeSlot(new Lang(ap));
 		}, 8 * 20, 20);
 	}
-
 
 	public static Objective getObjective(Scoreboard sb) {
 		Objective obj = sb.getObjective("  " + Lang.CHAT);
 
 		if (obj == null) obj = sb.getObjective("abc");
 		if (obj == null) obj = sb.getObjective(Lang.CHAT + "  ");
+		if (obj == null) obj = sb.getObjective("  " + Lang.CHAT + "abc" + Lang.CHAT + "  ");
 		return obj;
 	}
 
@@ -65,12 +65,16 @@ public class Sb {
 		getObjective(sb).unregister();
 		if (getObjective(sb) != null) return;
 
-		sb.registerNewObjective("  " + Lang.CHAT, "abc", Lang.CHAT + "  ").getScore("  §8» §"
-				+ ch + (l.getString(path).length() <= 16 ? l.getString(path) : "§8-")).setScore(score);
+		sb.getTeam("dTime").setDisplayName("HII");
+		sb.getEntryTeam("dTime").setPrefix("Nope");
+
+//		Score abc = sb.registerNewObjective("  " + Lang.CHAT, "abc", Lang.CHAT + "  ").getScore(
+//				"  §8» §" + ch + (l.getString(path).length() <= 16 ? l.getString(path) : "§8-"));
+//		abc.resetScore();
+//		abc.setScore(score);
 	}
 
-	public static void setDefaultScoreBoard(Player p) {
-		Lang l = new Lang(p);
+	public static void setDefaultScoreBoard(Lang l) {
 		String chat = Lang.CHAT;
 
 		if (chat.length() >= 17) chat = "§cInvalid String";
@@ -79,22 +83,11 @@ public class Sb {
 		Objective obj = sb.registerNewObjective("  " + chat, "abc", chat + "  ");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-		String ti = l.getString("sb_time").length() <= 16 ? l.getString("sb_time") : "§8-";
-		String w = l.getString("sb_world").length() <= 16 ? l.getString("sb_world") : "§8-";
-
-		String dea = l.getString("sb_deaths").length() <= 16 ? l.getString("sb_deaths") : "§8-";
-		String ki = l.getString("sb_kills").length() <= 16 ? l.getString("sb_kills") : "§8-";
-
 		Score space0 = obj.getScore("§0 "),
 				space1 = obj.getScore(" §0"),
 				space2 = obj.getScore(" §0 "),
 				space3 = obj.getScore(" §0  "),
-				space4 = obj.getScore("  §0 "),
-
-				time = obj.getScore("  §8» §6" + ti),
-				world = obj.getScore("  §8» §3" + w),
-				deaths = obj.getScore("  §8» §4" + dea),
-				kills = obj.getScore("  §8» §5" + ki);
+				space4 = obj.getScore("  §0 ");
 
 		space0.setScore(17);
 		space1.setScore(14);
@@ -102,37 +95,61 @@ public class Sb {
 		space3.setScore(8);
 		space4.setScore(5);
 
-		time.setScore(TIME_SLOT);
-		world.setScore(WORLD_SLOT);
-		deaths.setScore(DEATH_SLOT);
-		kills.setScore(KILL_SLOT);
+		Team dTime = sb.registerNewTeam("dTime"),
+				dWorld = sb.registerNewTeam("dWorld"),
+				dDeaths = sb.registerNewTeam("dDeaths"),
+				dKills = sb.registerNewTeam("dKills"),
 
-		Team dTime = sb.registerNewTeam("dTime");
-		Team dWorld = sb.registerNewTeam("dWorld");
-		Team dDeaths = sb.registerNewTeam("dDeaths");
-		Team dKills = sb.registerNewTeam("dKills");
+				dTimeDis = sb.registerNewTeam("dTimeDis"),
+				dWorldDis = sb.registerNewTeam("dWorldDis"),
+				dDeathsDis = sb.registerNewTeam("dDeathsDis"),
+				dKillsDis = sb.registerNewTeam("dKillsDis");
 
 		dTime.addEntry("" + ChatColor.AQUA);
 		dWorld.addEntry("" + ChatColor.BLACK);
 		dDeaths.addEntry("" + ChatColor.BLUE);
-		dKills.addEntry("" + ChatColor.DARK_AQUA);
+		dKills.addEntry("" + ChatColor.GREEN);
 
-		PC pc = new PC(p);
+		dTimeDis.addEntry("" + ChatColor.DARK_AQUA);
+		dWorldDis.addEntry("" + ChatColor.DARK_GRAY);
+		dDeathsDis.addEntry("" + ChatColor.DARK_BLUE);
+		dKillsDis.addEntry("" + ChatColor.DARK_GREEN);
+
+		PC pc = new PC(l.thisPlayer());
+
+		String ti = l.getString("sb_time_" + timeEntry).length() <= 16 ?
+				l.getString("sb_time_" + timeEntry) : "§8-",
+				wo = l.getString("sb_world_" + worldEntry).length() <= 16 ?
+						l.getString("sb_world_" + worldEntry) : "§8-",
+
+				de = l.getString("sb_deaths_" + deathEntry).length() <= 16 ?
+						l.getString("sb_deaths_" + deathEntry) : "§8-",
+				ki = l.getString("sb_kills_" + killEntry).length() <= 16 ?
+						l.getString("sb_kills_" + killEntry) : "§8-";
+
+		dTimeDis.setPrefix("  §8» " + ti + " ⌚");
+		dWorldDis.setPrefix("  §8» " + wo + " \uD83C\uDF0F");
+		dDeathsDis.setPrefix("  §8» " + de + " \uD83D\uDD48");
+		dKillsDis.setPrefix("  §8» " + ki + " ⚔");
 
 		dTime.setPrefix("    §e➥ ☞ " + String.format("%s", convertTime(System.currentTimeMillis())));
-		dWorld.setPrefix("    §b➥ ۩ " + p.getWorld().getName());
+		dWorld.setPrefix("    §b➥ ۩ " + l.thisPlayer().getWorld().getName());
 		dDeaths.setPrefix("    §c➥ ⚔ " + String.format("%s", pc.getDeaths()));
 		dKills.setPrefix("    §d➥ ❤ " + String.format("%s", pc.getKills()));
 
-		obj.getScore("" + ChatColor.AQUA).setScore(15);
-		obj.getScore("" + ChatColor.BLACK).setScore(12);
-		obj.getScore("" + ChatColor.BLUE).setScore(9);
-		obj.getScore("" + ChatColor.DARK_AQUA).setScore(6);
+		obj.getScore("" + ChatColor.AQUA).setScore(TIME_SLOT - 1);
+		obj.getScore("" + ChatColor.BLACK).setScore(WORLD_SLOT - 1);
+		obj.getScore("" + ChatColor.BLUE).setScore(DEATH_SLOT - 1);
+		obj.getScore("" + ChatColor.GREEN).setScore(KILL_SLOT - 1);
 
-		p.setScoreboard(sb);
+		obj.getScore("" + ChatColor.DARK_AQUA).setScore(TIME_SLOT);
+		obj.getScore("" + ChatColor.DARK_GRAY).setScore(WORLD_SLOT);
+		obj.getScore("" + ChatColor.DARK_BLUE).setScore(DEATH_SLOT);
+		obj.getScore("" + ChatColor.DARK_GREEN).setScore(KILL_SLOT);
+
+		l.thisPlayer().setScoreboard(sb);
 //		updateTime(p);
 	}
-
 
 	public static void unsetAllScoreboards() {
 		Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -144,15 +161,15 @@ public class Sb {
 
 	public static void unsetScoreboard(Player p) {
 		Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
-		Objective obj = sb.registerNewObjective(" ", "abc", " ");
+		sb.registerNewObjective(" ", "abc", " ");
 		p.setScoreboard(sb);
 	}
 
-	public static void updateFullScoreBoard(Player p) {
-		updateTimeSlot(p);
-		updateWorldSlot(p);
-		updateKillSlot(p);
-		updateDeathSlot(p);
+	public static void updateFullScoreBoard(Lang l) {
+		updateTimeSlot(l);
+		updateWorldSlot(l);
+		updateKillSlot(l);
+		updateDeathSlot(l);
 
 //		sb.getTeam("dTime").setPrefix("    §e➥ ☞ " + String.format("%s", convertTime(System.currentTimeMillis())));
 //		sb.getTeam("dWorld").setPrefix("    §b➥ \u06E9 " + p.getWorld().getName());
@@ -160,126 +177,102 @@ public class Sb {
 //		sb.getTeam("dKills").setPrefix("    §d➥ ❤ " + String.format("%s", pc.getKills()));
 	}
 
-	public static void updateTimeSlot(Player p) {
-		if (timeEntry == 0) updateTime(p);
-		else if (timeEntry == 1) updateWorldTime(p);
+	public static void updateTimeSlot(Lang l) {
+		if (timeEntry == 0) updateTime(l);
+		else if (timeEntry == 1) updateWorldTime(l);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
-		updateTimeHeader(p);
+		updateTimeHeader(l);
 	}
 
-	public static void updateTimeHeader(Player p) {
-		if (timeEntry == 0) {
-			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_AQUA);
-			setScore(p, '3', "sb_time", p.getScoreboard(), TIME_SLOT);
-
-		} else if (timeEntry == 1) {
-			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_AQUA);
-			setScore(p, 'b', "sb_world_time", p.getScoreboard(), TIME_SLOT);
-
-		} else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
+	public static void updateTimeHeader(Lang l) {
+		l.thisPlayer().getScoreboard().getTeam("dTimeDis").setPrefix("sb_time_" + timeEntry);
 	}
 
-	public static void updateTime(Player p) {
-		Scoreboard sb = p.getScoreboard();
-		sb.getTeam("dTime").setPrefix("    §e➥ ☞ " + String.format("%s", convertTime(System.currentTimeMillis())));
+	public static void updateTime(Lang l) {
+		Scoreboard sb = l.thisPlayer().getScoreboard();
+		sb.getTeam("dTime").setPrefix("    §e➥ ☞ " + String.format("%s",
+				convertTime(System.currentTimeMillis())));
 	}
 
-	public static void updateWorldTime(Player p) {
-		Scoreboard sb = p.getScoreboard();
-		sb.getTeam("dTime").setPrefix("    §6➥ ☞ " + String.format("%s", convertTime(p.getWorld().getTime())));
+	public static void updateWorldTime(Lang l) {
+		Scoreboard sb = l.thisPlayer().getScoreboard();
+		sb.getTeam("dTime").setPrefix("    §6➥ ☞ " + String.format("%s",
+				convertTime(l.thisPlayer().getWorld().getTime())));
 	}
 
-	public static void updateWorldSlot(Player p) {
-		if (worldEntry == 0) updateWorld(p);
-		else if (worldEntry == 1) updateNearbyEntities(p);
+	public static void updateWorldSlot(Lang l) {
+		if (worldEntry == 0) updateWorld(l);
+		else if (worldEntry == 1) updateNearbyEntities(l);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
-		updateWorldHeader(p);
+		updateWorldHeader(l);
 	}
 
-	public static void updateWorldHeader(Player p) {
-		if (worldEntry == 0) {
-			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_BLACK);
-			setScore(p, '6', "sb_world", p.getScoreboard(), WORLD_SLOT);
-
-		} else if (worldEntry == 1) {
-			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_BLACK);
-			setScore(p, 'e', "sb_nearby_entities", p.getScoreboard(), WORLD_SLOT);
-		} else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
+	public static void updateWorldHeader(Lang l) {
+		l.thisPlayer().getScoreboard().getTeam("dWorldDis").setPrefix("sb_world_" + timeEntry);
 	}
 
-	public static void updateWorld(Player p) {
-		Scoreboard sb = p.getScoreboard();
-		sb.getTeam("dWorld").setPrefix("    §b➥ ۩ " + p.getWorld().getName());
+	public static void updateWorld(Lang l) {
+		Scoreboard sb = l.thisPlayer().getScoreboard();
+		sb.getTeam("dWorld").setPrefix("    §b➥ ۩ " + l.thisPlayer().getWorld().getName());
 	}
 
-	public static void updateNearbyEntities(Player p) {
-		Scoreboard sb = p.getScoreboard();
-		sb.getTeam("dWorld").setPrefix("    §3➥ ۩ " + p.getLocation().getNearbyEntities(16, 16, 16).size());
+	public static void updateNearbyEntities(Lang l) {
+		Scoreboard sb = l.thisPlayer().getScoreboard();
+		sb.getTeam("dWorld").setPrefix("    §3➥ ۩ " +
+				l.thisPlayer().getLocation().getNearbyEntities(16, 16, 16).size());
 	}
 
-	public static void updateDeathSlot(Player p) {
-		if (deathEntry == 0) updateDeaths(p);
-		else if (deathEntry == 1) updateXp(p);
+	public static void updateDeathSlot(Lang l) {
+		if (deathEntry == 0) updateDeaths(l);
+		else if (deathEntry == 1) updateXp(l);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
-		updateDeathHeader(p);
+		updateDeathHeader(l);
 	}
 
-	public static void updateDeathHeader(Player p) {
-		if (deathEntry == 0) {
-			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_BLUE);
-			setScore(p, '4', "sb_deaths", p.getScoreboard(), DEATH_SLOT);
-		} else if (deathEntry == 1) {
-			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_BLUE);
-			setScore(p, 'c', "sb_xp", p.getScoreboard(), DEATH_SLOT);
-		} else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
+	public static void updateDeathHeader(Lang l) {
+		l.thisPlayer().getScoreboard().getTeam("dDeathDis").setPrefix("sb_death_" + deathEntry);
 	}
 
-	public static void updateDeaths(Player p) {
-		Scoreboard sb = p.getScoreboard();
+	public static void updateDeaths(Lang l) {
+		Scoreboard sb = l.thisPlayer().getScoreboard();
 
-		PC pc = new PC(p);
+		PC pc = new PC(l.thisPlayer());
 		sb.getTeam("dDeaths").setPrefix("    §c➥ ⚔ " + String.format("%s", pc.getDeaths()));
 	}
 
-	public static void updateXp(Player p) {
-		Scoreboard sb = p.getScoreboard();
+	public static void updateXp(Lang l) {
+		Scoreboard sb = l.thisPlayer().getScoreboard();
 
-		PC pc = new PC(p);
+		PC pc = new PC(l.thisPlayer());
 		sb.getTeam("dDeaths").setPrefix("    §4➥ ⚔ " + String.format("%s", pc.getDeaths()));
 	}
 
-	public static void updateKillSlot(Player p) {
-		if (killEntry == 0) updateKills(p);
-		else if (killEntry == 1) updateKillLevel(p);
+	public static void updateKillSlot(Lang l) {
+		if (killEntry == 0) updateKills(l);
+		else if (killEntry == 1) updateKillLevel(l);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
-		updateKillHeader(p);
+		updateKillHeader(l);
 	}
 
-	public static void updateKillHeader(Player p) {
-		if (killEntry == 0) {
-			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_DARK_AQUA);
-			setScore(p, 'c', "sb_kills", p.getScoreboard(), KILL_SLOT);
-
-		} else if (killEntry == 1) {
-			p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR_TEAM_DARK_AQUA);
-			setScore(p, '4', "sb_kill_level", p.getScoreboard(), KILL_SLOT);
-		} else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
+	public static void updateKillHeader(Lang l) {
+		l.thisPlayer().getScoreboard().getTeam("dKillDis").setPrefix("sb_kill_" + killEntry);
 	}
 
-	public static void updateKills(Player p) {
-		Scoreboard sb = p.getScoreboard();
+	public static void updateKills(Lang l) {
+		Scoreboard sb = l.thisPlayer().getScoreboard();
 
-		PC pc = new PC(p);
+		PC pc = new PC(l.thisPlayer());
 		sb.getTeam("dKills").setPrefix("    §d➥ ❤ " + String.format("%s", pc.getKills()));
 	}
 
-	public static void updateKillLevel(Player p) {
-		Scoreboard sb = p.getScoreboard();
-		sb.getTeam("dKills").setPrefix("    §5➥ ❤ " + String.format("%s", p.getTotalExperience()));
+	public static void updateKillLevel(Lang l) {
+		Scoreboard sb = l.thisPlayer().getScoreboard();
+		sb.getTeam("dKills").setPrefix("    §5➥ ❤ "
+				+ String.format("%s", l.thisPlayer().getTotalExperience()));
 	}
 
 	public static String convertTime(long time) {

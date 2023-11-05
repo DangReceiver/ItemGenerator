@@ -13,14 +13,20 @@ public class SleepPhantomAway implements Listener {
 
 	@EventHandler
 	public void handle(PlayerBedLeaveEvent e) {
-		World w = e.getPlayer().getWorld();
-		e.getPlayer().sendMessage(w.getTime() + "");
-		e.getPlayer().getStatistic(Statistic.TIME_SINCE_REST);
+		Player p = e.getPlayer();
+		World w = p.getWorld();
+
+		p.sendMessage(w.getTime() + "");
+		p.sendMessage("tsr:" + p.getStatistic(Statistic.TIME_SINCE_REST));
 
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
-			e.getPlayer().sendMessage(w.getTime() + "");
-			if (w.getTime() >= 40) for (Player ap : Bukkit.getOnlinePlayers())
+			if (w.getTime() < 40) return;
+			for (Player ap : Bukkit.getOnlinePlayers()) {
+
+				p.sendMessage(w.getTime() + "");
 				ap.setStatistic(Statistic.TIME_SINCE_REST, 0);
+				ap.sendMessage("tsr: " + ap.getStatistic(Statistic.TIME_SINCE_REST));
+			}
 		}, 2 * 20);
 	}
 }

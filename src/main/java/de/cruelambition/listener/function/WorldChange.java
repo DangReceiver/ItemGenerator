@@ -1,6 +1,7 @@
 package de.cruelambition.listener.function;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
+import de.cruelambition.language.Lang;
 import de.cruelambition.oo.Sb;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,9 +14,9 @@ public class WorldChange implements Listener {
 	@EventHandler
 	public void handle(PlayerChangedWorldEvent e) {
 		Player p = e.getPlayer();
-		Sb.updateWorldSlot(p);
+		Lang l = new Lang(p);
 
-		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
-				() -> Sb.updateWorldSlot(p), 3);
+		Sb.updateWorldSlot(l);
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> Sb.updateWorldSlot(l), 4);
 	}
 }
