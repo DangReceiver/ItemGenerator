@@ -158,9 +158,13 @@ public class WorldBorder implements Listener {
 		Inventory inv = Bukkit.createInventory(null, 4 * 9, lp.getString("wb_upgrader_inv"));
 		IB.invFiller(inv, IB.getFiller(new PC(p).getFiller(), true, true, null, null));
 
-		inv.setItem(inv.getSize() / 2 - 3, IB.lore(IB.name(new ItemStack(Material.RED_BANNER), l.getString("cancel_purchase")), Utils.splitString(l.getString("cancel_purchase_lore"))));
-		inv.setItem(inv.getSize() / 2 - 5, IB.lore(IB.name(new ItemStack(Material.KNOWLEDGE_BOOK), l.getString("purchase_info")), Utils.splitString(String.format(l.getString("wb_upgrade_info"), getUpgradeCost(as.getWorld())))));
-		inv.setItem(inv.getSize() / 2 - 7, IB.lore(IB.name(new ItemStack(Material.LIME_BANNER), l.getString("confirm_purchase"))));
+		inv.setItem(inv.getSize() / 2 - 3, IB.lore(IB.name(new ItemStack(Material.RED_BANNER),
+				l.getString("cancel_purchase")), Utils.splitString(l.getString("cancel_purchase_lore"))));
+		inv.setItem(inv.getSize() / 2 - 5, IB.lore(IB.name(new ItemStack(Material.KNOWLEDGE_BOOK),
+				l.getString("purchase_info")), Utils.splitString(String.format(l.getString("wb_upgrade_info"),
+				getUpgradeCost(as.getWorld())))));
+		inv.setItem(inv.getSize() / 2 - 7, IB.lore(IB.name(new ItemStack(Material.LIME_BANNER),
+				l.getString("confirm_purchase"))));
 
 		p.openInventory(inv);
 	}
@@ -202,7 +206,11 @@ public class WorldBorder implements Listener {
 				broadcastIncrement(p, p.getWorld());
 				increase();
 
-				c.set("Border." + p.getWorld().getName() + ".upgrade", c.getInt("Border." + p.getWorld().getName() + ".upgrade") + 1);
+				c.set("Border." + p.getWorld().getName() + ".upgrade", c.getInt("Border."
+						+ p.getWorld().getName() + ".upgrade") + 1);
+
+				if (p.getWorld().getName().contains("nether")) c.set("Border." + p.getWorld().getName()
+						+ "_nether" + ".upgrade", c.getInt("Border." + p.getWorld().getName() + ".upgrade") + 1);
 
 				c.set("Border." + p.getWorld().getName() + ".delay", true);
 				ItemGenerator.getItemGenerator().saveConfig();

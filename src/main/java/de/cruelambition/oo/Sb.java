@@ -5,6 +5,7 @@ import de.cruelambition.language.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.*;
 
 import java.text.Format;
@@ -16,6 +17,8 @@ public class Sb {
 	private static int timeEntry = 0, worldEntry = 0, deathEntry = 0, killEntry = 0;
 
 	public static final int TIME_SLOT = 16, WORLD_SLOT = 13, DEATH_SLOT = 10, KILL_SLOT = 7;
+
+	private static BukkitTask bt;
 
 	public static void setAllScoreBoards() {
 		for (Player ap : Bukkit.getOnlinePlayers()) setDefaultScoreBoard(new Lang(ap));
@@ -36,42 +39,26 @@ public class Sb {
 			if (killEntry >= 1) killEntry = -1;
 			killEntry++;
 
-			for (Player ap : Bukkit.getOnlinePlayers()) {
-				updateFullScoreBoard(new Lang(ap));
-				ap.sendMessage("SB Updated!" + " || " + timeEntry);
-			}
-
+			for (Player ap : Bukkit.getOnlinePlayers()) updateFullScoreBoard(new Lang(ap));
+			if (worldEntry == 1) startNbEntities();
+			else cancelNbEntities();
 		}, 8 * 20, 8 * 20);
+	}
+
+	public static void startNbEntities() {
+		bt = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
+			for (Player ap : Bukkit.getOnlinePlayers()) Sb.updateWorldSlot(new Lang(ap));
+		}, 30, 30);
+	}
+
+	public static void cancelNbEntities() {
+		bt.cancel();
 	}
 
 	public static void timeLoop() {
 		Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
 			for (Player ap : Bukkit.getOnlinePlayers()) Sb.updateTimeSlot(new Lang(ap));
 		}, 8 * 20, 20);
-	}
-
-	public static Objective getObjective(Scoreboard sb) {
-		Objective obj = sb.getObjective("  " + Lang.CHAT);
-
-		if (obj == null) obj = sb.getObjective("abc");
-		if (obj == null) obj = sb.getObjective(Lang.CHAT + "  ");
-		if (obj == null) obj = sb.getObjective("  " + Lang.CHAT + "abc" + Lang.CHAT + "  ");
-		return obj;
-	}
-
-	public static void setScore(Player p, char ch, String path, Scoreboard sb, int score) {
-		Lang l = new Lang(p);
-
-		getObjective(sb).unregister();
-		if (getObjective(sb) != null) return;
-
-		sb.getTeam("dTime").setDisplayName("HII");
-		sb.getEntryTeam("dTime").setPrefix("Nope");
-
-//		Score abc = sb.registerNewObjective("  " + Lang.CHAT, "abc", Lang.CHAT + "  ").getScore(
-//				"  §8» §" + ch + (l.getString(path).length() <= 16 ? l.getString(path) : "§8-"));
-//		abc.resetScore();
-//		abc.setScore(score);
 	}
 
 	public static void setDefaultScoreBoard(Lang l) {
@@ -186,7 +173,8 @@ public class Sb {
 	}
 
 	public static void updateTimeHeader(Lang l) {
-		l.thisPlayer().getScoreboard().getTeam("dTimeDis").setPrefix("sb_time_" + timeEntry);
+		l.thisPlayer().getScoreboard().getTeam("dTimeDis").setPrefix(
+				l.getString("sb_time_" + timeEntry));
 	}
 
 	public static void updateTime(Lang l) {
@@ -197,8 +185,8 @@ public class Sb {
 
 	public static void updateWorldTime(Lang l) {
 		Scoreboard sb = l.thisPlayer().getScoreboard();
-		sb.getTeam("dTime").setPrefix("    §6➥ ☞ " + String.format("%s",
-				convertTime(l.thisPlayer().getWorld().getTime())));
+		sb.getTeam("dTime").setPrefix("    §e➥ ☞ " + String.format("%s",
+				convertTime(l.thisPlayer().getWorld().getGameTime())));
 	}
 
 	public static void updateWorldSlot(Lang l) {
@@ -210,7 +198,8 @@ public class Sb {
 	}
 
 	public static void updateWorldHeader(Lang l) {
-		l.thisPlayer().getScoreboard().getTeam("dWorldDis").setPrefix("sb_world_" + timeEntry);
+		l.thisPlayer().getScoreboard().getTeam("dWorldDis").setPrefix(
+				l.getString("sb_world_" + timeEntry));
 	}
 
 	public static void updateWorld(Lang l) {
@@ -220,8 +209,8 @@ public class Sb {
 
 	public static void updateNearbyEntities(Lang l) {
 		Scoreboard sb = l.thisPlayer().getScoreboard();
-		sb.getTeam("dWorld").setPrefix("    §3➥ ۩ " +
-				l.thisPlayer().getLocation().getNearbyEntities(16, 16, 16).size());
+		sb.getTeam("dWorld").setPrefix("    §b➥ ۩ " +
+				l.thisPlayer().getLocation().getNearbyEntities(8, 8, 8).size());
 	}
 
 	public static void updateDeathSlot(Lang l) {
@@ -233,7 +222,8 @@ public class Sb {
 	}
 
 	public static void updateDeathHeader(Lang l) {
-		l.thisPlayer().getScoreboard().getTeam("dDeathDis").setPrefix("sb_death_" + deathEntry);
+		l.thisPlayer().getScoreboard().getTeam("dDeathsDis").setPrefix(
+				l.getString("sb_deaths_" + deathEntry));
 	}
 
 	public static void updateDeaths(Lang l) {
@@ -247,7 +237,7 @@ public class Sb {
 		Scoreboard sb = l.thisPlayer().getScoreboard();
 
 		PC pc = new PC(l.thisPlayer());
-		sb.getTeam("dDeaths").setPrefix("    §4➥ ⚔ " + String.format("%s", pc.getDeaths()));
+		sb.getTeam("dDeaths").setPrefix("    §c➥ ⚔ " + "§8-");
 	}
 
 	public static void updateKillSlot(Lang l) {
@@ -259,7 +249,7 @@ public class Sb {
 	}
 
 	public static void updateKillHeader(Lang l) {
-		l.thisPlayer().getScoreboard().getTeam("dKillDis").setPrefix("sb_kill_" + killEntry);
+		l.thisPlayer().getScoreboard().getTeam("dKillsDis").setPrefix(l.getString("sb_kills_" + killEntry));
 	}
 
 	public static void updateKills(Lang l) {
@@ -271,7 +261,7 @@ public class Sb {
 
 	public static void updateKillLevel(Lang l) {
 		Scoreboard sb = l.thisPlayer().getScoreboard();
-		sb.getTeam("dKills").setPrefix("    §5➥ ❤ "
+		sb.getTeam("dKills").setPrefix("    §d➥ ❤ "
 				+ String.format("%s", l.thisPlayer().getTotalExperience()));
 	}
 

@@ -390,7 +390,7 @@ public class Generator {
 
 		IB.name(item, Lang.colorFromRGB(col.getRed(), col.getGreen(), col.getBlue())
 				+ String.format(Lang.getMessage(Lang.getServerLang(), "potion"),
-				pe.getType().getName().replaceAll("_", " ")));
+				pe.getType().getName().replaceAll("_", " ").toLowerCase()));
 		if (r.nextInt(4) == 0) effect(item);
 	}
 

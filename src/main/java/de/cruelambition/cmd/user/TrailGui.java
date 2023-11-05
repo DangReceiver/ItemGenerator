@@ -60,9 +60,8 @@ public class TrailGui implements CommandExecutor, Listener {
 
 			if (!c.isSet("ParticleList." + ps)) {
 				c.set("ParticleList." + ps + ".material", Material.GOLD_BLOCK.toString());
-				c.set("ParticleList." + ps + ".group", "beginner");
-
 				c.set("ParticleList." + ps + ".cost", 16);
+
 				c.set("ParticleList." + ps + ".color", "b");
 				c.set("ParticleList." + ps + ".lore", "§7§oA particle");
 			}

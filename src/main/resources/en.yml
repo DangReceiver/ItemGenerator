@@ -163,13 +163,13 @@ mergeresult:
 
 sb:
   sb_time_0: "§6Current time"
-  sb_time_1: "§eWorld Time"
+  sb_time_1: "§6World Time"
   sb_world_0: "§3Your world"
-  sb_world_1: "§bNearby NPCs"
+  sb_world_1: "§3Nearby NPCs"
   sb_deaths_0: "§4Deaths"
-  sb_deaths_1: "§cXp"
+  sb_deaths_1: "§4Xp"
   sb_kills_0: "§5Kills"
-  sb_kills_1: "§dKill Level"
+  sb_kills_1: "§5Kill Level"
 
 worldborder:
   as_wb: "§2WorldBorder Upgrader"
