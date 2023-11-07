@@ -50,16 +50,17 @@ backpack:
   backpack_inventory: "§8» $175,120,50; Backpack"
   backpack_saved: "Your backpack inventory was saved."
   backpack_upgrade_inv: "§8» $175,120,50; Upgrade the Backpack"
-  backpack_upgrade: "§7When clicking, you'll pay %s Emeralds and // receive 1 (more) row of space"
+  backpack_upgrade: "§7When clicking, you'll pay %s Emeralds and // §7receive 1 (more) row of space"
   backpack_not_unlocked: "You have not yet unlocked the backpack"
+  backpack_upgrade_info: "§7Upgrade for one more row with //§7 a cost of %s Emeralds"
 
 purchase:
   confirm_purchase: "§aClick to confirm the purchase"
   cancel_purchase: "§cClick to cancel the purchase"
-  cancel_purchase_lore: "§7Clicking will cancel everything // in terms of the purchase"
+  cancel_purchase_lore: "§7Clicking will cancel everything // §7in terms of the purchase"
   purchase_info: "§9Purchase info§8: "
   wb_upgrade_info: "§bClicking the banner will cost you %s xp (level) //
-   and grow the border by 2 Blocks//in time of 4 Seconds"
+   §band grow the border by 2 Blocks//§bin time of 4 Seconds"
 
 info:
   info: "Ram usage: §e%s/§a%s. "
@@ -149,6 +150,9 @@ cm:
 
 playerclickplayer:
   x_loves_you: "§C%s §7loves you ^^"
+
+customitems:
+  jetpack_in_use: "You're currently on delay for this item!"
 
 gamemode:
   gamemode_changed_survival: "You will now receive items (again)."

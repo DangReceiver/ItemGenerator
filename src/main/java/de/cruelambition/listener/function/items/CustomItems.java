@@ -50,7 +50,10 @@ public class CustomItems implements Listener {
 				for (Player ap : Bukkit.getOnlinePlayers())
 					ap.stopSound(Sound.MUSIC_DISC_CAT);
 
-				cb.getWorld().playSound(cb.getLocation(), "aa_itemgenerator_wavvyboi-Phantom", 0.5f, 1);
+				cb.getWorld().playSound(cb.getLocation(), "records/aa_itemgenerator_wavvyboi-Phantom",
+						0.5f, 1);
+				cb.getWorld().playSound(cb.getLocation(), "aa_itemgenerator_wavvyboi-Phantom",
+						0.5f, 1);
 //				cb.setBlockData(Bukkit.createBlockData(""));
 			}
 
@@ -97,8 +100,8 @@ public class CustomItems implements Listener {
 
 			if (a.toString().contains("RIGHT") || a.toString().contains("LEFT")) {
 				Random r = new Random();
-				p.sendTitle(Lang.PRE, l.getString("sound_playing_sound"), 20, 20, 10);
 
+				p.sendTitle(Lang.PRE, l.getString("sound_playing_sound"), 20, 20, 10);
 				p.playSound(p.getLocation(), Sound.values()[r.nextInt(Sound.values().length - 1)],
 						0.8f, (float) (r.nextInt(21) / 10));
 			}
@@ -107,31 +110,31 @@ public class CustomItems implements Listener {
 			e.setCancelled(true);
 			PC pc = new PC(p);
 
-			if (a.toString().contains("RIGHT")) {
-				if (pc.getJetpackUsage()) {
+			if (!a.toString().contains("RIGHT")) return;
+			if (pc.getJetpackUsage()) {
 
-					p.sendTitle(Lang.PRE, "§7" + l.getString("jetpack_in_use"));
-					return;
-				}
-
-				if (p.getFallDistance() > 0) p.setFallDistance(p.getFallDistance() / 2);
-
-				pc.setJetpackUsage(true);
-				pc.savePCon();
-
-				p.setVelocity(p.getVelocity().setY(0).add(new Vector(0, 0.3, 0)).multiply(1.4f));
-				Utils.particleOffset(p.getLocation(), Particle.FLAME, 2, 0.275);
-
-				Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
-
-					p.setVelocity(p.getVelocity().setY(0).add(new Vector(0, 0.2f, 0)).multiply(1.4f));
-					Utils.particleOffset(p.getLocation(), Particle.SOUL_FIRE_FLAME, 3, 0.35);
-
-					PC pc1 = new PC(p);
-					pc1.setJetpackUsage(false);
-					pc1.savePCon();
-				}, 6);
+				p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 0.5f, 0.75f);
+				p.sendActionBar(Lang.PRE + l.getString("jetpack_in_use"));
+				return;
 			}
+
+			if (p.getFallDistance() > 0) p.setFallDistance(p.getFallDistance() / 2);
+
+			pc.setJetpackUsage(true);
+			pc.savePCon();
+
+			p.setVelocity(p.getVelocity().setY(0).add(new Vector(0, 0.2, 0)).multiply(1.7f));
+			Utils.particleOffset(p.getLocation(), Particle.FLAME, 2, 0.275);
+
+			Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
+
+				p.setVelocity(p.getVelocity().setY(0).add(new Vector(0, 0.15f, 0)).multiply(1.7f));
+				Utils.particleOffset(p.getLocation(), Particle.SMALL_FLAME, 4, 0.35);
+
+				PC pc1 = new PC(p);
+				pc1.setJetpackUsage(false);
+				pc1.savePCon();
+			}, 5);
 		}
 	}
 
@@ -186,16 +189,17 @@ public class CustomItems implements Listener {
 
 		if (item.equals(Items.ITEMS.get(4))) {
 			item.getType().isEdible();
+			p.sendMessage("Banana");
 
 			p.setSaturation(p.getSaturation() - 1);
 			p.setExhaustion(p.getExhaustion() + 2);
 
 		} else if (item.equals(Items.ITEMS.get(5))) {
 			item.getType().isEdible();
+			p.sendMessage("Baked Banana");
 
 			p.setSaturation(p.getSaturation() + 1);
 			p.setExhaustion(p.getExhaustion() + 4);
-
 		}
 
 	}

@@ -1,5 +1,7 @@
 package de.cruelambition.listener.function.blocks;
 
+import de.cruelambition.itemgenerator.ItemGenerator;
+import de.cruelambition.oo.PC;
 import de.cruelambition.oo.Utils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -32,6 +34,11 @@ public class CaneCactus implements Listener {
 		if (l.getBlock().getType() != Material.AIR && l.getBlock().getType() != cb.getType()) return;
 
 		e.setCancelled(true);
+		PC pc = new PC(p);
+
+		if (pc.isSet("Temp.CaneCactus")) return;
+		pc.set("Temp.CaneCactus", true);
+		pc.savePCon();
 
 		if (l.getBlock().getType() != cb.getType()) l.getBlock().setType(cb.getType());
 		else if (!extendGrowable(cb, cb.getLocation().clone())) return;
@@ -41,6 +48,13 @@ public class CaneCactus implements Listener {
 
 		p.playSound(p.getLocation(), Sound.ITEM_BONE_MEAL_USE, 0.4f, 1.15f);
 		Utils.particleOffset(l.clone().add(0.5, 0.5, 0.5), Particle.VILLAGER_HAPPY, 4, 0.65);
+
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
+			PC pc1 = new PC(p);
+
+			pc1.set("Temp.CaneCactus", null);
+			pc1.savePCon();
+		}, 6);
 	}
 
 	public boolean extendGrowable(Block cb, Location loc) {

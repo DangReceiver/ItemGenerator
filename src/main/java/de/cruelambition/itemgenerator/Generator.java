@@ -24,7 +24,6 @@ public class Generator {
 	private BukkitTask generatorLoop, checkLoop;
 
 	public Generator() {
-		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 		material = new ArrayList<>();
 		forbidden = new ArrayList<>();
 
@@ -34,7 +33,7 @@ public class Generator {
 		editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(),
 				Material.POTION.toString(), Material.SPLASH_POTION.toString(),
 				Material.TIPPED_ARROW.toString(), Material.LINGERING_POTION.toString(),
-				"CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET", "_SWORD", "_PICKAXE", "_AXE", "_SHOVEL"));
+				"CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET", "_SWORD", "_PICKAXE", "_AXE", "_SHOVEL", "SPAWN_EGG"));
 
 		for (int a = 0; a <= Items.mats.size() - 1; a++)
 			for (int b = 0; b <= Items.amount[a]; b++)
@@ -101,6 +100,8 @@ public class Generator {
 
 		for (int i = 0; i <= 5; i++) // Total: 7
 			addMaterialToLoop(Material.ENCHANTED_BOOK);
+		for (int i = 0; i <= 0; i++) // Total: 2
+			addMaterialToLoop(Material.ALLAY_SPAWN_EGG);
 	}
 
 	public void addMaterialToLoop(Material m) {
@@ -111,8 +112,8 @@ public class Generator {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
 		int csi = c.getInt("Loops.Check.StartIn", 60),
 				cf = c.getInt("Loops.Check.Frequency", 80),
-				gsi = c.getInt("Loops.Generator.StartIn", 6),
-				gf = c.getInt("Loops.Generator.Frequency", 30);
+				gsi = c.getInt("Loops.Generator.StartIn", 12),
+				gf = c.getInt("Loops.Generator.Frequency", 25);
 
 		return new ArrayList<>(Arrays.asList(csi, cf, gsi, gf));
 	}
@@ -275,23 +276,22 @@ public class Generator {
 			ItemStack is;
 			Random r = new Random();
 
-			if (r.nextInt(4) == 0) is = new ItemStack(getRandomMaterial());
+			if (r.nextInt(3) == 0) is = new ItemStack(getRandomMaterial());
 			else is = new ItemStack(getRandomCommonMaterial());
 
 			Material type = is.getType();
-			if (type == Material.ALLAY_SPAWN_EGG) rollSpawnEgg(is);
 			if (r.nextInt(2) == 0 && canEdit(type)) edit(is);
 
 			if (type.isBlock()) if (r.nextInt(2) == 0)
 				is.setAmount(r.nextInt(2) == 0 ? (r.nextInt(10 + 1) - 4 >= 1
 						? r.nextInt(10 + 1) - 4 : 1) : r.nextInt(10 + 1));
 
-
 			if (isCustomItem(type)) {
 				ap.sendMessage("§5§kkk Receiving custom item... §kkk");
 
-				int cmd = r.nextInt(getCustomItemAmount(type) + 1);
+				int cmd = r.nextInt(getCustomItemAmount(type) + 1) + 1;
 				if (cmd != 0) IB.cmd(is, cmd);
+
 				ap.sendMessage("cmd: " + cmd + " || type: " + type);
 				ap.sendMessage("§5§kkk Received custom item o: §kkk");
 
@@ -306,7 +306,10 @@ public class Generator {
 	}
 
 	public void rollSpawnEgg(ItemStack item) {
-		item.setType(spawnEggs.get(new Random().nextInt(spawnEggs.size())));
+		Bukkit.getConsoleSender().sendMessage("Rolling Spawnegg... ");
+		Material type = spawnEggs.get(new Random().nextInt(spawnEggs.size()));
+		item.setType(type);
+		Bukkit.getConsoleSender().sendMessage("Rolling Spawnegg: " + type);
 	}
 
 	public boolean isCustomItem(Material m) {
@@ -317,13 +320,14 @@ public class Generator {
 		boolean b = false;
 		if (item.getType().getMaxStackSize() <= 1) return false;
 
-		List<String> l = new ArrayList<>(Arrays.asList("ARROW", "WOOL", "DEEPSLATE", "STONE"));
+		List<String> l = new ArrayList<>(Arrays.asList("ARROW", "WOOL", "DEEPSLATE", "STONE", "BRICK", "CLAY",
+				"GLASS", "PLANKS", "LOG"));
 		for (String s : l) if (item.getType().toString().contains(s)) b = true;
 
 		if (b) {
 			Random r = new Random();
-			int i = r.nextInt(10) + 1;
-			item.setAmount(i >= 6 && (r.nextInt(2) == 0) ? i / 2 : i);
+			int i = r.nextInt(8) + 1;
+			item.setAmount(i >= 5 && (r.nextInt(2) == 0) ? i / 2 : i);
 		}
 
 		return b;
@@ -376,13 +380,13 @@ public class Generator {
 		Color col = Color.fromRGB(r.nextInt(256), r.nextInt(256), r.nextInt(256));
 		pm.setColor(col);
 
-		int d = r.nextInt(460 * 20);
+		int d = r.nextInt(480 * 20);
 		int a = r.nextInt(5);
 
 		PotionEffect pe = new PotionEffect(PotionEffectType.values()[r.nextInt(PotionEffectType
 				.values().length)], ((d >= 160 && r.nextInt(4) == 0) || (d >= 280 &&
 				r.nextInt(5) == 0) || (d >= 370 && r.nextInt(6) == 0) ? d / 3 : d),
-				((a > 1 && r.nextInt(4) == 0) || (a > 3 && r.nextInt(6) == 0) ? a - 1 : a),
+				((a > 1 && r.nextInt(5) == 0) || (a > 3 && r.nextInt(5) == 0) ? a - 1 : a),
 				true, true, true);
 
 		pm.addCustomEffect(pe, true);
@@ -391,7 +395,7 @@ public class Generator {
 		IB.name(item, Lang.colorFromRGB(col.getRed(), col.getGreen(), col.getBlue())
 				+ String.format(Lang.getMessage(Lang.getServerLang(), "potion"),
 				pe.getType().getName().replaceAll("_", " ").toLowerCase()));
-		if (r.nextInt(4) == 0) effect(item);
+		if (pm.getCustomEffects().size() <= 5 && r.nextInt(3) == 0) effect(item);
 	}
 
 	public boolean canEdit(Material m) {
@@ -402,6 +406,8 @@ public class Generator {
 	public void edit(ItemStack item) {
 		if (item.getType() == Material.POTION || item.getType() == Material.SPLASH_POTION ||
 				item.getType() == Material.LINGERING_POTION || item.getType() == Material.TIPPED_ARROW) effect(item);
+
+		else if (item.getType().toString().contains("SPAWN_EGG")) rollSpawnEgg(item);
 		else enchant(item);
 	}
 

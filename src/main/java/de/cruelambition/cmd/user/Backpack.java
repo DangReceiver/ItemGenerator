@@ -54,18 +54,21 @@ public class Backpack implements CommandExecutor, Listener {
 			Inventory inv = Bukkit.createInventory(null, 3 * 9, l.getString("backpack_upgrade_inv"));
 
 			IB.invFiller(inv, IB.getFiller(pc.getFiller(), true, false, null, null));
-			inv.setItem((inv.getSize() / 2 + 1), IB.lore(IB.name(new ItemStack(Material.RED_TERRACOTTA),
-					"cancel_purchase"), "cancel_purchase_lore"));
+			inv.setItem((inv.getSize() / 2 + 2), IB.lore(IB.name(new ItemStack(Material.RED_TERRACOTTA),
+					l.getString("cancel_purchase")), l.getString("cancel_purchase_lore")));
+			inv.setItem((inv.getSize() / 2 + 2), IB.lore(IB.name(new ItemStack(Material.PAPER),
+					l.getString("purchase_info")), String.format(l.getString("purchase_info"),
+					(8 * (bps + 1) * bps + 32))));
 
 			p.openInventory(inv);
 			Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
 
-				inv.setItem((inv.getSize() / 2 - 1), IB.lore(IB.name(new ItemStack(Material.LIME_TERRACOTTA),
+				inv.setItem((inv.getSize() / 2 - 2), IB.lore(IB.name(new ItemStack(Material.LIME_TERRACOTTA),
 						l.getString("confirm_purchase")), String.format(l.getString("backpack_upgrade"),
-						(8 * bps * bps + 24))));
+						(8 * (bps + 1) * bps + 32))));
 
 				p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_XYLOPHONE, 0.5f, 1.2f);
-			}, 30);
+			}, 35);
 
 			return false;
 		} else if (args.length != 0) {
@@ -101,7 +104,7 @@ public class Backpack implements CommandExecutor, Listener {
 				PC pc = new PC(p);
 
 				int bps = pc.getBackpackSize();
-				int cost = (8 * bps * bps + 24);
+				int cost = (8 * (bps + 1) * bps + 32);
 
 				if (IB.getMaterialAmount(Material.EMERALD, p.getInventory()) < cost) {
 					p.sendMessage(Lang.PRE + l.getString("insufficient_funds"));
