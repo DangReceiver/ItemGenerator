@@ -48,6 +48,11 @@ public class Items {
 //		for (Player ap : Bukkit.getOnlinePlayers()) for (ItemStack is : l) ap.getInventory().addItem(is);
 	}
 
+	public ItemStack getCustomItem(Material m, int cmd) {
+
+		return null;
+	}
+
 	public ItemStack newItem(String name, String lore) {
 		ItemStack customItem = new ItemStack(Material.PAPER);
 
