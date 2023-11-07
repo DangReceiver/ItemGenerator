@@ -68,7 +68,8 @@ public class WorldBorder implements Listener {
 //			cs.sendMessage("§2en: " + en.toString() + " || dn: " + (en.getCustomName() != null
 //					? en.getCustomName() : null));
 
-			if (en instanceof ArmorStand as && !as.hasGravity()) {
+			if (en instanceof ArmorStand as &&
+					as.hasEquipmentLock(EquipmentSlot.HEAD, ArmorStand.LockType.REMOVING_OR_CHANGING)) {
 //				cs.sendMessage("§2is upgrader");
 				return true;
 			}
@@ -79,7 +80,9 @@ public class WorldBorder implements Listener {
 
 	public ArmorStand getSpawnUpgrader(World w) {
 		for (Entity en : w.getNearbyEntities(new Location(w, 0.5, 64, 0.5), 8d, 8d, 8d))
-			if (en instanceof ArmorStand as && !as.hasGravity()) return as;
+			if (en instanceof ArmorStand as &&
+					as.hasEquipmentLock(EquipmentSlot.HEAD, ArmorStand.LockType.REMOVING_OR_CHANGING))
+				return as;
 
 		return null;
 	}
