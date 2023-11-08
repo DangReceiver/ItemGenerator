@@ -4,6 +4,7 @@ import de.cruelambition.language.Lang;
 import de.cruelambition.oo.PC;
 import de.cruelambition.worlds.SpawnWorld;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,6 +40,7 @@ public class Spawn implements CommandExecutor {
 			pc.savePCon();
 		}
 
+		p.setGameMode(GameMode.ADVENTURE);
 		p.teleport(loc);
 	}
 }

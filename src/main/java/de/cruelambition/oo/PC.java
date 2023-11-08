@@ -121,6 +121,47 @@ public class PC {
 
 	public void increaseKills() {
 		c.set("player.stats.kills", getKills() + 1);
+		if (getKills() >= getKillLevelRequirement()) {
+
+			setKillLevel(getKillLevel() + 1);
+			setKillLevelRequirement(getNewLevelRequirement(getKillLevel()));
+
+			killLevelIncreased();
+		}
+	}
+
+	public void killLevelIncreased() {
+		Player p = this.thisPlayer();
+		p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.5f, 1.2f);
+
+		p.sendTitle(String.format(Lang.getMessage(getLanguage(), "kill_level_increase"), getKillLevel()),
+				String.format(Lang.getMessage(getLanguage(), "kill_level_increase_sub"), getKillLevelRequirement()),
+				10, 80, 40);
+	}
+
+	public void setKillLevel(int level) {
+		c.set("player.stats.killLevel", level);
+	}
+
+	public int getKillLevel() {
+		return c.getInt("player.stats.killLevel", 1);
+	}
+
+	public void setKillLevelRequirement(int levelRequirement) {
+		c.set("player.stats.killLevelRequirement", levelRequirement);
+	}
+
+	public int getNewLevelRequirement(int level) {
+		return level * level + 64;
+	}
+
+	public int getKillLevelRequirement() {
+		return c.isSet("player.stats.killLevelRequirement") ? c.getInt("player.stats.killLevelRequirement")
+				: getNewLevelRequirement(0);
+	}
+
+	public int getKillStatus() {
+		return c.getInt("player.stats.killLevelStatus", 0);
 	}
 
 	public int getKills() {

@@ -10,6 +10,7 @@ import org.bukkit.scoreboard.*;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 
 public class Sb {
@@ -19,6 +20,8 @@ public class Sb {
 	public static final int TIME_SLOT = 16, WORLD_SLOT = 13, DEATH_SLOT = 10, KILL_SLOT = 7;
 
 	private static BukkitTask bt;
+	private static final int MAX_IDLE = Bukkit.getIdleTimeout();
+
 
 	public static void setAllScoreBoards() {
 		for (Player ap : Bukkit.getOnlinePlayers()) setDefaultScoreBoard(new Lang(ap));
@@ -157,11 +160,6 @@ public class Sb {
 		updateWorldSlot(l);
 		updateKillSlot(l);
 		updateDeathSlot(l);
-
-//		sb.getTeam("dTime").setPrefix("    §e➥ ☞ " + String.format("%s", convertTime(System.currentTimeMillis())));
-//		sb.getTeam("dWorld").setPrefix("    §b➥ \u06E9 " + p.getWorld().getName());
-//		sb.getTeam("dDeaths").setPrefix("    §c➥ ⚔ " + String.format("%s", pc.getDeaths()));
-//		sb.getTeam("dKills").setPrefix("    §d➥ ❤ " + String.format("%s", pc.getKills()));
 	}
 
 	public static void updateTimeSlot(Lang l) {
@@ -186,7 +184,7 @@ public class Sb {
 	public static void updateWorldTime(Lang l) {
 		Scoreboard sb = l.thisPlayer().getScoreboard();
 		sb.getTeam("dTime").setPrefix("    §e➥ ☞ " + String.format("%s",
-				convertTime(l.thisPlayer().getWorld().getGameTime())));
+				convertTime(l.thisPlayer().getWorld().getFullTime())));
 	}
 
 	public static void updateWorldSlot(Lang l) {
@@ -235,9 +233,8 @@ public class Sb {
 
 	public static void updateXp(Lang l) {
 		Scoreboard sb = l.thisPlayer().getScoreboard();
-
-		PC pc = new PC(l.thisPlayer());
-		sb.getTeam("dDeaths").setPrefix("    §c➥ ⚔ " + "§8-");
+		Duration id = l.thisPlayer().getIdleDuration();
+		sb.getTeam("dDeaths").setPrefix("    §c➥ ⚔ " + id.getSeconds() + " / " + MAX_IDLE);
 	}
 
 	public static void updateKillSlot(Lang l) {
@@ -261,8 +258,9 @@ public class Sb {
 
 	public static void updateKillLevel(Lang l) {
 		Scoreboard sb = l.thisPlayer().getScoreboard();
-		sb.getTeam("dKills").setPrefix("    §d➥ ❤ "
-				+ String.format("%s", l.thisPlayer().getTotalExperience()));
+		PC pc = new PC(l.thisPlayer());
+
+		sb.getTeam("dKills").setPrefix("    §d➥ ❤ " + pc.getKillStatus() + " / " + pc.getKillLevelRequirement());
 	}
 
 	public static String convertTime(long time) {

@@ -344,18 +344,9 @@ public class Language {
 		cs.sendMessage(getMessage(getServerLang(), "saving_missing_keys"));
 		int i = 0;
 
+		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
 		File f = new File(df + "/languages");
-		File fmkf = new File(df, "missingkeys.yml");
 
-		if (!fmkf.exists()) {
-			try {
-				fmkf.createNewFile();
-			} catch (IOException e) {
-				cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(), "error_creating_missing_keys"));
-			}
-		}
-
-		YamlConfiguration mkf = YamlConfiguration.loadConfiguration(fmkf);
 		for (File lf : f.listFiles()) {
 			String s1 = lf.getName().split(".yml")[0];
 
@@ -363,17 +354,13 @@ public class Language {
 			for (String s : mkl) {
 
 				if (s.contains("; " + s1)) continue;
-				mkf.set(s1, mkl);
+				c.set(s1, mkl);
 
 				mkl.remove(i);
 				i++;
 			}
 		}
 
-		try {
-			mkf.save(fmkf);
-		} catch (IOException ignored) {
-			cs.sendMessage(getMessage(getServerLang(), "missingkey_file_save_error"));
-		}
+		ItemGenerator.getItemGenerator().saveConfig();
 	}
 }

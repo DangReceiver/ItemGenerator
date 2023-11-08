@@ -30,6 +30,8 @@ public class KillDeath implements Listener {
 
 		PC pc = new PC(p);
 		pc.increaseKills();
+
+
 		pc.savePCon();
 
 		Sb.updateKillSlot(new Lang(p));

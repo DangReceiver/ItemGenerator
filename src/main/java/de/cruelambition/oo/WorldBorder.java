@@ -45,12 +45,14 @@ public class WorldBorder implements Listener {
 		}
 
 		if (!spawnUpgraderExists(wb.getWorld())) {
-			cs.sendMessage(Lang.PRE + String.format(l.getString("spawning_wb_non_existing"), wb.getWorld().getName()));
+			cs.sendMessage(Lang.PRE + String.format(l.getString("spawning_wb_non_existing"),
+					wb.getWorld().getName()));
 			spawnUpgrader(wb.getWorld());
 		}
 
 		if (!spawnUpgraderExists(wbn.getWorld())) {
-			cs.sendMessage(Lang.PRE + String.format(l.getString("spawning_wb_non_existing"), wbn.getWorld().getName()));
+			cs.sendMessage(Lang.PRE + String.format(l.getString("spawning_wb_non_existing"),
+					wbn.getWorld().getName()));
 			spawnUpgrader(wbn.getWorld());
 		}
 
@@ -62,15 +64,15 @@ public class WorldBorder implements Listener {
 	}
 
 	public boolean spawnUpgraderExists(World w) {
-//		ConsoleCommandSender cs = Bukkit.getConsoleSender();
+		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 
 		for (Entity en : w.getNearbyEntities(new Location(w, 0.5, 64, 0.5), 8d, 8d, 8d)) {
-//			cs.sendMessage("§2en: " + en.toString() + " || dn: " + (en.getCustomName() != null
-//					? en.getCustomName() : null));
+			cs.sendMessage("§2en: " + en.toString() + " || dn: " + (en.getCustomName() != null
+					? en.getCustomName() : null));
 
 			if (en instanceof ArmorStand as &&
 					as.hasEquipmentLock(EquipmentSlot.HEAD, ArmorStand.LockType.REMOVING_OR_CHANGING)) {
-//				cs.sendMessage("§2is upgrader");
+				cs.sendMessage("§2is upgrader");
 				return true;
 			}
 		}
@@ -107,7 +109,8 @@ public class WorldBorder implements Listener {
 		org.bukkit.WorldBorder pwb = w.getWorldBorder();
 		if (c.isSet("Border." + w.getName() + ".hadDefaults") && pwb != null) return;
 
-		if (pwb == null) Bukkit.getConsoleSender().sendMessage(Lang.PRE + new Lang(null).getString("wb_invalid_world"));
+		if (pwb == null) Bukkit.getConsoleSender().sendMessage(Lang.PRE +
+				new Lang(null).getString("wb_invalid_world"));
 		else defaults(pwb);
 	}
 
@@ -193,33 +196,38 @@ public class WorldBorder implements Listener {
 				break;
 
 			case LIME_BANNER:
-				if (c.isSet("Border." + p.getWorld().getName() + ".delay")) {
+				World world = p.getWorld();
+				if (world.getName().contains("_nether"))
+					world = Bukkit.getWorld(world.getName().split("_nether")[0]);
+
+				if (c.isSet("Border." + world.getName() + ".delay")) {
 					p.sendMessage(Lang.PRE + l.getString("wb_upgrader_on_delay"));
 					return;
 				}
 
-				if (p.getLevel() < getUpgradeCost(p.getWorld())) {
+				if (p.getLevel() < getUpgradeCost(world)) {
 					p.sendMessage(Lang.PRE + l.getString("insufficient_exp_level"));
 					return;
 				}
 
-				p.setLevel(p.getLevel() - getUpgradeCost(p.getWorld()));
+				p.setLevel(p.getLevel() - getUpgradeCost(world));
 				p.sendTitle(Lang.PRE, l.getString("you_upgraded_wb"), 30, 40, 60);
 
-				broadcastIncrement(p, p.getWorld());
+				broadcastIncrement(p, world);
 				increase();
 
-				c.set("Border." + p.getWorld().getName() + ".upgrade", c.getInt("Border."
-						+ p.getWorld().getName() + ".upgrade") + 1);
+				c.set("Border." + world.getName() + ".upgrade", c.getInt("Border."
+						+ world.getName() + ".upgrade") + 1);
 
-				if (p.getWorld().getName().contains("nether")) c.set("Border." + p.getWorld().getName()
-						+ "_nether" + ".upgrade", c.getInt("Border." + p.getWorld().getName() + ".upgrade") + 1);
+				if (world.getName().contains("nether")) c.set("Border." + world.getName()
+						+ "_nether" + ".upgrade", c.getInt("Border." + world.getName() + ".upgrade") + 1);
 
-				c.set("Border." + p.getWorld().getName() + ".delay", true);
+				c.set("Border." + world.getName() + ".delay", true);
 				ItemGenerator.getItemGenerator().saveConfig();
 
+				World w = world;
 				Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
-					c.set("Border." + p.getWorld().getName() + ".delay", null);
+					c.set("Border." + w.getName() + ".delay", null);
 					ItemGenerator.getItemGenerator().saveConfig();
 				}, 4 * 20 + 1);
 

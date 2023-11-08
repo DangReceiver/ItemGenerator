@@ -27,6 +27,7 @@ public class Afk implements Listener {
 		e.setCancelled(true);
 
 		Player p = e.getPlayer();
+		p.resetIdleDuration();
 		Spawn.sendToSpawn(p);
 
 //		p.setIdle

@@ -276,7 +276,7 @@ public class Generator {
 			ItemStack is;
 			Random r = new Random();
 
-			if (r.nextInt(3) == 0) is = new ItemStack(getRandomMaterial());
+			if (r.nextInt(5) == 0) is = new ItemStack(getRandomMaterial());
 			else is = new ItemStack(getRandomCommonMaterial());
 
 			Material type = is.getType();

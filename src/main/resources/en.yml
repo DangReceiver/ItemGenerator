@@ -32,6 +32,13 @@ checkmessage:
   listing_missing_keys: "Listing missing keys§8..."
   list_missing_keys: "Key§8:§2 %s"
 
+fix:
+  fix_attempt: "Trying to fix your item..."
+  could_not_fix_item: "Item could not be fixed... Try again!"
+  fixed_item: "Item fixed successfully"
+  already_fixed: "This item is already fixed"
+  fix_invalid_item: "This item is not valid for a fix"
+
 fly:
   flight_updated: "Your flight mode was toggled."
   flight_updated_target: "Your target's flight mode was toggled."
@@ -168,17 +175,23 @@ mergeresult:
 sb:
   sb_time_0: "§6Current time"
   sb_time_1: "§6World Time"
-  sb_world_0: "§3Your world"
+  sb_world_0: "§3Your World"
   sb_world_1: "§3Nearby NPCs"
   sb_deaths_0: "§4Deaths"
-  sb_deaths_1: "§4Xp"
+  sb_deaths_1: "§4Idle Duration"
   sb_kills_0: "§5Kills"
   sb_kills_1: "§5Kill Level"
+
+pc:
+  kill_level_increase: "§5Kill level up! (%s)"
+  kill_level_increase_sub: "§7New level requirement is §a%s §7kills!"
 
 worldborder:
   as_wb: "§2WorldBorder Upgrader"
   wb_upgraded: "The World Border was upgraded by %s for %s xp (level)!"
   wb_upgrader_inv: "§2WorldBorder Upgrader"
+  spawning_wb_non_existing: "Creating worldborder upgrader..."
+
 
 frequent:
   not_implemented_yet: "You are looking into the future! This feature has not been implemented yet!"

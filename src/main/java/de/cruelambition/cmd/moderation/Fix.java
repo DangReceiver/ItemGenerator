@@ -60,6 +60,7 @@ public class Fix implements CommandExecutor {
 			return false;
 		}
 
+		p.sendMessage(Lang.PRE + l.getString("fix_invalid_item"));
 		return false;
 	}
 

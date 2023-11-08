@@ -11,7 +11,6 @@ de\cruelambition\itemgenerator\ItemGenerator.class
 de\cruelambition\listener\function\blocks\CaneCactus.class
 de\cruelambition\cmd\moderation\CheckMessage.class
 de\cruelambition\cmd\user\Info.class
-de\cruelambition\worlds\Nether.class
 de\cruelambition\listener\essential\CM.class
 de\cruelambition\cmd\moderation\Get.class
 de\cruelambition\cmd\moderation\LearnRecipes.class

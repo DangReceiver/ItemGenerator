@@ -112,6 +112,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new Respawn(), this);
 		pm.registerEvents(new PreConnect(), this);
 		pm.registerEvents(new Brute(), this);
+		pm.registerEvents(new SneakGlow(), this);
 //		pm.registerEvents(new Afk(), this);
 
 		TrailGui.fillParList();
