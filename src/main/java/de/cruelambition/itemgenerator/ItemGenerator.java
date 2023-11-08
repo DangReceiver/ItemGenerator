@@ -21,11 +21,9 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
 
-import net.kyori.adventure.key.Key;
 import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.GlowItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.PluginManager;
@@ -85,6 +83,7 @@ public final class ItemGenerator extends JavaPlugin {
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new CM(), this);
 		pm.registerEvents(new Chat(), this);
+		pm.registerEvents(new de.cruelambition.listener.essential.Chat(), this);
 		pm.registerEvents(new GameModeChange(), this);
 		pm.registerEvents(new InvSee(), this);
 		pm.registerEvents(new ItemDrop(), this);
@@ -160,12 +159,12 @@ public final class ItemGenerator extends JavaPlugin {
 		cs.sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),
 				"running_version"), VERSION));
 
+		ClickGrowed.fillSeedList();
 
-		Bukkit.getScheduler().runTaskLater(this, () -> {
-			g = new Generator();
-			List<Integer> f = g.getFrequencies();
-			Generator.start(g, f.get(0), f.get(1), f.get(2), f.get(3));
-		}, 10);
+		g = new Generator();
+		List<Integer> f = g.getFrequencies();
+
+		Generator.initiate(g, f.get(0), f.get(1), f.get(2), f.get(3));
 	}
 
 

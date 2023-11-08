@@ -24,9 +24,12 @@ public class Afk implements Listener {
 	@EventHandler
 	public void handle(PlayerKickEvent e) {
 		if (e.getCause() != PlayerKickEvent.Cause.IDLING) return;
-		e.setCancelled(true);
 
+		e.setCancelled(true);
 		Player p = e.getPlayer();
+
+		p.sendMessage(e.getCause() + "");
+
 		p.resetIdleDuration();
 		Spawn.sendToSpawn(p);
 

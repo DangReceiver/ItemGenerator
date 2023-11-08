@@ -32,24 +32,25 @@ public class Chat implements Listener {
 		e.setFormat(f = replaceChat(pc, f, null));
 
 		if (p.hasPermission("Savior.Chat.Color")) f = f.replaceAll("&", "§");
-		if (!p.hasPermission("Savior.Chat.Tagging")) return;
 
-		for (Player ap : Bukkit.getOnlinePlayers()) {
-			if (!msg.contains(ap.getName())) continue;
+		if (p.hasPermission("Savior.Chat.Tagging"))
+			for (Player ap : Bukkit.getOnlinePlayers()) {
 
-			msg = msg.replaceAll(ap.getName(), "§" + Lang.colorFromRGB(100, 220, 40) + "§o@" +
-					ap.getName() + cc);
-			ap.playSound(ap.getLocation(), Sound.BLOCK_NOTE_BLOCK_XYLOPHONE, 0.6F, 1.1F);
+				if (!msg.contains(ap.getName())) continue;
+				msg = msg.replaceAll(ap.getName(), "§" + Lang.colorFromRGB(100, 220, 40) + "§o@" +
+						ap.getName() + cc);
 
-		}
+				ap.playSound(ap.getLocation(), Sound.BLOCK_NOTE_BLOCK_XYLOPHONE, 0.6F, 1.1F);
+			}
+
 		e.setFormat(f.replaceAll("<message>", msg));
 	}
 
 	public static String replaceChat(PC pc, String f, @Nullable String msg) {
 		List<Integer> dmc = pc.getDefaultMessageColor();
-		ChatColor cc = Lang.colorFromRGB(dmc.get(0), dmc.get(1), dmc.get(2));
 
-		Player p = (Player) pc.thisOfflinePlayer();
+		Player p = pc.thisPlayer();
+		ChatColor cc = Lang.colorFromRGB(dmc.get(0), dmc.get(1), dmc.get(2));
 
 		f = f.replaceAll("<prefix>", Lang.CHAT);
 		f = f.replaceAll("<player_name>", p.getName()).replaceAll("<player_color>", pc.getPlayerColor());

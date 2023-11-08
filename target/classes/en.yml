@@ -88,7 +88,8 @@ generator:
   itemgenerator_forbiddenlist_add_item: "§6Item %s was added to the forbidden item list."
   itemgenerator_forbidden_listing: "§6Currently forbidden items§8: §e%s"
   generator_give_all: "Everyone just received a new item."
-  generated_item: "You received %s."
+  generated_item_inv: "You received %s."
+  generated_item_drop: "You were dropped %s"
   potion: "Potion of %s"
 
 itemgenerator:
@@ -161,6 +162,7 @@ playerclickplayer:
 
 customitems:
   jetpack_in_use: "You're currently on delay for this item!"
+  sound_playing_sound: "Playing the sound '%s'."
 
 gamemode:
   gamemode_changed_survival: "You will now receive items (again)."

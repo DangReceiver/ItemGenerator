@@ -15,9 +15,12 @@ public class PlayerClickPlayer implements Listener {
 		Player p = e.getPlayer();
 		if (!(e.getRightClicked() instanceof Player t)) return;
 
-		Utils.particleOffset(t.getLocation().add(0, 0.5, 0), Particle.HEART, 6, 0.6);
-		Utils.particleOffset(p.getLocation().add(0, 0.5, 0), Particle.HEART, 8, 0.85);
+		Utils.particleOffsetDelayed(t, Particle.HEART,
+				14, 0, 0.85, 4);
+		Utils.particleOffsetDelayed(p, Particle.HEART,
+				10, 0, 0.6, 5);
 
-		t.sendTitle("§4💞❤", String.format(new Lang(t).getString("x_loves_you"), p.getName()), 8, 200, 50);
+		t.sendTitle("§4💞❤", String.format(new Lang(t).getString("x_loves_you"),
+				p.getName()), 6, 180, 60);
 	}
 }

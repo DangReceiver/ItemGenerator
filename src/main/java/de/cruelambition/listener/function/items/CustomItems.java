@@ -101,9 +101,11 @@ public class CustomItems implements Listener {
 			if (a.toString().contains("RIGHT") || a.toString().contains("LEFT")) {
 				Random r = new Random();
 
-				p.sendTitle(Lang.PRE, l.getString("sound_playing_sound"), 20, 20, 10);
-				p.playSound(p.getLocation(), Sound.values()[r.nextInt(Sound.values().length - 1)],
-						0.8f, (float) (r.nextInt(21) / 10));
+				Sound sound = Sound.values()[r.nextInt(Sound.values().length - 1)];
+				p.playSound(p.getLocation(), sound, 0.8f, (float) (r.nextInt(21) / 10));
+
+				p.sendTitle(Lang.PRE, String.format(l.getString("sound_playing_sound"),
+						sound.toString().toLowerCase()), 20, 20, 10);
 			}
 
 		} else if (item.equals(Items.ITEMS.get(0))) {

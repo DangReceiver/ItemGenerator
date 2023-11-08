@@ -28,6 +28,7 @@ public class Utils {
 	public static List<String> splitString(String s) {
 		return new ArrayList<>(Arrays.asList(s.split("//")));
 	}
+
 	public static void particleOffset(Location l, Particle par, int amount, double area) {
 		for (int i = 0; i < amount; i++) {
 
@@ -39,5 +40,21 @@ public class Utils {
 
 			l.getWorld().spawnParticle(par, loc, 1);
 		}
+	}
+
+	public static void particleOffsetDelayed(Player p, Particle par, int amount, int count, double area, int delay) {
+		if (count >= amount) return;
+
+		Location loc = p.getLocation().clone().add(0, 0.5, 0);
+		Random r = new Random();
+
+		loc.add(r.nextDouble(area * 2) - area,
+				r.nextDouble(area * 2) - area,
+				r.nextDouble(area * 2) - area);
+
+		p.getLocation().add(0, 0.5, 0).getWorld().spawnParticle(par, loc, 1);
+
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () ->
+				particleOffsetDelayed(p, par, amount, count + 1, area, delay), delay);
 	}
 }

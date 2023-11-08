@@ -7,7 +7,7 @@ import de.cruelambition.language.Lang;
 import de.cruelambition.oo.IB;
 import de.cruelambition.oo.Items;
 import org.bukkit.*;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -19,47 +19,95 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 public class Generator {
-	private final List<String> material, forbidden, common, editable;
+	private final List<String> material, forbidden, editable;
 	private final List<Material> spawnEggs = new ArrayList<>();
+	private List<String> common;
 	private BukkitTask generatorLoop, checkLoop;
 
 	public Generator() {
 		material = new ArrayList<>();
 		forbidden = new ArrayList<>();
+		common = new ArrayList<>();
 
-		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		common = c.isSet("Item.List.Common") ? c.getStringList("Item.List.Common") : material;
+		fillList();
+		initiateCommonItems();
+		syncForbiddenItems();
 
 		editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(),
 				Material.POTION.toString(), Material.SPLASH_POTION.toString(),
 				Material.TIPPED_ARROW.toString(), Material.LINGERING_POTION.toString(),
-				"CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET", "_SWORD", "_PICKAXE", "_AXE", "_SHOVEL", "SPAWN_EGG"));
+				"CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET", "_SWORD", "_PICKAXE", "_AXE", "_SHOVEL",
+				Material.ALLAY_SPAWN_EGG.toString()));
 
 		for (int a = 0; a <= Items.mats.size() - 1; a++)
 			for (int b = 0; b <= Items.amount[a]; b++)
 				addMaterialToLoop(Items.mats.get(a));
 	}
 
-	public void setupCommonList() {
+	public List<String> invertRareList() {
+		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+
+		List<String> rare = c.getStringList("Item.List.Rare");
+		List<String> base = new ArrayList<>();
+
+//		Bukkit.getConsoleSender().sendMessage(material.toString() + " || " + (material == null));
+		for (Material val : Material.values()) {
+			for (String st : rare) {
+
+				if (!val.toString().contains(st) && !common.contains(val.toString()))
+					addCommonItem(val.toString(), null);
+
+				if (val.toString().contains("SPAWN_EGG")) {
+					if (!spawnEggs.contains(val)) spawnEggs.add(val);
+
+					if (!val.toString().contains("ALLAY")) {
+						removeItemFromCommonList(val);
+						removeItemFromList(val);
+					}
+//					Bukkit.getConsoleSender().sendMessage("Adding " + val.toString() + " to spawn egg list");
+				}
+			}
+		}
+
+		addCommonItem(Material.ALLAY_SPAWN_EGG.toString(), null);
+//		Bukkit.getConsoleSender().sendMessage(base.toString() + " || " + base.size());
+
+		return common;
+	}
+
+	public List<String> setupCommonList() {
 		List<String> rare = Arrays.asList("_SHULKER", "NETHERITE", "DIAMOND", "BEACON", "DIRT", "SPAWN_EGG",
-				"SPAWNER", "BARRIER", "BEDROCK", "ENCHANTMENT_TABLE", "_BUCKET", "ELYTRA", "_TRIM", "EMERALD");
+				"SPAWNER", "BARRIER", "BEDROCK", "ENCHANTMENT_TABLE", "_BUCKET", "ELYTRA", "_TRIM", "EMERALD",
+				"NETHER", "BEACON", "FRAME", "OBSIDIAN", "STRUCTURE", "ENDER", "CAMPFIRE", "TABLE", "DRAGON",
+				"HEAD", "SKULL");
 
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		List<String> base = c.getStringList("Item.List.Common");
+		List<String> base = c.getStringList("Item.List.Rare");
 
-		addCommonItem(Material.ALLAY_SPAWN_EGG.toString(), base);
+		for (String val : material) {
+			for (String st : rare) {
 
-		for (String st : rare)
-			for (String val : material) {
+				if (!val.contains(st) && !common.contains(val.toString()))
+					addCommonItem(val, null);
 
-				if (!val.toString().contains(st)) addCommonItem(val, base);
-				else if (val.toString().contains("SPAWN_EGG")) spawnEggs.add(Material.valueOf(val));
-				Bukkit.getConsoleSender().sendMessage(base.toString() + " || " + base.size());
+				if (val.contains("SPAWN_EGG")) {
+					if (!spawnEggs.contains(Material.valueOf(val))) spawnEggs.add(Material.valueOf(val));
+
+					if (!val.contains("ALLAY")) {
+						removeItemFromList(Material.valueOf(val));
+						removeItemFromCommonList(Material.valueOf(val));
+					}
+					Bukkit.getConsoleSender().sendMessage("Adding " + val + " to spawn egg list");
+				}
 			}
+		}
 
-		Bukkit.getConsoleSender().sendMessage(base.toString() + " || " + base.size());
-		c.set("Item.List.Common", base);
+		addCommonItem(Material.ALLAY_SPAWN_EGG.toString(), null);
+//		Bukkit.getConsoleSender().sendMessage(base.toString() + " || " + base.size());
+
+		c.set("Item.List.Rare", base);
 		ItemGenerator.getItemGenerator().saveConfig();
+		return common;
 	}
 
 	public int getCustomItemAmount(Material m) {
@@ -73,34 +121,36 @@ public class Generator {
 		return forbidden;
 	}
 
-	public static void start(Generator g, int csi, int cf, int gsi, int gf) {
-		g.fillList();
-		g.syncForbiddenItems();
-
-		g.removeAllForbiddenItemsFromMaterialList();
-		g.checkForForbiddenItemsLoop(csi, cf);
-
+	public static void initiate(Generator g, int csi, int cf, int gsi, int gf) {
 		g.more();
-		if (g.common.isEmpty()) g.setupCommonList();
+		g.removeAllForbiddenItemsFromMaterialList();
 
+//		Bukkit.getConsoleSender().sendMessage(g.material.toString());
 		g.startGeneratorLoop(gsi, gf);
+
+//		g.checkForForbiddenItemsLoop(csi, cf);
 //		g.listForbiddenItems();
+	}
+
+	public void initiateCommonItems() {
+		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+		common = c.isSet("Item.List.Rare") ? invertRareList() : setupCommonList();
 	}
 
 	public void more() {
 		for (int i = 0; i <= 4; i++) // Total: 6
 			addMaterialToLoop(Material.POTION);
-		for (int i = 0; i <= 3; i++) // Total: 5
+		for (int i = 0; i <= 2; i++) // Total: 4
 			addMaterialToLoop(Material.SPLASH_POTION);
 
 		for (int i = 0; i <= 1; i++) // Total: 3
 			addMaterialToLoop(Material.LINGERING_POTION);
-		for (int i = 0; i <= 2; i++) // Total: 4
+		for (int i = 0; i <= 1; i++) // Total: 3
 			addMaterialToLoop(Material.TIPPED_ARROW);
 
-		for (int i = 0; i <= 5; i++) // Total: 7
+		for (int i = 0; i <= 4; i++) // Total: 6
 			addMaterialToLoop(Material.ENCHANTED_BOOK);
-		for (int i = 0; i <= 0; i++) // Total: 2
+		for (int i = 0; i <= 4; i++) // Total: 6 || 1=>3
 			addMaterialToLoop(Material.ALLAY_SPAWN_EGG);
 	}
 
@@ -134,21 +184,11 @@ public class Generator {
 		cancelCheck();
 	}
 
-	public void restart() {
-		stopLoop();
-
-		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
-			List<Integer> f = getFrequencies();
-
-			start(this, f.get(0), f.get(1), f.get(2), f.get(3));
-		}, 5);
-	}
-
 	public void restart(int csi, int cf, int gsi, int gf) {
 		stopLoop();
 		setFrequencies(csi, cf, gsi, gf);
 
-		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> start(
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> initiate(
 				this, csi, cf, gsi, gf), 5);
 	}
 
@@ -160,13 +200,6 @@ public class Generator {
 		forbidden.remove(m.toString());
 	}
 
-	public void removeForbiddenItemFromPlayer(Player p, Material m) {
-		if (!isForbiddenItem(m)) return;
-
-		for (ItemStack c : p.getInventory().getContents())
-			if (c != null && c.getType() == m) c.setType(Material.AIR);
-	}
-
 	public void removeAllForbiddenItemsFromPlayer(Player p) {
 		for (ItemStack c : p.getInventory().getContents())
 			if (c != null && forbidden.contains(c.getType().toString())) c.setType(Material.AIR);
@@ -174,9 +207,7 @@ public class Generator {
 
 	public void removeAllForbiddenItemsFromAllPlayers() {
 		for (Player ap : Bukkit.getOnlinePlayers())
-
-			for (ItemStack c : ap.getInventory().getContents())
-				if (c != null && forbidden.contains(c.getType().toString())) c.setType(Material.AIR);
+			removeAllForbiddenItemsFromPlayer(ap);
 	}
 
 	public void syncForbiddenItems() {
@@ -218,11 +249,14 @@ public class Generator {
 //		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 
 		for (Material m : Material.values())
-			for (String s : forbidden)
+			for (String s : forbidden) {
 				if (m.toString().contains(s) && material.contains(m.toString())) {
 					removeItemFromList(m);
+				}
+				if (m.toString().contains(s) && common.contains(m.toString())) {
 					removeItemFromCommonList(m);
 				}
+			}
 	}
 
 	public void removeItemFromList(Material m) {
@@ -230,7 +264,7 @@ public class Generator {
 	}
 
 	public void removeItemFromCommonList(Material m) {
-		common.remove(m.toString());
+		if (!common.contains(m.toString())) common.remove(m.toString());
 	}
 
 	public boolean isForbiddenItem(Material m) {
@@ -276,40 +310,57 @@ public class Generator {
 			ItemStack is;
 			Random r = new Random();
 
-			if (r.nextInt(5) == 0) is = new ItemStack(getRandomMaterial());
-			else is = new ItemStack(getRandomCommonMaterial());
+			if (r.nextInt(5) == 0) {
+				is = new ItemStack(getRandomMaterial());
+				ap.sendMessage("from rare: " + is.getType());
+			} else {
+				is = new ItemStack(getRandomCommonMaterial());
+				ap.sendMessage("from common: " + is.getType());
+			}
 
 			Material type = is.getType();
+			if (type.toString().contains("SPAWN_EGG")) {
+				edit(is);
+			}
+
 			if (r.nextInt(2) == 0 && canEdit(type)) edit(is);
 
 			if (type.isBlock()) if (r.nextInt(2) == 0)
-				is.setAmount(r.nextInt(2) == 0 ? (r.nextInt(10 + 1) - 4 >= 1
-						? r.nextInt(10 + 1) - 4 : 1) : r.nextInt(10 + 1));
+				is.setAmount(r.nextInt(2) == 0 ? (Math.max((r.nextInt(8) + 1) - 4, 1))
+						: r.nextInt(10) + 1);
 
 			if (isCustomItem(type)) {
-				ap.sendMessage("§5§kkk Receiving custom item... §kkk");
+				ap.sendMessage("§5§kkk §5Receiving custom item... §5§kkk");
+				int cmd;
 
-				int cmd = r.nextInt(getCustomItemAmount(type) + 1) + 1;
-				if (cmd != 0) IB.cmd(is, cmd);
+				is = Items.getCustomItem(type, cmd = r.nextInt(getCustomItemAmount(type) + 1) + 1);
+				type = is.getType();
 
 				ap.sendMessage("cmd: " + cmd + " || type: " + type);
-				ap.sendMessage("§5§kkk Received custom item o: §kkk");
+				ap.sendMessage(String.format("§5§kkk §5Received custom item %s §5§kkk", is.getItemMeta().getDisplayName()));
 
 			} else moreItems(is);
 
-			if (ap.getInventory().firstEmpty() != -1) ap.getInventory().addItem(is);
-			else ap.getWorld().dropItemNaturally(ap.getLocation(), is);
+//			ap.sendMessage("amount:" + is.getAmount());
+			if (ap.getInventory().firstEmpty() != -1) {
 
-			ap.sendActionBar(Lang.PRE + String.format(new Lang(ap).getString("generated_item"),
-					type.toString().toLowerCase().replaceAll("_", " ")));
+				ap.getInventory().addItem(is);
+				ap.sendActionBar(Lang.PRE + String.format(new Lang(ap).getString("generated_item_inv"),
+						type.toString().toLowerCase().replaceAll("_", " ")));
+
+			} else {
+				ap.getWorld().dropItemNaturally(ap.getLocation(), is);
+				ap.sendActionBar(Lang.PRE + String.format(new Lang(ap).getString("generated_item_drop"),
+						type.toString().toLowerCase().replaceAll("_", " ")));
+			}
 		}
 	}
 
 	public void rollSpawnEgg(ItemStack item) {
-		Bukkit.getConsoleSender().sendMessage("Rolling Spawnegg... ");
+		Bukkit.getConsoleSender().sendMessage("§6Rolling Spawn egg... ");
 		Material type = spawnEggs.get(new Random().nextInt(spawnEggs.size()));
 		item.setType(type);
-		Bukkit.getConsoleSender().sendMessage("Rolling Spawnegg: " + type);
+		Bukkit.getConsoleSender().sendMessage("§6Rolled Spawn egg: " + type);
 	}
 
 	public boolean isCustomItem(Material m) {
@@ -317,11 +368,11 @@ public class Generator {
 	}
 
 	public boolean moreItems(ItemStack item) {
-		boolean b = false;
 		if (item.getType().getMaxStackSize() <= 1) return false;
+		boolean b = false;
 
-		List<String> l = new ArrayList<>(Arrays.asList("ARROW", "WOOL", "DEEPSLATE", "STONE", "BRICK", "CLAY",
-				"GLASS", "PLANKS", "LOG"));
+		List<String> l = new ArrayList<>(Arrays.asList("ARROW", "WOOL", "DEEPSLATE", "STONE", "BRICK",
+				"CLAY", "GLASS", "PLANKS", "LOG"));
 		for (String s : l) if (item.getType().toString().contains(s)) b = true;
 
 		if (b) {
@@ -334,8 +385,11 @@ public class Generator {
 	}
 
 	public void addCommonItem(String s, List<String> base) {
+		for (String string : forbidden)
+			if (string.contains(s)) return;
+
 		common.add(s);
-		base.add(s);
+		if (base != null) base.add(s);
 	}
 
 	public void removeCommonItem(String s) {

@@ -44,13 +44,19 @@ public class Items {
 		}
 
 		ITEMS.addAll(l);
-
 //		for (Player ap : Bukkit.getOnlinePlayers()) for (ItemStack is : l) ap.getInventory().addItem(is);
 	}
 
-	public ItemStack getCustomItem(Material m, int cmd) {
+	public static ItemStack getCustomItem(Material m, int cmd) {
+		int i = 0;
+		for (ItemStack item : ITEMS) {
 
-		return null;
+			if (item.getType() != m) continue;
+			i++;
+
+			if (i == cmd) return item;
+		}
+		return new ItemStack(m);
 	}
 
 	public ItemStack newItem(String name, String lore) {

@@ -67,12 +67,12 @@ public class WorldBorder implements Listener {
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 
 		for (Entity en : w.getNearbyEntities(new Location(w, 0.5, 64, 0.5), 8d, 8d, 8d)) {
-			cs.sendMessage("§2en: " + en.toString() + " || dn: " + (en.getCustomName() != null
-					? en.getCustomName() : null));
+//			cs.sendMessage("§2en: " + en.toString() + " || dn: " + (en.getCustomName() != null
+//					? en.getCustomName() : null));
 
 			if (en instanceof ArmorStand as &&
 					as.hasEquipmentLock(EquipmentSlot.HEAD, ArmorStand.LockType.REMOVING_OR_CHANGING)) {
-				cs.sendMessage("§2is upgrader");
+//				cs.sendMessage("§2is upgrader");
 				return true;
 			}
 		}
