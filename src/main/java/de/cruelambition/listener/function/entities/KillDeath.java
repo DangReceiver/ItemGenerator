@@ -28,12 +28,12 @@ public class KillDeath implements Listener {
 		if (!(e.getDamager() instanceof Player p)) return;
 		if (!(e.getEntity() instanceof Monster)) return;
 
+		if (e.getDamage() < ((Monster) e.getEntity()).getHealth()) return;
+
 		PC pc = new PC(p);
 		pc.increaseKills();
 
-
 		pc.savePCon();
-
 		Sb.updateKillSlot(new Lang(p));
 	}
 }

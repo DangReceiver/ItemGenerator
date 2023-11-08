@@ -95,6 +95,7 @@ itemgenerator:
   modules_success: "All modules were loaded sucessfully!"
   running_version: "Running on Plugin Version %s."
   player_receiving_recipe: "The player %s received all custom recipes!"
+  player_removeRecipe_recipe: "Removing all plugin recipes from player %s"
 
 language:
   string_not_found: "The string %s could not be determined§8."
@@ -191,7 +192,6 @@ worldborder:
   wb_upgraded: "The World Border was upgraded by %s for %s xp (level)!"
   wb_upgrader_inv: "§2WorldBorder Upgrader"
   spawning_wb_non_existing: "Creating worldborder upgrader..."
-
 
 frequent:
   not_implemented_yet: "You are looking into the future! This feature has not been implemented yet!"

@@ -121,10 +121,13 @@ public class PC {
 
 	public void increaseKills() {
 		c.set("player.stats.kills", getKills() + 1);
-		if (getKills() >= getKillLevelRequirement()) {
+		setKillStatus(getKillStatus() + 1);
+
+		if (getKillStatus() >= getKillLevelRequirement()) {
 
 			setKillLevel(getKillLevel() + 1);
 			setKillLevelRequirement(getNewLevelRequirement(getKillLevel()));
+			setKillStatus(0);
 
 			killLevelIncreased();
 		}
@@ -147,21 +150,25 @@ public class PC {
 		return c.getInt("player.stats.killLevel", 1);
 	}
 
+	public void setKillStatus(int status) {
+		c.set("player.stats.killStatus", status);
+	}
+
+	public int getKillStatus() {
+		return c.getInt("player.stats.killStatus", 0);
+	}
+
 	public void setKillLevelRequirement(int levelRequirement) {
 		c.set("player.stats.killLevelRequirement", levelRequirement);
 	}
 
 	public int getNewLevelRequirement(int level) {
-		return level * level + 64;
+		return level * level + 32;
 	}
 
 	public int getKillLevelRequirement() {
 		return c.isSet("player.stats.killLevelRequirement") ? c.getInt("player.stats.killLevelRequirement")
 				: getNewLevelRequirement(0);
-	}
-
-	public int getKillStatus() {
-		return c.getInt("player.stats.killLevelStatus", 0);
 	}
 
 	public int getKills() {

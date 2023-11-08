@@ -16,7 +16,7 @@ public class SneakGlow implements Listener {
 	public void handle(PlayerToggleSneakEvent e) {
 		Player p = e.getPlayer();
 
-		if (p.isSneaking() && p.hasPotionEffect(PotionEffectType.GLOWING))
+		if (!p.isSneaking() && p.hasPotionEffect(PotionEffectType.GLOWING))
 			p.removePotionEffect(PotionEffectType.GLOWING);
 		else p.addPotionEffect(GLOW);
 	}

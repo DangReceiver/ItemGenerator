@@ -19,7 +19,7 @@ public class Sb {
 
 	public static final int TIME_SLOT = 16, WORLD_SLOT = 13, DEATH_SLOT = 10, KILL_SLOT = 7;
 
-	private static BukkitTask bt;
+	private static BukkitTask entities, idle;
 	private static final int MAX_IDLE = Bukkit.getIdleTimeout();
 
 
@@ -43,19 +43,33 @@ public class Sb {
 			killEntry++;
 
 			for (Player ap : Bukkit.getOnlinePlayers()) updateFullScoreBoard(new Lang(ap));
+
 			if (worldEntry == 1) startNbEntities();
 			else cancelNbEntities();
-		}, 8 * 20, 8 * 20);
+
+			if (deathEntry == 1) startAfkLoop();
+			else cancelAfkLoop();
+		}, 6 * 20, 10 * 20);
 	}
 
 	public static void startNbEntities() {
-		bt = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
+		entities = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
 			for (Player ap : Bukkit.getOnlinePlayers()) Sb.updateWorldSlot(new Lang(ap));
-		}, 30, 30);
+		}, 25, 25);
 	}
 
 	public static void cancelNbEntities() {
-		bt.cancel();
+		entities.cancel();
+	}
+
+	public static void startAfkLoop() {
+		idle = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
+			for (Player ap : Bukkit.getOnlinePlayers()) Sb.updateDeathSlot(new Lang(ap));
+		}, 20, 20);
+	}
+
+	public static void cancelAfkLoop() {
+		idle.cancel();
 	}
 
 	public static void timeLoop() {
@@ -184,7 +198,7 @@ public class Sb {
 	public static void updateWorldTime(Lang l) {
 		Scoreboard sb = l.thisPlayer().getScoreboard();
 		sb.getTeam("dTime").setPrefix("    §e➥ ☞ " + String.format("%s",
-				convertTime(l.thisPlayer().getWorld().getFullTime())));
+				convertTime(l.thisPlayer().getWorld().getTime())));
 	}
 
 	public static void updateWorldSlot(Lang l) {
@@ -213,7 +227,7 @@ public class Sb {
 
 	public static void updateDeathSlot(Lang l) {
 		if (deathEntry == 0) updateDeaths(l);
-		else if (deathEntry == 1) updateXp(l);
+		else if (deathEntry == 1) updateIdle(l);
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
 		updateDeathHeader(l);
@@ -231,7 +245,7 @@ public class Sb {
 		sb.getTeam("dDeaths").setPrefix("    §c➥ ⚔ " + String.format("%s", pc.getDeaths()));
 	}
 
-	public static void updateXp(Lang l) {
+	public static void updateIdle(Lang l) {
 		Scoreboard sb = l.thisPlayer().getScoreboard();
 		Duration id = l.thisPlayer().getIdleDuration();
 		sb.getTeam("dDeaths").setPrefix("    §c➥ ⚔ " + id.getSeconds() + " / " + MAX_IDLE);
@@ -253,14 +267,14 @@ public class Sb {
 		Scoreboard sb = l.thisPlayer().getScoreboard();
 
 		PC pc = new PC(l.thisPlayer());
-		sb.getTeam("dKills").setPrefix("    §d➥ ❤ " + String.format("%s", pc.getKills()));
+		sb.getTeam("dKills").setPrefix("    §d➥ ❤ " + pc.getKillStatus() + " / " + pc.getKillLevelRequirement());
 	}
 
 	public static void updateKillLevel(Lang l) {
 		Scoreboard sb = l.thisPlayer().getScoreboard();
 		PC pc = new PC(l.thisPlayer());
 
-		sb.getTeam("dKills").setPrefix("    §d➥ ❤ " + pc.getKillStatus() + " / " + pc.getKillLevelRequirement());
+		sb.getTeam("dKills").setPrefix("    §d➥ ❤ " + pc.getKills() + " (" + pc.getKillLevel() + ")");
 	}
 
 	public static String convertTime(long time) {
