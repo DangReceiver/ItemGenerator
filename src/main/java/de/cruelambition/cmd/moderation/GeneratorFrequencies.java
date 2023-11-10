@@ -74,7 +74,7 @@ public class GeneratorFrequencies implements CommandExecutor, TabCompleter {
 		}
 		p.sendMessage(Lang.PRE + String.format(l.getString("generatorfrequencies_after"), csi, cf, gsi, gf));
 
-		ItemGenerator.g.restart(csi, cf, gsi, gf);
+		ItemGenerator.g.restartGeneratorLoop(gsi, gf);
 		return false;
 	}
 

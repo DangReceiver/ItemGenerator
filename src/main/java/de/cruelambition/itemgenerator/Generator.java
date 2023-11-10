@@ -1,13 +1,10 @@
 package de.cruelambition.itemgenerator;
 
-import java.util.*;
-import java.util.List;
-
 import de.cruelambition.language.Lang;
+import de.cruelambition.language.Language;
 import de.cruelambition.oo.IB;
 import de.cruelambition.oo.Items;
 import org.bukkit.*;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -18,97 +15,131 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.*;
+
 public class Generator {
-	private final List<String> material, forbidden, editable;
-	private final List<Material> spawnEggs = new ArrayList<>();
-	private List<String> common;
-	private BukkitTask generatorLoop, checkLoop;
+
+	private static List<Material> common, rare, forbidden, spawnEggs;
+	private static List<String> editable;
+
+	private boolean stopGenerator;
+	private BukkitTask g;
+	private final FileConfiguration c;
 
 	public Generator() {
-		material = new ArrayList<>();
-		forbidden = new ArrayList<>();
 		common = new ArrayList<>();
+		rare = new ArrayList<>();
 
-		fillList();
-		initiateCommonItems();
-		syncForbiddenItems();
+		forbidden = new ArrayList<>();
+		spawnEggs = new ArrayList<>();
 
-		editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(),
-				Material.POTION.toString(), Material.SPLASH_POTION.toString(),
-				Material.TIPPED_ARROW.toString(), Material.LINGERING_POTION.toString(),
-				"CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET", "_SWORD", "_PICKAXE", "_AXE", "_SHOVEL",
-				Material.ALLAY_SPAWN_EGG.toString()));
+		editable = new ArrayList<>();
 
-		for (int a = 0; a <= Items.mats.size() - 1; a++)
-			for (int b = 0; b <= Items.amount[a]; b++)
-				addMaterialToLoop(Items.mats.get(a));
+		c = ItemGenerator.getItemGenerator().getConfig();
+
+		setupForbidden();
+		setupRare();
+
+		setupCommon();
+		extractSpawnEggs();
+		more();
+
+		setupEditable();
+
+		List<Integer> frequencies = getFrequencies();
+		startGeneratorLoop(frequencies.get(0), frequencies.get(1));
 	}
 
-	public List<String> invertRareList() {
+	// GeneratorOld Loop Start
+
+	public List<Integer> getFrequencies() {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+		int gsi = c.getInt("Loops.GeneratorOld.StartIn", 12),
+				gf = c.getInt("Loops.GeneratorOld.Frequency", 25),
+				csi = c.getInt("Loops.Check.StartIn", 60),
+				cf = c.getInt("Loops.Check.Frequency", 80);
 
-		List<String> rare = c.getStringList("Item.List.Rare");
-		List<String> base = new ArrayList<>();
-
-//		Bukkit.getConsoleSender().sendMessage(material.toString() + " || " + (material == null));
-		for (Material val : Material.values()) {
-			for (String st : rare) {
-
-				if (!val.toString().contains(st) && !common.contains(val.toString()))
-					addCommonItem(val.toString(), null);
-
-				if (val.toString().contains("SPAWN_EGG")) {
-					if (!spawnEggs.contains(val)) spawnEggs.add(val);
-
-					if (!val.toString().contains("ALLAY")) {
-						removeItemFromCommonList(val);
-						removeItemFromList(val);
-					}
-//					Bukkit.getConsoleSender().sendMessage("Adding " + val.toString() + " to spawn egg list");
-				}
-			}
-		}
-
-		addCommonItem(Material.ALLAY_SPAWN_EGG.toString(), null);
-//		Bukkit.getConsoleSender().sendMessage(base.toString() + " || " + base.size());
-
-		return common;
+		return new ArrayList<>(Arrays.asList(csi, cf, gsi, gf));
 	}
 
-	public List<String> setupCommonList() {
-		List<String> rare = Arrays.asList("_SHULKER", "NETHERITE", "DIAMOND", "BEACON", "DIRT", "SPAWN_EGG",
-				"SPAWNER", "BARRIER", "BEDROCK", "ENCHANTMENT_TABLE", "_BUCKET", "ELYTRA", "_TRIM", "EMERALD",
-				"NETHER", "BEACON", "FRAME", "OBSIDIAN", "STRUCTURE", "ENDER", "CAMPFIRE", "TABLE", "DRAGON",
-				"HEAD", "SKULL");
-
+	public void setFrequencies(int csi, int cf, int gsi, int gf) {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		List<String> base = c.getStringList("Item.List.Rare");
+		c.set("Loops.GeneratorOld.StartIn", gsi);
+		c.set("Loops.GeneratorOld.Frequency", gf);
 
-		for (String val : material) {
-			for (String st : rare) {
+		c.set("Loops.Check.StartIn", csi);
+		c.set("Loops.Check.Frequency", cf);
 
-				if (!val.contains(st) && !common.contains(val.toString()))
-					addCommonItem(val, null);
-
-				if (val.contains("SPAWN_EGG")) {
-					if (!spawnEggs.contains(Material.valueOf(val))) spawnEggs.add(Material.valueOf(val));
-
-					if (!val.contains("ALLAY")) {
-						removeItemFromList(Material.valueOf(val));
-						removeItemFromCommonList(Material.valueOf(val));
-					}
-					Bukkit.getConsoleSender().sendMessage("Adding " + val + " to spawn egg list");
-				}
-			}
-		}
-
-		addCommonItem(Material.ALLAY_SPAWN_EGG.toString(), null);
-//		Bukkit.getConsoleSender().sendMessage(base.toString() + " || " + base.size());
-
-		c.set("Item.List.Rare", base);
 		ItemGenerator.getItemGenerator().saveConfig();
-		return common;
 	}
+
+	public void startGeneratorLoop(int startIn, int frequency) {
+		g = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
+			if (stopGenerator) {
+				stopGenerator = false;
+				return;
+			}
+			giveAll();
+		}, 20L * startIn, 20L * frequency);
+	}
+
+	public void stopGeneratorLoop() {
+		stopGenerator = true;
+		g.cancel();
+	}
+
+	public void restartGeneratorLoop(int startIn, int frequency) {
+		stopGeneratorLoop();
+
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
+				() -> startGeneratorLoop(startIn, frequency), 20);
+	}
+
+	public void giveAll() {
+		List<Player> wP = Bukkit.getWorld("world").getPlayers();
+		if (wP == null) throw new RuntimeException(
+				Lang.getMessage(Language.getServerLang(), "giveall_world_player_invalid"));
+
+		for (Player ap : wP) {
+			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
+			ap.playSound(ap.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 0.45f, 0.8f);
+
+			ItemStack is = new ItemStack(Material.AIR);
+			Random r = new Random();
+
+			is.setType(r.nextInt(10) == 0 ? getRare() : getCommon());
+			Material type = is.getType();
+
+			if (canEdit(type) && r.nextInt(4) == 0) edit(is);
+			else if (type.toString().contains("SPAWN_EGG")) edit(is);
+
+			Lang l = new Lang(ap);
+			if (isCustomItem(type)) {
+
+				ap.sendMessage(Lang.PRE + l.getString("rolling_custom_item"));
+				is = Items.getCustomItem(type, r.nextInt(getCustomItemAmount(type) + 1) + 1);
+
+//				ap.sendMessage("cmd: " + cmd + " || type: " + type);
+				ap.sendMessage(Lang.PRE + String.format(l.getString("received_custom_item")),
+						is.getItemMeta().getDisplayName());
+			}
+
+			String s = type.toString().toLowerCase().replaceAll("_", " ");
+			if (ap.getInventory().firstEmpty() != -1) {
+
+				ap.getInventory().addItem(is);
+				ap.sendActionBar(Lang.PRE + String.format(l.getString("generated_item_inv"), s));
+
+			} else {
+				ap.getWorld().dropItemNaturally(ap.getLocation(), is);
+				ap.sendActionBar(Lang.PRE + String.format(l.getString("generated_item_drop"), s));
+			}
+		}
+	}
+
+	// GeneratorOld Loop End
+
+	// Item Handling Start
 
 	public int getCustomItemAmount(Material m) {
 		for (int a = 0; a <= Items.mats.size() - 1; a++)
@@ -117,314 +148,27 @@ public class Generator {
 		return -1;
 	}
 
-	public List<String> getForbiddenList() {
-		return forbidden;
-	}
-
-	public static void initiate(Generator g, int csi, int cf, int gsi, int gf) {
-		g.more();
-		g.removeAllForbiddenItemsFromMaterialList();
-
-//		Bukkit.getConsoleSender().sendMessage(g.material.toString());
-		g.startGeneratorLoop(gsi, gf);
-
-//		g.checkForForbiddenItemsLoop(csi, cf);
-//		g.listForbiddenItems();
-	}
-
-	public void initiateCommonItems() {
-		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		common = c.isSet("Item.List.Rare") ? invertRareList() : setupCommonList();
-	}
-
-	public void more() {
-		for (int i = 0; i <= 4; i++) // Total: 6
-			addMaterialToLoop(Material.POTION);
-		for (int i = 0; i <= 2; i++) // Total: 4
-			addMaterialToLoop(Material.SPLASH_POTION);
-
-		for (int i = 0; i <= 1; i++) // Total: 3
-			addMaterialToLoop(Material.LINGERING_POTION);
-		for (int i = 0; i <= 1; i++) // Total: 3
-			addMaterialToLoop(Material.TIPPED_ARROW);
-
-		for (int i = 0; i <= 4; i++) // Total: 6
-			addMaterialToLoop(Material.ENCHANTED_BOOK);
-		for (int i = 0; i <= 4; i++) // Total: 6 || 1=>3
-			addMaterialToLoop(Material.ALLAY_SPAWN_EGG);
-	}
-
-	public void addMaterialToLoop(Material m) {
-		material.add(m.toString());
-	}
-
-	public List<Integer> getFrequencies() {
-		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		int csi = c.getInt("Loops.Check.StartIn", 60),
-				cf = c.getInt("Loops.Check.Frequency", 80),
-				gsi = c.getInt("Loops.Generator.StartIn", 12),
-				gf = c.getInt("Loops.Generator.Frequency", 25);
-
-		return new ArrayList<>(Arrays.asList(csi, cf, gsi, gf));
-	}
-
-	public void setFrequencies(int csi, int cf, int gsi, int gf) {
-		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		c.set("Loops.Check.StartIn", csi);
-
-		c.set("Loops.Check.Frequency", cf);
-		c.set("Loops.Generator.StartIn", gsi);
-
-		c.set("Loops.Generator.Frequency", gf);
-		ItemGenerator.getItemGenerator().saveConfig();
-	}
-
-	public void stopLoop() {
-		cancelGenerator();
-		cancelCheck();
-	}
-
-	public void restart(int csi, int cf, int gsi, int gf) {
-		stopLoop();
-		setFrequencies(csi, cf, gsi, gf);
-
-		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> initiate(
-				this, csi, cf, gsi, gf), 5);
-	}
-
-	public void fillList() {
-		for (Material value : Material.values()) material.add(value.toString());
-	}
-
-	public void removeItemFromForbiddenList(Material m) {
-		forbidden.remove(m.toString());
-	}
-
-	public void removeAllForbiddenItemsFromPlayer(Player p) {
-		for (ItemStack c : p.getInventory().getContents())
-			if (c != null && forbidden.contains(c.getType().toString())) c.setType(Material.AIR);
-	}
-
-	public void removeAllForbiddenItemsFromAllPlayers() {
-		for (Player ap : Bukkit.getOnlinePlayers())
-			removeAllForbiddenItemsFromPlayer(ap);
-	}
-
-	public void syncForbiddenItems() {
-		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		if (!c.isSet("Item.List.Forbidden")) {
-
-			c.set("Item.List.Forbidden", new ArrayList<>(List.of(Material.AIR.toString(),
-					Material.COMMAND_BLOCK.toString(), Material.JIGSAW.toString(),
-					Material.STRUCTURE_BLOCK.toString(), "ARMOR_TRIM_SMITHING_TEMPLATE",
-					"_STEM", "LEGACY_", "POTTED_")));
-
-			ItemGenerator.getItemGenerator().saveConfig();
-		}
-
-		List<String> sl = c.getStringList("Item.List.Forbidden");
-		for (String m : sl) addItemToForbiddenList(m.toString());
-
-		removeAllForbiddenItemsFromMaterialList();
-//		publiciseForbiddenItems();
-	}
-
-	public void publiciseForbiddenItems() {
-		Lang.broadcastArg(String.format(Lang.getMessage(Lang.getServerLang(),
-				"itemgenerator_forbiddenlist_add_item"), getForbiddenList()));
-
-		Bukkit.getConsoleSender().sendMessage(Lang.PRE + String.format(Lang.getMessage(
-				Lang.getServerLang(), "itemgenerator_forbiddenlist_add_item"), getForbiddenList()));
-	}
-
-	public void addItemToForbiddenList(String m) {
-		if (forbidden.contains(m)) return;
-
-		for (Material mt : Material.values())
-			if (mt.toString().contains(m)) forbidden.add(m);
-	}
-
-	public void removeAllForbiddenItemsFromMaterialList() {
-		if (material.isEmpty() || material == null) return;
-//		ConsoleCommandSender cs = Bukkit.getConsoleSender();
-
-		for (Material m : Material.values())
-			for (String s : forbidden) {
-				if (m.toString().contains(s) && material.contains(m.toString())) {
-					removeItemFromList(m);
-				}
-				if (m.toString().contains(s) && common.contains(m.toString())) {
-					removeItemFromCommonList(m);
-				}
-			}
-	}
-
-	public void removeItemFromList(Material m) {
-		material.remove(m.toString());
-	}
-
-	public void removeItemFromCommonList(Material m) {
-		if (!common.contains(m.toString())) common.remove(m.toString());
-	}
-
-	public boolean isForbiddenItem(Material m) {
-		return forbidden.contains(m.toString());
-	}
-
-	public Material getRandomMaterial() {
-		return Material.valueOf(material.get(new Random().nextInt(material.size() - 1)));
-	}
-
-	public Material getRandomCommonMaterial() {
-		return Material.valueOf(common.get(new Random().nextInt(common.size() - 1)));
-	}
-
-	public void startGeneratorLoop(int startIn, int frequency) {
-		this.generatorLoop = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
-				this::giveAll, 20L * startIn, 20L * frequency);
-	}
-
-	public void checkForForbiddenItemsLoop(int startIn, int frequency) {
-		this.checkLoop = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(),
-				this::removeAllForbiddenItemsFromAllPlayers, 20L * startIn, 20L * frequency);
-	}
-
-	public void cancelGenerator() {
-		if (generatorLoop != null) generatorLoop.cancel();
-	}
-
-	public void cancelCheck() {
-		if (checkLoop != null) checkLoop.cancel();
-	}
-
-	public void giveAll() {
-		List<Player> wP = Bukkit.getWorld("world").getPlayers();
-		if (wP == null) return;
-
-		for (Player ap : wP) {
-//			ap.sendMessage(ap.getWorld().getName() + " || " + wP.toString());
-
-			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
-			ap.playSound(ap.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 0.45f, 0.8f);
-
-			ItemStack is;
-			Random r = new Random();
-
-			if (r.nextInt(5) == 0) {
-				is = new ItemStack(getRandomMaterial());
-				ap.sendMessage("from rare: " + is.getType());
-			} else {
-				is = new ItemStack(getRandomCommonMaterial());
-				ap.sendMessage("from common: " + is.getType());
-			}
-
-			Material type = is.getType();
-			if (type.toString().contains("SPAWN_EGG")) {
-				edit(is);
-			}
-
-			if (r.nextInt(2) == 0 && canEdit(type)) edit(is);
-
-			if (type.isBlock()) if (r.nextInt(2) == 0)
-				is.setAmount(r.nextInt(2) == 0 ? (Math.max((r.nextInt(8) + 1) - 4, 1))
-						: r.nextInt(10) + 1);
-
-			if (isCustomItem(type)) {
-				ap.sendMessage("§5§kkk §5Receiving custom item... §5§kkk");
-				int cmd;
-
-				is = Items.getCustomItem(type, cmd = r.nextInt(getCustomItemAmount(type) + 1) + 1);
-				type = is.getType();
-
-				ap.sendMessage("cmd: " + cmd + " || type: " + type);
-				ap.sendMessage(String.format("§5§kkk §5Received custom item %s §5§kkk", is.getItemMeta().getDisplayName()));
-
-			} else moreItems(is);
-
-//			ap.sendMessage("amount:" + is.getAmount());
-			if (ap.getInventory().firstEmpty() != -1) {
-
-				ap.getInventory().addItem(is);
-				ap.sendActionBar(Lang.PRE + String.format(new Lang(ap).getString("generated_item_inv"),
-						type.toString().toLowerCase().replaceAll("_", " ")));
-
-			} else {
-				ap.getWorld().dropItemNaturally(ap.getLocation(), is);
-				ap.sendActionBar(Lang.PRE + String.format(new Lang(ap).getString("generated_item_drop"),
-						type.toString().toLowerCase().replaceAll("_", " ")));
-			}
-		}
-	}
-
 	public void rollSpawnEgg(ItemStack item) {
-		Bukkit.getConsoleSender().sendMessage("§6Rolling Spawn egg... ");
-		Material type = spawnEggs.get(new Random().nextInt(spawnEggs.size()));
-		item.setType(type);
-		Bukkit.getConsoleSender().sendMessage("§6Rolled Spawn egg: " + type);
+		item.setType(spawnEggs.get(new Random().nextInt(spawnEggs.size()) + 1));
 	}
 
-	public boolean isCustomItem(Material m) {
-		return Items.mats.contains(m);
+	public void addCustomItems(List<Material> list) {
+		for (int a = 0; a <= Items.mats.size() - 1; a++)
+			for (int b = 0; b <= Items.amount[a]; b++)
+				list.add(Items.mats.get(a));
 	}
 
-	public boolean moreItems(ItemStack item) {
-		if (item.getType().getMaxStackSize() <= 1) return false;
-		boolean b = false;
-
-		List<String> l = new ArrayList<>(Arrays.asList("ARROW", "WOOL", "DEEPSLATE", "STONE", "BRICK",
-				"CLAY", "GLASS", "PLANKS", "LOG"));
-		for (String s : l) if (item.getType().toString().contains(s)) b = true;
-
-		if (b) {
-			Random r = new Random();
-			int i = r.nextInt(8) + 1;
-			item.setAmount(i >= 5 && (r.nextInt(2) == 0) ? i / 2 : i);
-		}
-
-		return b;
-	}
-
-	public void addCommonItem(String s, List<String> base) {
-		for (String string : forbidden)
-			if (string.contains(s)) return;
-
-		common.add(s);
-		if (base != null) base.add(s);
-	}
-
-	public void removeCommonItem(String s) {
-		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		List<String> sl = c.getStringList("Item.List.Common");
-
-		if (common.contains(s)) common.remove(s);
-		if (sl.contains(s)) sl.remove(s);
-
-		c.set("Item.List.Common", sl);
-		ItemGenerator.getItemGenerator().saveConfig();
-	}
-
-	public void setCommonItems(List<String> l) {
-		ItemGenerator.getItemGenerator().getConfig().set("Item.List.Common", l);
-		ItemGenerator.getItemGenerator().saveConfig();
-	}
-
-	public boolean isCommon(String s) {
-		for (String ra : common) if (s.contains(ra)) return true;
+	public boolean canEdit(Material m) {
+		for (String s : editable) if (m.toString().contains(s)) return true;
 		return false;
 	}
 
-	public boolean isCommonFromList(String s) {
-		return common.contains(s);
-	}
+	public void edit(ItemStack item) {
+		if (item.getType() == Material.POTION || item.getType() == Material.SPLASH_POTION ||
+				item.getType() == Material.LINGERING_POTION || item.getType() == Material.TIPPED_ARROW) effect(item);
 
-	public boolean isCommonFromConfig(ItemStack item) {
-		for (String s : ItemGenerator.getItemGenerator().getConfig().getStringList("Item.List.Common"))
-			if (item.getType().toString().contains(s)) return true;
-		return false;
-	}
-
-	public List<String> getCommonItems() {
-		return new ArrayList<>();
+		else if (item.getType().toString().contains("SPAWN_EGG")) rollSpawnEgg(item);
+		else enchant(item);
 	}
 
 	public static void effect(ItemStack item) {
@@ -452,17 +196,9 @@ public class Generator {
 		if (pm.getCustomEffects().size() <= 5 && r.nextInt(3) == 0) effect(item);
 	}
 
-	public boolean canEdit(Material m) {
-		for (String s : editable) if (m.toString().contains(s)) return true;
-		return false;
-	}
-
-	public void edit(ItemStack item) {
-		if (item.getType() == Material.POTION || item.getType() == Material.SPLASH_POTION ||
-				item.getType() == Material.LINGERING_POTION || item.getType() == Material.TIPPED_ARROW) effect(item);
-
-		else if (item.getType().toString().contains("SPAWN_EGG")) rollSpawnEgg(item);
-		else enchant(item);
+	public static boolean applicable(ItemStack item, Enchantment ench) {
+		return item.getType() == Material.ENCHANTED_BOOK ||
+				(ench.getItemTarget().includes(item) && ench.canEnchantItem(item));
 	}
 
 	public static void enchant(ItemStack item) {
@@ -493,8 +229,178 @@ public class Generator {
 		return ench;
 	}
 
-	public static boolean applicable(ItemStack item, Enchantment ench) {
-		return item.getType() == Material.ENCHANTED_BOOK ||
-				(ench.getItemTarget().includes(item) && ench.canEnchantItem(item));
+	// Item Handling End
+
+	// GeneratorOld List Setup Start
+
+	public void syncRare() {
+		if (!c.isSet("GeneratorOld.Lists.Rare")) setupRare();
+
+		List<Material> rareTemp = new ArrayList<>();
+		for (String s : c.getStringList("GeneratorOld.Lists.Rare")) rareTemp.add(Material.valueOf(s));
+
+		addCustomItems(rareTemp);
+		rare = rareTemp;
 	}
+
+	public void setupRare() {
+		List<Material> rareTemp = new ArrayList<>();
+		List<String> temp = new ArrayList<>(Arrays.asList("NETHERITE", "DIAMOND", "BEACON", "NETHER", "END", "SPAWN",
+				"IRON", "OBSIDIAN", "_SHULKER", "DIRT", "BARRIER", "ELYTRA", "TRIM", "BEDROCK"));
+
+		for (String s : temp)
+			for (Material m : Material.values())
+				if (m.toString().contains(s)) rareTemp.add(m);
+
+		c.set("GeneratorOld.Lists.Forbidden", rareTemp);
+		ItemGenerator.getItemGenerator().saveConfig();
+	}
+
+	public void syncForbidden() {
+		if (!c.isSet("GeneratorOld.Lists.Forbidden")) setupForbidden();
+
+		List<Material> forbiddenTemp = new ArrayList<>();
+		for (String s : c.getStringList("GeneratorOld.Lists.Forbidden")) forbiddenTemp.add(Material.valueOf(s));
+
+		forbidden = forbiddenTemp;
+	}
+
+	public void setupForbidden() {
+		List<Material> forbiddenTemp = new ArrayList<>();
+		List<String> temp = new ArrayList<>(Arrays.asList("STRUCTURE", "COMMAND", "JIGSAW", "DEBUG", "STEM", "AIR",
+				"_PANE", "BOAT", "MINECART", "PRESSURE_PLATE", "BUTTON", "BANNER", "CANDLE", "WALL", "HANGING",
+				"POTTE", "LEGACY", "ARMOR_TRIM_SMITHING_TEMPLATE", "_BED"));
+
+		for (String s : temp)
+			for (Material m : Material.values())
+				if (m.toString().contains(s)) forbiddenTemp.add(m);
+
+		c.set("GeneratorOld.Lists.Forbidden", forbiddenTemp);
+		ItemGenerator.getItemGenerator().saveConfig();
+	}
+
+	public void setupCommon() {
+		Collections.addAll(common, Material.values());
+
+		removeForbiddenItems();
+		removeRareItems();
+	}
+
+	public void more() {
+		for (int i = 0; i <= 4; i++) // Total: 6
+			addMaterialToCommon(Material.POTION);
+		for (int i = 0; i <= 2; i++) // Total: 4
+			addMaterialToCommon(Material.SPLASH_POTION);
+
+		for (int i = 0; i <= 1; i++) // Total: 3
+			addMaterialToCommon(Material.LINGERING_POTION);
+		for (int i = 0; i <= 1; i++) // Total: 3
+			addMaterialToCommon(Material.TIPPED_ARROW);
+
+		for (int i = 0; i <= 4; i++) // Total: 6
+			addMaterialToCommon(Material.ENCHANTED_BOOK);
+		for (int i = 0; i <= 3; i++) // Total: 4 || 1=>3
+			addMaterialToRare(Material.ALLAY_SPAWN_EGG);
+	}
+
+	public void setupEditable() {
+		editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(),
+				Material.POTION.toString(), Material.SPLASH_POTION.toString(),
+				Material.TIPPED_ARROW.toString(), Material.LINGERING_POTION.toString(),
+				"CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET", "_SWORD", "_PICKAXE", "_AXE", "_SHOVEL",
+				Material.ALLAY_SPAWN_EGG.toString()));
+	}
+
+	public void addRoughCommonMaterials(String s) {
+
+	}
+
+	public void removeRoughCommonMaterials(String s) {
+
+	}
+
+	public void addRoughForbiddenMaterials(String s) {
+
+	}
+
+	public void removeRoughForbiddenMaterials(String s) {
+
+	}
+
+	public void addRoughRareMaterials(String s) {
+
+	}
+
+	public void removeRoughRareMaterials(String s) {
+
+	}
+
+	public void addMaterialToRare(Material m) {
+
+	}
+
+	public void addMaterialToCommon(Material m) {
+
+	}
+
+	public void removeItemToRare(Material m) {
+
+	}
+
+	public void removeItemToCommon(Material m) {
+
+	}
+
+	public void extractSpawnEggs() {
+		for (Material m : rare)
+			if (m.toString().contains("SPAWN_EGG") && !m.toString().contains("ALLAY")) {
+				spawnEggs.add(m);
+				rare.remove(m);
+			}
+		spawnEggs.add(Material.ALLAY_SPAWN_EGG);
+	}
+
+	public boolean isEditable(Material m) {
+		for (String s : editable) if (m.toString().contains(s)) return true;
+		return false;
+	}
+
+	public boolean isCustomItem(Material m) {
+		return Items.mats.contains(m);
+	}
+
+	public boolean isForbidden(Material m) {
+		return forbidden.contains(m);
+	}
+
+	public void removeForbiddenItems() {
+		for (Material m : common) if (isForbidden(m)) common.remove(m);
+	}
+
+	public boolean isRare(Material m) {
+		return rare.contains(m);
+	}
+
+	public void removeRareItems() {
+		for (Material m : rare) if (isRare(m)) common.remove(m);
+	}
+
+	public Material getCommon() {
+		return common.get(new Random().nextInt(common.size()) + 1);
+	}
+
+	public Material getCommonFromInt(int i) {
+		return common.get(i);
+	}
+
+	public Material getRare() {
+		return rare.get(new Random().nextInt(rare.size()) + 1);
+	}
+
+	public Material getRareFromInt(int i) {
+		return rare.get(i);
+	}
+
+	// GeneratorOld List Setup End
+
 }

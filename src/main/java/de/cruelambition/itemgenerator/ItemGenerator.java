@@ -163,16 +163,12 @@ public final class ItemGenerator extends JavaPlugin {
 
 		g = new Generator();
 		List<Integer> f = g.getFrequencies();
-
-		Generator.initiate(g, f.get(0), f.get(1), f.get(2), f.get(3));
+		g.startGeneratorLoop(f.get(0), f.get(1));
 	}
 
 
 	public void onDisable() {
-		if (g != null) {
-			g.cancelCheck();
-			g.cancelGenerator();
-		}
+		if (g != null) g.stopGeneratorLoop();
 
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 		Lang l = new Lang(null);
