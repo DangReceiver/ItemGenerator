@@ -4,6 +4,7 @@ import de.cruelambition.language.Lang;
 import de.cruelambition.language.Language;
 import de.cruelambition.oo.IB;
 import de.cruelambition.oo.Items;
+import de.cruelambition.oo.PC;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -37,8 +38,8 @@ public class Generator {
 
 		c = ItemGenerator.getItemGenerator().getConfig();
 
-		setupForbidden();
-		setupRare();
+		syncForbidden();
+		syncRare();
 
 		setupCommon();
 		extractSpawnEggs();
@@ -50,12 +51,12 @@ public class Generator {
 		startGeneratorLoop(frequencies.get(0), frequencies.get(1));
 	}
 
-	// GeneratorOld Loop Start
+	// Generator Loop Start
 
 	public List<Integer> getFrequencies() {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		int gsi = c.getInt("Loops.GeneratorOld.StartIn", 12),
-				gf = c.getInt("Loops.GeneratorOld.Frequency", 25),
+		int gsi = c.getInt("Loops.Generator.StartIn", 12),
+				gf = c.getInt("Loops.Generator.Frequency", 25),
 				csi = c.getInt("Loops.Check.StartIn", 60),
 				cf = c.getInt("Loops.Check.Frequency", 80);
 
@@ -64,8 +65,8 @@ public class Generator {
 
 	public void setFrequencies(int csi, int cf, int gsi, int gf) {
 		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		c.set("Loops.GeneratorOld.StartIn", gsi);
-		c.set("Loops.GeneratorOld.Frequency", gf);
+		c.set("Loops.Generator.StartIn", gsi);
+		c.set("Loops.Generator.Frequency", gf);
 
 		c.set("Loops.Check.StartIn", csi);
 		c.set("Loops.Check.Frequency", cf);
@@ -92,7 +93,7 @@ public class Generator {
 		stopGeneratorLoop();
 
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
-				() -> startGeneratorLoop(startIn, frequency), 20);
+				() -> startGeneratorLoop(startIn, frequency), 40);
 	}
 
 	public void giveAll() {
@@ -125,6 +126,8 @@ public class Generator {
 			}
 
 			String s = type.toString().toLowerCase().replaceAll("_", " ");
+			if (isRare(type)) ap.sendMessage(Lang.PRE + l.getString("receiving_rare_item"));
+
 			if (ap.getInventory().firstEmpty() != -1) {
 
 				ap.getInventory().addItem(is);
@@ -134,10 +137,20 @@ public class Generator {
 				ap.getWorld().dropItemNaturally(ap.getLocation(), is);
 				ap.sendActionBar(Lang.PRE + String.format(l.getString("generated_item_drop"), s));
 			}
+
+			PC pc = new PC(ap);
+			List<String> list = pc.isSet("Generator.Receiving.Materials") ?
+					pc.getStringList("Generator.Receiving.Materials") : new ArrayList<>();
+
+			if (list.size() >= 8) list.remove(0);
+			list.add(System.currentTimeMillis() + "::" + type.toString());
+
+			pc.set("Generator.Receiving.Materials", list);
+			pc.savePCon();
 		}
 	}
 
-	// GeneratorOld Loop End
+	// Generator Loop End
 
 	// Item Handling Start
 
@@ -231,56 +244,56 @@ public class Generator {
 
 	// Item Handling End
 
-	// GeneratorOld List Setup Start
+	// Generator List Setup Start
 
 	public void syncRare() {
-		if (!c.isSet("GeneratorOld.Lists.Rare")) setupRare();
+		if (!c.isSet("Generator.Lists.Rare")) setupRare();
 
 		List<Material> rareTemp = new ArrayList<>();
-		for (String s : c.getStringList("GeneratorOld.Lists.Rare")) rareTemp.add(Material.valueOf(s));
+		for (String s : c.getStringList("Generator.Lists.Rare")) rareTemp.add(Material.valueOf(s));
 
 		addCustomItems(rareTemp);
 		rare = rareTemp;
 	}
 
 	public void setupRare() {
-		List<Material> rareTemp = new ArrayList<>();
-		List<String> temp = new ArrayList<>(Arrays.asList("NETHERITE", "DIAMOND", "BEACON", "NETHER", "END", "SPAWN",
-				"IRON", "OBSIDIAN", "_SHULKER", "DIRT", "BARRIER", "ELYTRA", "TRIM", "BEDROCK"));
+		List<String> rareTemp = new ArrayList<>(),
+				temp = new ArrayList<>(Arrays.asList("NETHERITE", "DIAMOND", "BEACON", "NETHER", "END", "SPAWNER",
+						"IRON", "OBSIDIAN", "_SHULKER", "DIRT", "BARRIER", "ELYTRA", "TRIM", "BEDROCK"));
 
 		for (String s : temp)
 			for (Material m : Material.values())
-				if (m.toString().contains(s)) rareTemp.add(m);
+				if (m.toString().contains(s)) rareTemp.add(m.toString());
 
-		c.set("GeneratorOld.Lists.Forbidden", rareTemp);
+		c.set("Generator.Lists.Rare", rareTemp);
 		ItemGenerator.getItemGenerator().saveConfig();
 	}
 
 	public void syncForbidden() {
-		if (!c.isSet("GeneratorOld.Lists.Forbidden")) setupForbidden();
+		if (!c.isSet("Generator.Lists.Forbidden")) setupForbidden();
 
 		List<Material> forbiddenTemp = new ArrayList<>();
-		for (String s : c.getStringList("GeneratorOld.Lists.Forbidden")) forbiddenTemp.add(Material.valueOf(s));
+		for (String s : c.getStringList("Generator.Lists.Forbidden")) forbiddenTemp.add(Material.valueOf(s));
 
 		forbidden = forbiddenTemp;
 	}
 
 	public void setupForbidden() {
-		List<Material> forbiddenTemp = new ArrayList<>();
-		List<String> temp = new ArrayList<>(Arrays.asList("STRUCTURE", "COMMAND", "JIGSAW", "DEBUG", "STEM", "AIR",
-				"_PANE", "BOAT", "MINECART", "PRESSURE_PLATE", "BUTTON", "BANNER", "CANDLE", "WALL", "HANGING",
-				"POTTE", "LEGACY", "ARMOR_TRIM_SMITHING_TEMPLATE", "_BED"));
+		List<String> forbiddenTemp = new ArrayList<>(),
+				temp = new ArrayList<>(Arrays.asList("STRUCTURE", "COMMAND", "JIGSAW", "DEBUG", "STEM", "AIR",
+						"_PANE", "BOAT", "MINECART", "PRESSURE_PLATE", "BUTTON", "BANNER", "CANDLE", "WALL", "HANGING",
+						"POTTE", "LEGACY", "ARMOR_TRIM_SMITHING_TEMPLATE", "_BED"));
 
 		for (String s : temp)
 			for (Material m : Material.values())
-				if (m.toString().contains(s)) forbiddenTemp.add(m);
+				if (m.toString().contains(s)) forbiddenTemp.add(m.toString());
 
-		c.set("GeneratorOld.Lists.Forbidden", forbiddenTemp);
+		c.set("Generator.Lists.Forbidden", forbiddenTemp);
 		ItemGenerator.getItemGenerator().saveConfig();
 	}
 
 	public void setupCommon() {
-		Collections.addAll(common, Material.values());
+		for (Material value : Material.values()) common.add(value);
 
 		removeForbiddenItems();
 		removeRareItems();
@@ -352,11 +365,15 @@ public class Generator {
 	}
 
 	public void extractSpawnEggs() {
-		for (Material m : rare)
+		if (rare.isEmpty()) throw new RuntimeException("Rare list is empty");
+
+		for (Material m : Material.values())
 			if (m.toString().contains("SPAWN_EGG") && !m.toString().contains("ALLAY")) {
-				spawnEggs.add(m);
-				rare.remove(m);
+
+				if (!spawnEggs.contains(m)) spawnEggs.add(m);
+				if (rare.contains(m)) rare.remove(m);
 			}
+
 		spawnEggs.add(Material.ALLAY_SPAWN_EGG);
 	}
 
@@ -374,7 +391,8 @@ public class Generator {
 	}
 
 	public void removeForbiddenItems() {
-		for (Material m : common) if (isForbidden(m)) common.remove(m);
+		for (Material m : forbidden)
+			if (common.contains(m)) common.remove(m);
 	}
 
 	public boolean isRare(Material m) {
@@ -382,7 +400,8 @@ public class Generator {
 	}
 
 	public void removeRareItems() {
-		for (Material m : rare) if (isRare(m)) common.remove(m);
+		for (Material m : rare)
+			if (common.contains(m)) common.remove(m);
 	}
 
 	public Material getCommon() {
@@ -401,6 +420,6 @@ public class Generator {
 		return rare.get(i);
 	}
 
-	// GeneratorOld List Setup End
+	// Generator List Setup End
 
 }

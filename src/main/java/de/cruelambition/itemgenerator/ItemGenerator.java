@@ -162,8 +162,6 @@ public final class ItemGenerator extends JavaPlugin {
 		ClickGrowed.fillSeedList();
 
 		g = new Generator();
-		List<Integer> f = g.getFrequencies();
-		g.startGeneratorLoop(f.get(0), f.get(1));
 	}
 
 

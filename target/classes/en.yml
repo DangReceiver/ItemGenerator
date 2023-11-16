@@ -87,10 +87,10 @@ playtime:
 generator:
   itemgenerator_forbiddenlist_add_item: "§6Item %s was added to the forbidden item list."
   itemgenerator_forbidden_listing: "§6Currently forbidden items§8: §e%s"
-  generator_give_all: "Everyone just received a new item."
   generated_item_inv: "You received %s."
   generated_item_drop: "You were dropped %s"
   potion: "Potion of %s"
+  receiving_rare_item: "You just received a rare item!"
 
 itemgenerator:
   modules_success: "All modules were loaded sucessfully!"
