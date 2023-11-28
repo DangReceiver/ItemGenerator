@@ -46,7 +46,6 @@ public class Generator {
         more();
 
         removeForbiddenItems(common);
-        removeForbiddenItems(rare);
 
         setupEditable();
 
@@ -168,7 +167,7 @@ public class Generator {
         item.setType(spawnEggs.get(new Random().nextInt(spawnEggs.size()) + 1));
     }
 
-    public void addCustomItems(List<Material> list) {
+    public void addAllCustomItems(List<Material> list) {
         for (int a = 0; a <= Items.mats.size() - 1; a++)
             for (int b = 0; b <= Items.amount[a]; b++)
                 list.add(Items.mats.get(a));
@@ -255,14 +254,14 @@ public class Generator {
         List<Material> rareTemp = new ArrayList<>();
         for (String s : c.getStringList("Generator.Lists.Rare")) rareTemp.add(Material.valueOf(s));
 
-        addCustomItems(rareTemp);
-        rare = rareTemp;
+        addAllCustomItems(rareTemp);
+        removeForbiddenItems(rare = rareTemp);
     }
 
     public void setupRare() {
         List<String> rareTemp = new ArrayList<>(),
-                temp = new ArrayList<>(Arrays.asList("NETHERITE", "DIAMOND", "BEACON", "NETHER", "END",
-                        "SPAWN", "IRON", "OBSIDIAN", "_SHULKER", "DIRT", "BARRIER", "ELYTRA", "TRIM", "BEDROCK"));
+                temp = new ArrayList<>(Arrays.asList("NETHERITE", "DIAMOND", "BEACON", "NETHER", "END", "DRIPSTONE",
+                        "SPAWN", "IRON", "OBSIDIAN", "_SHULKER", "DIRT", "BARRIER", "ELYTRA", "TRIM", "BEDROCK", "DISC"));
 
 
         for (String s : temp)
@@ -328,57 +327,25 @@ public class Generator {
                 Material.ALLAY_SPAWN_EGG.toString()));
     }
 
-    public void addRoughCommonMaterials(String s) {
-
-    }
-
-    public void removeRoughCommonMaterials(String s) {
-
-    }
-
-    public void addRoughForbiddenMaterials(String s) {
-
-    }
-
-    public void removeRoughForbiddenMaterials(String s) {
-
-    }
-
-    public void addRoughRareMaterials(String s) {
-
-    }
-
-    public void removeRoughRareMaterials(String s) {
-
-    }
-
     public void addMaterialToRare(Material m) {
-
+        rare.add(m);
     }
 
     public void addMaterialToCommon(Material m) {
-
-    }
-
-    public void removeItemToRare(Material m) {
-
-    }
-
-    public void removeItemToCommon(Material m) {
-
+        common.add(m);
     }
 
     public void extractSpawnEggs() {
         if (rare.isEmpty()) throw new RuntimeException("Rare list is empty");
 
-        for (Material m : Material.values())
-            if (m.toString().contains("SPAWN_EGG") && !m.toString().contains("ALLAY")) {
+        for (Material m : rare) {
+            if (!(m.toString().contains("SPAWN_EGG") && !m.toString().contains("ALLAY"))) continue;
 
-                if (!spawnEggs.contains(m)) spawnEggs.add(m);
-                if (rare.contains(m)) rare.remove(m);
-            }
+            if (!spawnEggs.contains(m)) spawnEggs.add(m);
+            if (rare.contains(m)) rare.remove(m);
+        }
 
-        spawnEggs.add(Material.ALLAY_SPAWN_EGG);
+        if (!spawnEggs.contains(Material.ALLAY_SPAWN_EGG)) spawnEggs.add(Material.ALLAY_SPAWN_EGG);
     }
 
     public boolean isEditable(Material m) {
