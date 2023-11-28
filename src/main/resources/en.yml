@@ -84,6 +84,11 @@ playtime:
   target_hasnt_yet_played: "%s has never played on this server."
   targets_play_time: "%s has played for %s"
 
+todo:
+  todo_usage: "Usage: /todo <list; add; remove; check> <listname> 
+  [<\"string in quotation marks\"; line number; playername>]"
+  todo_length: "Invalid length, try \"/todo\" or check your usage!"
+
 generator:
   itemgenerator_forbiddenlist_add_item: "§6Item %s was added to the forbidden item list."
   itemgenerator_forbidden_listing: "§6Currently forbidden items§8: §e%s"
