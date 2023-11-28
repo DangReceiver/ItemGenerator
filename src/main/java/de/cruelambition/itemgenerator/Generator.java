@@ -20,406 +20,410 @@ import java.util.*;
 
 public class Generator {
 
-	private static List<Material> common, rare, forbidden, spawnEggs;
-	private static List<String> editable;
+    private static List<Material> common, rare, forbidden, spawnEggs;
+    private static List<String> editable;
 
-	private boolean stopGenerator;
-	private BukkitTask g;
-	private final FileConfiguration c;
+    private boolean stopGenerator;
+    private BukkitTask g;
+    private final FileConfiguration c;
 
-	public Generator() {
-		common = new ArrayList<>();
-		rare = new ArrayList<>();
+    public Generator() {
+        common = new ArrayList<>();
+        rare = new ArrayList<>();
 
-		forbidden = new ArrayList<>();
-		spawnEggs = new ArrayList<>();
+        forbidden = new ArrayList<>();
+        spawnEggs = new ArrayList<>();
 
-		editable = new ArrayList<>();
+        editable = new ArrayList<>();
 
-		c = ItemGenerator.getItemGenerator().getConfig();
+        c = ItemGenerator.getItemGenerator().getConfig();
 
-		syncForbidden();
-		syncRare();
+        syncForbidden();
+        syncRare();
 
-		setupCommon();
-		extractSpawnEggs();
-		more();
+        setupCommon();
+        extractSpawnEggs();
+        more();
 
-		setupEditable();
+        removeForbiddenItems(common);
+        removeForbiddenItems(rare);
 
-		List<Integer> frequencies = getFrequencies();
-		startGeneratorLoop(frequencies.get(0), frequencies.get(1));
-	}
+        setupEditable();
 
-	// Generator Loop Start
+        List<Integer> frequencies = getFrequencies();
+        startGeneratorLoop(frequencies.get(0), frequencies.get(1));
+    }
 
-	public List<Integer> getFrequencies() {
-		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		int gsi = c.getInt("Loops.Generator.StartIn", 12),
-				gf = c.getInt("Loops.Generator.Frequency", 25),
-				csi = c.getInt("Loops.Check.StartIn", 60),
-				cf = c.getInt("Loops.Check.Frequency", 80);
+    // Generator Loop Start
 
-		return new ArrayList<>(Arrays.asList(csi, cf, gsi, gf));
-	}
+    public List<Integer> getFrequencies() {
+        FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+        int gsi = c.getInt("Loops.Generator.StartIn", 12),
+                gf = c.getInt("Loops.Generator.Frequency", 25),
+                csi = c.getInt("Loops.Check.StartIn", 60),
+                cf = c.getInt("Loops.Check.Frequency", 80);
 
-	public void setFrequencies(int csi, int cf, int gsi, int gf) {
-		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
-		c.set("Loops.Generator.StartIn", gsi);
-		c.set("Loops.Generator.Frequency", gf);
+        return new ArrayList<>(Arrays.asList(csi, cf, gsi, gf));
+    }
 
-		c.set("Loops.Check.StartIn", csi);
-		c.set("Loops.Check.Frequency", cf);
+    public void setFrequencies(int csi, int cf, int gsi, int gf) {
+        FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+        c.set("Loops.Generator.StartIn", gsi);
+        c.set("Loops.Generator.Frequency", gf);
 
-		ItemGenerator.getItemGenerator().saveConfig();
-	}
+        c.set("Loops.Check.StartIn", csi);
+        c.set("Loops.Check.Frequency", cf);
 
-	public void startGeneratorLoop(int startIn, int frequency) {
-		g = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
-			if (stopGenerator) {
-				stopGenerator = false;
-				return;
-			}
-			giveAll();
-		}, 20L * startIn, 20L * frequency);
-	}
+        ItemGenerator.getItemGenerator().saveConfig();
+    }
 
-	public void stopGeneratorLoop() {
-		stopGenerator = true;
-		g.cancel();
-	}
+    public void startGeneratorLoop(int startIn, int frequency) {
+        g = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
+            if (stopGenerator) {
+                stopGenerator = false;
+                return;
+            }
+            giveAll();
+        }, 20L * startIn, 20L * frequency);
+    }
 
-	public void restartGeneratorLoop(int startIn, int frequency) {
-		stopGeneratorLoop();
+    public void stopGeneratorLoop() {
+        stopGenerator = true;
+        g.cancel();
+    }
 
-		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
-				() -> startGeneratorLoop(startIn, frequency), 40);
-	}
+    public void restartGeneratorLoop(int startIn, int frequency) {
+        stopGeneratorLoop();
 
-	public void giveAll() {
-		List<Player> wP = Bukkit.getWorld("world").getPlayers();
-		if (wP == null) throw new RuntimeException(
-				Lang.getMessage(Language.getServerLang(), "giveall_world_player_invalid"));
+        Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
+                () -> startGeneratorLoop(startIn, frequency), 40);
+    }
 
-		for (Player ap : wP) {
-			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
-			ap.playSound(ap.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 0.45f, 0.8f);
+    public void giveAll() {
+        List<Player> wP = Bukkit.getWorld("world").getPlayers();
+        if (wP == null) throw new RuntimeException(
+                Lang.getMessage(Language.getServerLang(), "giveall_world_player_invalid"));
 
-			ItemStack is = new ItemStack(Material.AIR);
-			Random r = new Random();
+        for (Player ap : wP) {
+            if (ap.getGameMode() != GameMode.SURVIVAL) continue;
+            ap.playSound(ap.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 0.45f, 0.8f);
 
-			is.setType(r.nextInt(10) == 0 ? getRare() : getCommon());
-			Material type = is.getType();
+            ItemStack is = new ItemStack(Material.AIR);
+            Random r = new Random();
 
-			if (canEdit(type) && r.nextInt(4) == 0) edit(is);
-			else if (type.toString().contains("SPAWN_EGG")) edit(is);
+            is.setType(r.nextInt(10) == 0 ? getRare() : getCommon());
+            Material type = is.getType();
 
-			Lang l = new Lang(ap);
-			if (isCustomItem(type)) {
+            if (canEdit(type) && r.nextInt(4) == 0) edit(is);
+            else if (type.toString().contains("SPAWN_EGG")) edit(is);
 
-				ap.sendMessage(Lang.PRE + l.getString("rolling_custom_item"));
-				is = Items.getCustomItem(type, r.nextInt(getCustomItemAmount(type) + 1) + 1);
+            Lang l = new Lang(ap);
+            if (isCustomItem(type)) {
+
+                ap.sendMessage(Lang.PRE + l.getString("rolling_custom_item"));
+                is = Items.getCustomItem(type, r.nextInt(getCustomItemAmount(type) + 1) + 1);
 
 //				ap.sendMessage("cmd: " + cmd + " || type: " + type);
-				ap.sendMessage(Lang.PRE + String.format(l.getString("received_custom_item")),
-						is.getItemMeta().getDisplayName());
-			}
+                ap.sendMessage(Lang.PRE + String.format(l.getString("received_custom_item")),
+                        is.getItemMeta().getDisplayName());
+            }
 
-			String s = type.toString().toLowerCase().replaceAll("_", " ");
-			if (isRare(type)) ap.sendMessage(Lang.PRE + l.getString("receiving_rare_item"));
+            String s = type.toString().toLowerCase().replaceAll("_", " ");
+            if (isRare(type)) ap.sendMessage(Lang.PRE + l.getString("receiving_rare_item"));
 
-			if (ap.getInventory().firstEmpty() != -1) {
+            if (ap.getInventory().firstEmpty() != -1) {
 
-				ap.getInventory().addItem(is);
-				ap.sendActionBar(Lang.PRE + String.format(l.getString("generated_item_inv"), s));
+                ap.getInventory().addItem(is);
+                ap.sendActionBar(Lang.PRE + String.format(l.getString("generated_item_inv"), s));
 
-			} else {
-				ap.getWorld().dropItemNaturally(ap.getLocation(), is);
-				ap.sendActionBar(Lang.PRE + String.format(l.getString("generated_item_drop"), s));
-			}
+            } else {
+                ap.getWorld().dropItemNaturally(ap.getLocation(), is);
+                ap.sendActionBar(Lang.PRE + String.format(l.getString("generated_item_drop"), s));
+            }
 
-			PC pc = new PC(ap);
-			List<String> list = pc.isSet("Generator.Receiving.Materials") ?
-					pc.getStringList("Generator.Receiving.Materials") : new ArrayList<>();
+            PC pc = new PC(ap);
+            List<String> list = pc.isSet("Generator.Receiving.Materials") ?
+                    pc.getStringList("Generator.Receiving.Materials") : new ArrayList<>();
 
-			if (list.size() >= 8) list.remove(0);
-			list.add(System.currentTimeMillis() + "::" + type.toString());
+            if (list.size() >= 8) list.remove(0);
+            list.add(System.currentTimeMillis() + "::" + type.toString());
 
-			pc.set("Generator.Receiving.Materials", list);
-			pc.savePCon();
-		}
-	}
+            pc.set("Generator.Receiving.Materials", list);
+            pc.savePCon();
+        }
+    }
 
-	// Generator Loop End
+    // Generator Loop End
 
-	// Item Handling Start
+    // Item Handling Start
 
-	public int getCustomItemAmount(Material m) {
-		for (int a = 0; a <= Items.mats.size() - 1; a++)
-			if (Items.mats.get(a) == m) return Items.amount[a];
+    public int getCustomItemAmount(Material m) {
+        for (int a = 0; a <= Items.mats.size() - 1; a++)
+            if (Items.mats.get(a) == m) return Items.amount[a];
 
-		return -1;
-	}
+        return -1;
+    }
 
-	public void rollSpawnEgg(ItemStack item) {
-		item.setType(spawnEggs.get(new Random().nextInt(spawnEggs.size()) + 1));
-	}
+    public void rollSpawnEgg(ItemStack item) {
+        item.setType(spawnEggs.get(new Random().nextInt(spawnEggs.size()) + 1));
+    }
 
-	public void addCustomItems(List<Material> list) {
-		for (int a = 0; a <= Items.mats.size() - 1; a++)
-			for (int b = 0; b <= Items.amount[a]; b++)
-				list.add(Items.mats.get(a));
-	}
+    public void addCustomItems(List<Material> list) {
+        for (int a = 0; a <= Items.mats.size() - 1; a++)
+            for (int b = 0; b <= Items.amount[a]; b++)
+                list.add(Items.mats.get(a));
+    }
 
-	public boolean canEdit(Material m) {
-		for (String s : editable) if (m.toString().contains(s)) return true;
-		return false;
-	}
+    public boolean canEdit(Material m) {
+        for (String s : editable) if (m.toString().contains(s)) return true;
+        return false;
+    }
 
-	public void edit(ItemStack item) {
-		if (item.getType() == Material.POTION || item.getType() == Material.SPLASH_POTION ||
-				item.getType() == Material.LINGERING_POTION || item.getType() == Material.TIPPED_ARROW) effect(item);
+    public void edit(ItemStack item) {
+        if (item.getType() == Material.POTION || item.getType() == Material.SPLASH_POTION ||
+                item.getType() == Material.LINGERING_POTION || item.getType() == Material.TIPPED_ARROW) effect(item);
 
-		else if (item.getType().toString().contains("SPAWN_EGG")) rollSpawnEgg(item);
-		else enchant(item);
-	}
+        else if (item.getType().toString().contains("SPAWN_EGG")) rollSpawnEgg(item);
+        else enchant(item);
+    }
 
-	public static void effect(ItemStack item) {
-		if (!(item.getItemMeta() instanceof PotionMeta pm)) return;
-		Random r = new Random();
+    public static void effect(ItemStack item) {
+        if (!(item.getItemMeta() instanceof PotionMeta pm)) return;
+        Random r = new Random();
 
-		Color col = Color.fromRGB(r.nextInt(256), r.nextInt(256), r.nextInt(256));
-		pm.setColor(col);
+        Color col = Color.fromRGB(r.nextInt(256), r.nextInt(256), r.nextInt(256));
+        pm.setColor(col);
 
-		int d = r.nextInt(480 * 20);
-		int a = r.nextInt(5);
+        int d = r.nextInt(480 * 20);
+        int a = r.nextInt(5);
 
-		PotionEffect pe = new PotionEffect(PotionEffectType.values()[r.nextInt(PotionEffectType
-				.values().length)], ((d >= 160 && r.nextInt(4) == 0) || (d >= 280 &&
-				r.nextInt(5) == 0) || (d >= 370 && r.nextInt(6) == 0) ? d / 3 : d),
-				((a > 1 && r.nextInt(5) == 0) || (a > 3 && r.nextInt(5) == 0) ? a - 1 : a),
-				true, true, true);
+        PotionEffect pe = new PotionEffect(PotionEffectType.values()[r.nextInt(PotionEffectType
+                .values().length)], ((d >= 160 && r.nextInt(4) == 0) || (d >= 280 &&
+                r.nextInt(5) == 0) || (d >= 370 && r.nextInt(6) == 0) ? d / 3 : d),
+                ((a > 1 && r.nextInt(5) == 0) || (a > 3 && r.nextInt(5) == 0) ? a - 1 : a),
+                true, true, true);
 
-		pm.addCustomEffect(pe, true);
-		item.setItemMeta(pm);
+        pm.addCustomEffect(pe, true);
+        item.setItemMeta(pm);
 
-		IB.name(item, Lang.colorFromRGB(col.getRed(), col.getGreen(), col.getBlue())
-				+ String.format(Lang.getMessage(Lang.getServerLang(), "potion"),
-				pe.getType().getName().replaceAll("_", " ").toLowerCase()));
-		if (pm.getCustomEffects().size() <= 5 && r.nextInt(3) == 0) effect(item);
-	}
+        IB.name(item, Lang.colorFromRGB(col.getRed(), col.getGreen(), col.getBlue())
+                + String.format(Lang.getMessage(Lang.getServerLang(), "potion"),
+                pe.getType().getName().replaceAll("_", " ").toLowerCase()));
+        if (pm.getCustomEffects().size() <= 5 && r.nextInt(3) == 0) effect(item);
+    }
 
-	public static boolean applicable(ItemStack item, Enchantment ench) {
-		return item.getType() == Material.ENCHANTED_BOOK ||
-				(ench.getItemTarget().includes(item) && ench.canEnchantItem(item));
-	}
+    public static boolean applicable(ItemStack item, Enchantment ench) {
+        return item.getType() == Material.ENCHANTED_BOOK ||
+                (ench.getItemTarget().includes(item) && ench.canEnchantItem(item));
+    }
 
-	public static void enchant(ItemStack item) {
-		Random r = new Random();
-		int l = r.nextInt(5), c = r.nextInt(3);
+    public static void enchant(ItemStack item) {
+        Random r = new Random();
+        int l = r.nextInt(5), c = r.nextInt(3);
 
-		if (!(l - c <= 0 || l - c >= 3)) return;
-		int lvl = r.nextInt(4);
+        if (!(l - c <= 0 || l - c >= 3)) return;
+        int lvl = r.nextInt(4);
 
-		IB.ench(item, reEnch(item), (lvl == 0 ? lvl + 1 : lvl));
-		if (l - c <= -1) IB.ench(item, reEnch(item), (lvl == 0 ? lvl + 1 : lvl));
-	}
+        IB.ench(item, reEnch(item), (lvl == 0 ? lvl + 1 : lvl));
+        if (l - c <= -1) IB.ench(item, reEnch(item), (lvl == 0 ? lvl + 1 : lvl));
+    }
 
-	public static Enchantment reEnch(ItemStack item) {
-		Random r = new Random();
-		@NotNull Enchantment[] v = Enchantment.values();
+    public static Enchantment reEnch(ItemStack item) {
+        Random r = new Random();
+        @NotNull Enchantment[] v = Enchantment.values();
 
-		int i = r.nextInt(v.length);
-		Enchantment ench = v[i];
+        int i = r.nextInt(v.length);
+        Enchantment ench = v[i];
 
-		while (!applicable(item, ench)) {
-			if (i >= v.length - 1) i = -1;
+        while (!applicable(item, ench)) {
+            if (i >= v.length - 1) i = -1;
 
-			ench = v[i + 1];
-			i++;
-		}
+            ench = v[i + 1];
+            i++;
+        }
 
-		return ench;
-	}
+        return ench;
+    }
 
-	// Item Handling End
+    // Item Handling End
 
-	// Generator List Setup Start
+    // Generator List Setup Start
 
-	public void syncRare() {
-		if (!c.isSet("Generator.Lists.Rare")) setupRare();
+    public void syncRare() {
+        if (!c.isSet("Generator.Lists.Rare")) setupRare();
 
-		List<Material> rareTemp = new ArrayList<>();
-		for (String s : c.getStringList("Generator.Lists.Rare")) rareTemp.add(Material.valueOf(s));
+        List<Material> rareTemp = new ArrayList<>();
+        for (String s : c.getStringList("Generator.Lists.Rare")) rareTemp.add(Material.valueOf(s));
 
-		addCustomItems(rareTemp);
-		rare = rareTemp;
-	}
+        addCustomItems(rareTemp);
+        rare = rareTemp;
+    }
 
-	public void setupRare() {
-		List<String> rareTemp = new ArrayList<>(),
-				temp = new ArrayList<>(Arrays.asList("NETHERITE", "DIAMOND", "BEACON", "NETHER", "END", "SPAWNER",
-						"IRON", "OBSIDIAN", "_SHULKER", "DIRT", "BARRIER", "ELYTRA", "TRIM", "BEDROCK"));
+    public void setupRare() {
+        List<String> rareTemp = new ArrayList<>(),
+                temp = new ArrayList<>(Arrays.asList("NETHERITE", "DIAMOND", "BEACON", "NETHER", "END",
+                        "SPAWN", "IRON", "OBSIDIAN", "_SHULKER", "DIRT", "BARRIER", "ELYTRA", "TRIM", "BEDROCK"));
 
-		for (String s : temp)
-			for (Material m : Material.values())
-				if (m.toString().contains(s)) rareTemp.add(m.toString());
 
-		c.set("Generator.Lists.Rare", rareTemp);
-		ItemGenerator.getItemGenerator().saveConfig();
-	}
+        for (String s : temp)
+            for (Material m : Material.values())
+                if (m.toString().contains(s)) rareTemp.add(m.toString());
 
-	public void syncForbidden() {
-		if (!c.isSet("Generator.Lists.Forbidden")) setupForbidden();
+        c.set("Generator.Lists.Rare", rareTemp);
+        c.set("Generator.Lists.Forbidden", rareTemp);
 
-		List<Material> forbiddenTemp = new ArrayList<>();
-		for (String s : c.getStringList("Generator.Lists.Forbidden")) forbiddenTemp.add(Material.valueOf(s));
+        ItemGenerator.getItemGenerator().saveConfig();
+    }
 
-		forbidden = forbiddenTemp;
-	}
+    public void syncForbidden() {
+        if (!c.isSet("Generator.Lists.Forbidden")) setupForbidden();
 
-	public void setupForbidden() {
-		List<String> forbiddenTemp = new ArrayList<>(),
-				temp = new ArrayList<>(Arrays.asList("STRUCTURE", "COMMAND", "JIGSAW", "DEBUG", "STEM", "AIR",
-						"_PANE", "BOAT", "MINECART", "PRESSURE_PLATE", "BUTTON", "BANNER", "CANDLE", "WALL", "HANGING",
-						"POTTE", "LEGACY", "ARMOR_TRIM_SMITHING_TEMPLATE", "_BED"));
+        List<Material> forbiddenTemp = new ArrayList<>();
+        for (String s : c.getStringList("Generator.Lists.Forbidden")) forbiddenTemp.add(Material.valueOf(s));
 
-		for (String s : temp)
-			for (Material m : Material.values())
-				if (m.toString().contains(s)) forbiddenTemp.add(m.toString());
+        forbidden = forbiddenTemp;
+    }
 
-		c.set("Generator.Lists.Forbidden", forbiddenTemp);
-		ItemGenerator.getItemGenerator().saveConfig();
-	}
+    public void setupForbidden() {
+        List<String> forbiddenTemp = new ArrayList<>(),
+                temp = new ArrayList<>(Arrays.asList("STRUCTURE", "COMMAND", "JIGSAW", "DEBUG", "STEM", "AIR",
+                        "_PANE", "BOAT", "MINECART", "PRESSURE_PLATE", "BUTTON", "BANNER", "CANDLE", "WALL", "HANGING",
+                        "POTTE", "LEGACY", "ARMOR_TRIM_SMITHING_TEMPLATE", "_BED"));
 
-	public void setupCommon() {
-		for (Material value : Material.values()) common.add(value);
+        for (String s : temp)
+            for (Material m : Material.values())
+                if (m.toString().contains(s)) forbiddenTemp.add(m.toString());
 
-		removeForbiddenItems();
-		removeRareItems();
-	}
+        c.set("Generator.Lists.Forbidden", forbiddenTemp);
+        ItemGenerator.getItemGenerator().saveConfig();
+    }
 
-	public void more() {
-		for (int i = 0; i <= 4; i++) // Total: 6
-			addMaterialToCommon(Material.POTION);
-		for (int i = 0; i <= 2; i++) // Total: 4
-			addMaterialToCommon(Material.SPLASH_POTION);
+    public void setupCommon() {
+        common.addAll(Arrays.asList(Material.values()));
+        removeRareItems(common);
+    }
 
-		for (int i = 0; i <= 1; i++) // Total: 3
-			addMaterialToCommon(Material.LINGERING_POTION);
-		for (int i = 0; i <= 1; i++) // Total: 3
-			addMaterialToCommon(Material.TIPPED_ARROW);
+    public void more() {
+        for (int i = 0; i <= 4; i++) // Total: 6
+            addMaterialToCommon(Material.POTION);
+        for (int i = 0; i <= 2; i++) // Total: 4
+            addMaterialToCommon(Material.SPLASH_POTION);
 
-		for (int i = 0; i <= 4; i++) // Total: 6
-			addMaterialToCommon(Material.ENCHANTED_BOOK);
-		for (int i = 0; i <= 3; i++) // Total: 4 || 1=>3
-			addMaterialToRare(Material.ALLAY_SPAWN_EGG);
-	}
+        for (int i = 0; i <= 1; i++) // Total: 3
+            addMaterialToCommon(Material.LINGERING_POTION);
+        for (int i = 0; i <= 1; i++) // Total: 3
+            addMaterialToCommon(Material.TIPPED_ARROW);
 
-	public void setupEditable() {
-		editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(),
-				Material.POTION.toString(), Material.SPLASH_POTION.toString(),
-				Material.TIPPED_ARROW.toString(), Material.LINGERING_POTION.toString(),
-				"CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET", "_SWORD", "_PICKAXE", "_AXE", "_SHOVEL",
-				Material.ALLAY_SPAWN_EGG.toString()));
-	}
+        for (int i = 0; i <= 4; i++) // Total: 6
+            addMaterialToCommon(Material.ENCHANTED_BOOK);
+        for (int i = 0; i <= 3; i++) // Total: 4 || 1=>3
+            addMaterialToRare(Material.ALLAY_SPAWN_EGG);
+    }
 
-	public void addRoughCommonMaterials(String s) {
+    public void setupEditable() {
+        editable = new ArrayList<>(Arrays.asList(Material.ENCHANTED_BOOK.toString(),
+                Material.POTION.toString(), Material.SPLASH_POTION.toString(),
+                Material.TIPPED_ARROW.toString(), Material.LINGERING_POTION.toString(),
+                "CHESTPLATE", "LEGGINGS", "BOOTS", "HELMET", "_SWORD", "_PICKAXE", "_AXE", "_SHOVEL",
+                Material.ALLAY_SPAWN_EGG.toString()));
+    }
 
-	}
+    public void addRoughCommonMaterials(String s) {
 
-	public void removeRoughCommonMaterials(String s) {
+    }
 
-	}
+    public void removeRoughCommonMaterials(String s) {
 
-	public void addRoughForbiddenMaterials(String s) {
+    }
 
-	}
+    public void addRoughForbiddenMaterials(String s) {
 
-	public void removeRoughForbiddenMaterials(String s) {
+    }
 
-	}
+    public void removeRoughForbiddenMaterials(String s) {
 
-	public void addRoughRareMaterials(String s) {
+    }
 
-	}
+    public void addRoughRareMaterials(String s) {
 
-	public void removeRoughRareMaterials(String s) {
+    }
 
-	}
+    public void removeRoughRareMaterials(String s) {
 
-	public void addMaterialToRare(Material m) {
+    }
 
-	}
+    public void addMaterialToRare(Material m) {
 
-	public void addMaterialToCommon(Material m) {
+    }
 
-	}
+    public void addMaterialToCommon(Material m) {
 
-	public void removeItemToRare(Material m) {
+    }
 
-	}
+    public void removeItemToRare(Material m) {
 
-	public void removeItemToCommon(Material m) {
+    }
 
-	}
+    public void removeItemToCommon(Material m) {
 
-	public void extractSpawnEggs() {
-		if (rare.isEmpty()) throw new RuntimeException("Rare list is empty");
+    }
 
-		for (Material m : Material.values())
-			if (m.toString().contains("SPAWN_EGG") && !m.toString().contains("ALLAY")) {
+    public void extractSpawnEggs() {
+        if (rare.isEmpty()) throw new RuntimeException("Rare list is empty");
 
-				if (!spawnEggs.contains(m)) spawnEggs.add(m);
-				if (rare.contains(m)) rare.remove(m);
-			}
+        for (Material m : Material.values())
+            if (m.toString().contains("SPAWN_EGG") && !m.toString().contains("ALLAY")) {
 
-		spawnEggs.add(Material.ALLAY_SPAWN_EGG);
-	}
+                if (!spawnEggs.contains(m)) spawnEggs.add(m);
+                if (rare.contains(m)) rare.remove(m);
+            }
 
-	public boolean isEditable(Material m) {
-		for (String s : editable) if (m.toString().contains(s)) return true;
-		return false;
-	}
+        spawnEggs.add(Material.ALLAY_SPAWN_EGG);
+    }
 
-	public boolean isCustomItem(Material m) {
-		return Items.mats.contains(m);
-	}
+    public boolean isEditable(Material m) {
+        for (String s : editable) if (m.toString().contains(s)) return true;
+        return false;
+    }
 
-	public boolean isForbidden(Material m) {
-		return forbidden.contains(m);
-	}
+    public boolean isCustomItem(Material m) {
+        return Items.mats.contains(m);
+    }
 
-	public void removeForbiddenItems() {
-		for (Material m : forbidden)
-			if (common.contains(m)) common.remove(m);
-	}
+    public boolean isForbidden(Material m) {
+        return forbidden.contains(m);
+    }
 
-	public boolean isRare(Material m) {
-		return rare.contains(m);
-	}
+    public void removeForbiddenItems(List<Material> mat) {
+        for (Material m : forbidden)
+            if (mat.contains(m)) mat.remove(m);
+    }
 
-	public void removeRareItems() {
-		for (Material m : rare)
-			if (common.contains(m)) common.remove(m);
-	}
+    public boolean isRare(Material m) {
+        return rare.contains(m);
+    }
 
-	public Material getCommon() {
-		return common.get(new Random().nextInt(common.size()) + 1);
-	}
+    public void removeRareItems(List<Material> mat) {
+        for (Material m : rare)
+            if (mat.contains(m)) mat.remove(m);
+    }
 
-	public Material getCommonFromInt(int i) {
-		return common.get(i);
-	}
+    public Material getCommon() {
+        return common.get(new Random().nextInt(common.size()) + 1);
+    }
 
-	public Material getRare() {
-		return rare.get(new Random().nextInt(rare.size()) + 1);
-	}
+    public Material getCommonFromInt(int i) {
+        return common.get(i);
+    }
 
-	public Material getRareFromInt(int i) {
-		return rare.get(i);
-	}
+    public Material getRare() {
+        return rare.get(new Random().nextInt(rare.size()) + 1);
+    }
 
-	// Generator List Setup End
+    public Material getRareFromInt(int i) {
+        return rare.get(i);
+    }
+
+    // Generator List Setup End
 
 }
