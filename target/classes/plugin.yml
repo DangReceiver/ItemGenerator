@@ -44,3 +44,5 @@ commands:
     description: activate a trail
   trailgui:
     description: activate the trail gui
+  todo:
+    description: check and manage your personal todo!

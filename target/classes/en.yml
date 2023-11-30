@@ -84,6 +84,17 @@ playtime:
   target_hasnt_yet_played: "%s has never played on this server."
   targets_play_time: "%s has played for %s"
 
+todo:
+  todo_usage: "Usage: /todo <list; add; remove; check> <listname> 
+  [<\"string in quotation marks\"; line number; playername>]"
+  todo_length: "Invalid length, try \"/todo\" or check your usage!"
+  check_todos_pre: "Your todo-list:"
+  todos_listing: "§5ToDo §7#%s§8: §7%s"
+  todo_list_empty: "§oThis todo-list is empty..."
+  todo_check_number: "You cannot check this task, as you did not provide a number, or the task does not exist."
+  todo_remove_number: "You cannot remove this task, as you did not provide a number, or the task does not exist."
+  adding_todo: "Adding \"§n%s§7\" as a new task!"
+
 generator:
   itemgenerator_forbiddenlist_add_item: "§6Item %s was added to the forbidden item list."
   itemgenerator_forbidden_listing: "§6Currently forbidden items§8: §e%s"

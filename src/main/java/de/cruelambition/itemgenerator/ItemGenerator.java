@@ -168,7 +168,7 @@ public final class ItemGenerator extends JavaPlugin {
 
 
     public void onDisable() {
-        if (g != null) g.stopGeneratorLoop();
+//        if (g != null) g.stopGeneratorLoop();
 
         ConsoleCommandSender cs = Bukkit.getConsoleSender();
         Lang l = new Lang(null);
