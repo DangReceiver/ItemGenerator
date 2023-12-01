@@ -79,10 +79,12 @@ public class Generator {
 
 	public void startGeneratorLoop(int startIn, int frequency) {
 		g = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
+
 			if (stopGenerator) {
 				stopGenerator = false;
 				return;
 			}
+
 			giveAll();
 		}, 20L * startIn, 20L * frequency);
 	}
@@ -98,10 +100,13 @@ public class Generator {
 				if (ap.getWorld() == Bukkit.getWorld("Spawn")) continue;
 
 				pc = new PC(ap);
-				ap.sendMessage(Lang.PRE + Lang.getMessage(pc.getLanguage(), "generator_ready"));
 
-				pc.allowItemGeneration();
-				pc.savePCon();
+				if (!pc.mayGenerateItem()) {
+					ap.sendMessage(Lang.PRE + Lang.getMessage(pc.getLanguage(), "generator_ready"));
+
+					pc.allowItemGeneration();
+					pc.savePCon();
+				}
 			}
 
 			c.set("Generator.Delay", frequency);
