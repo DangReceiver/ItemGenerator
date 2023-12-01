@@ -42,9 +42,10 @@ public class ToDo implements CommandExecutor, TabCompleter {
 			p.sendMessage(Lang.PRE + l.getString("todo_usage"));
 			return false;
 		}
-		PC pc = new PC(p);
 
+		PC pc = new PC(p);
 		if (args.length == 1) {
+
 			if (args[0].equalsIgnoreCase("list")) {
 				p.sendMessage(Lang.PRE + l.getString("check_todos_pre"));
 
@@ -58,18 +59,18 @@ public class ToDo implements CommandExecutor, TabCompleter {
 					p.sendMessage(String.format(l.getString("todos_listing"), i, toDo));
 					i++;
 				}
+				return false;
+
 			} else {
 				p.sendMessage(Lang.PRE + l.getString("todo_usage"));
 				return false;
 			}
-			return false;
 		}
 
 		if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("check")) {
 
 				int i = -1;
-
 				try {
 					i = Integer.parseInt(args[1]);
 
@@ -84,12 +85,13 @@ public class ToDo implements CommandExecutor, TabCompleter {
 
 				pc.checkToDo(i);
 				p.sendMessage(Lang.PRE + l.getString("todo_checked"));
+
 				pc.savePCon();
+				return false;
 
 			} else if (args[0].equalsIgnoreCase("remove")) {
 
 				int i = -1;
-
 				try {
 					i = Integer.parseInt(args[1]);
 
@@ -102,21 +104,30 @@ public class ToDo implements CommandExecutor, TabCompleter {
 					return false;
 				}
 
+				p.sendMessage(Lang.PRE + String.format(l.getString("todo_removed"), pc.getToDo(i)));
 				pc.removeToDo(i);
-				p.sendMessage(Lang.PRE + l.getString("todo_removed"));
+
 				pc.savePCon();
+				return false;
 
 			} else if (args[0].equalsIgnoreCase("list")) {
+
+				if (!p.hasPermission(PERMISSION_OTHERS)) {
+					p.sendMessage(Lang.PRE + String.format(l.getString("insufficient_permission"),
+							PERMISSION_OTHERS));
+					return false;
+				}
+
 				Player t = Bukkit.getPlayer(args[1]);
+
 				if (t == null) {
 					p.sendMessage(Lang.PRE + l.getString("invalid_target"));
 					return false;
 				}
 
 				p.sendMessage(Lang.PRE + String.format(l.getString("check_todos_pre_other"), t));
-
-				//USAGE INVALID
 				pc.updatePlayer(t);
+
 				if (pc.getToDos().isEmpty()) {
 					p.sendMessage(Lang.PRE + l.getString("todo_list_empty"));
 					return false;
@@ -124,12 +135,12 @@ public class ToDo implements CommandExecutor, TabCompleter {
 
 				int i = 1;
 				for (String toDo : pc.getToDos()) {
+
 					p.sendMessage("  " + i + "§8: §7" + l.getString("todos_listing"), toDo);
 					i++;
 				}
+				return false;
 			}
-
-			return false;
 		}
 
 		if (args[0].equalsIgnoreCase("add")) {
@@ -139,9 +150,9 @@ public class ToDo implements CommandExecutor, TabCompleter {
 			for (String arg : args) {
 
 				if (arg.contains("\"")) sw = !sw;
-				if (sw) entry = entry + arg.replaceAll("\"", "");
-				else {
-					entry = entry + arg.replaceAll("\"", "");
+				entry = entry + arg.replaceAll("\"", "");
+
+				if (!sw) {
 					pc.addToDo(entry = entry.replaceAll("&", "§"));
 					p.sendMessage(Lang.PRE + String.format(l.getString("adding_todo"), entry));
 
@@ -155,7 +166,8 @@ public class ToDo implements CommandExecutor, TabCompleter {
 		p.sendMessage(Lang.PRE + l.getString("invalid_argument"));
 
 //        if (!p.hasPermission(PERMISSION_OTHERS)) {
-//            sen.sendMessage(Lang.PRE + String.format(l.getString("insufficient_permission"), PERMISSION_OTHERS));
+//            sen.sendMessage(Lang.PRE + String.format(l.getString("insufficient_permission"),
+//            PERMISSION_OTHERS));
 //            return false;
 //        }
 		return false;

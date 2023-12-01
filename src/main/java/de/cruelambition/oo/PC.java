@@ -1,5 +1,6 @@
 package de.cruelambition.oo;
 
+import de.cruelambition.cmd.user.ToDo;
 import de.cruelambition.language.Lang;
 import de.cruelambition.language.Language;
 
@@ -421,14 +422,16 @@ public class PC {
 
 	public void checkToDo(int i) {
 		List<String> sl = c.getStringList("Player.ToDo.List");
+		String current = getToDo(i);
 
-		String s = sl.get(i - 1);
-		sl.set(i - 1, "§o§m" + s);
-
-		sl.remove(i);
-		sl.add(s);
+		sl.set(i - 1, "§o§m" + current);
+		sl.remove(current);
 
 		c.set("Player.ToDo.List", sl);
+	}
+
+	public String getToDo(int i) {
+		return c.getStringList("Player.ToDo.List").get(i - 1);
 	}
 
 	public void removeToDo(int i) {
