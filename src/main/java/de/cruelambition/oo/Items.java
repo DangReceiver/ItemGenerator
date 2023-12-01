@@ -18,22 +18,25 @@ public class Items {
 	public Items() {
 		List<ItemStack> l = new ArrayList<>();
 
-		ItemStack mini_jetpack = newItem("§6Mini Jetpack", "Click to be boosted " +
+		ItemStack generator = newItem("§5§lGenerator", "§7§oClick to receive an item" +
+				"after a server-wide delay"),
+				mini_jetpack = newItem("§6Mini Jetpack", "§oClick to be boosted " +
 				"in the air every time you click"),
-				sound = newItem("§eSound", "Click to produce a sound"),
-				eraser = newItem("§cEraser", "click to remove a set of blocks"),
-				crate = newHeadItem("§cItem Crate", "Click to roll the lucky wheel"),
+				sound = newItem("§eSound", "§oClick to produce a random sound"),
+				eraser = newItem("§cEraser", "§oClick to remove a set of blocks"),
+				crate = newHeadItem("§cItem Crate", "§oClick to roll the lucky wheel"),
 				banana = newEdibleItem("§eBanana", "§e§oBanana!"),
 				bakedBanana = newEdibleItem("§eBaked Banana", "§e§o Baked Banana o:"),
-				disc = newDisc("§5Phantom - wavvyboi", "§eSpiele ein Lied 💞");
+				disc = newDisc("§5Phantom - wavvyboi", "§e§oSpiele ein Lied 💞");
 
-		l.add(mini_jetpack);    // 0
-		l.add(sound);           // 1
-		l.add(eraser);          // 2
-		l.add(crate);           // 3
-		l.add(banana);          // 4
-		l.add(bakedBanana);     // 5
-		l.add(disc);            // 6
+		l.add(generator);		// 0
+		l.add(mini_jetpack);    // 1
+		l.add(sound);           // 2
+		l.add(eraser);          // 3
+		l.add(crate);           // 4
+		l.add(banana);          // 5
+		l.add(bakedBanana);     // 6
+		l.add(disc);            // 7
 
 		for (ItemStack is : l) if (!mats.contains(is.getType())) mats.add(is.getType());
 		amount = new int[mats.size()];

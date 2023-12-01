@@ -39,6 +39,7 @@ public class CM implements Listener {
 			p.teleport(SpawnWorld.getSafeSpawnLocation());
 
 			if (!pc.hasCon(p)) pc.createCon(p);
+			pc.allowItemGeneration();
 			pc.savePCon();
 
 		} else if (pc.getQuitTime() - pc.getJoinTime() <= 25000L)

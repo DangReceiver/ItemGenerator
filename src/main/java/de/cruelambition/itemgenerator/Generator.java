@@ -27,7 +27,7 @@ public class Generator {
 	private BukkitTask g;
 	private final FileConfiguration c;
 
-	public Generator() {
+	public Generator(boolean alternativeGenerator) {
 		common = new ArrayList<>();
 		rare = new ArrayList<>();
 
@@ -49,7 +49,9 @@ public class Generator {
 		setupEditable();
 
 		List<Integer> frequencies = getFrequencies();
-		startGeneratorLoop(frequencies.get(0), frequencies.get(1));
+
+		if (!alternativeGenerator) startGeneratorLoop(frequencies.get(0), frequencies.get(1));
+		else alternativeGenerator(frequencies.get(0), frequencies.get(1));
 	}
 
 	// Generator Loop Start
@@ -85,6 +87,35 @@ public class Generator {
 		}, 20L * startIn, 20L * frequency);
 	}
 
+	public void alternativeGenerator(int startIn, int frequency) {
+		ItemGenerator ig = ItemGenerator.getItemGenerator();
+		FileConfiguration c = ig.getConfig();
+
+		g = Bukkit.getScheduler().runTaskTimer(ig, () -> {
+			PC pc;
+
+			for (Player ap : Bukkit.getOnlinePlayers()) {
+				if (ap.getWorld() == Bukkit.getWorld("Spawn")) continue;
+
+				pc = new PC(ap);
+				ap.sendMessage(Lang.PRE + Lang.getMessage(pc.getLanguage(), "generator_ready"));
+
+				pc.allowItemGeneration();
+				pc.savePCon();
+			}
+
+			c.set("Generator.Delay", frequency);
+		}, 20L * startIn, 20L * frequency);
+
+		ig.saveConfig();
+		Bukkit.getScheduler().runTaskTimer(ig, () -> {
+
+			c.set("Generator.Delay", c.getInt("Generator.Delay") - 1);
+			ig.saveConfig();
+
+		}, startIn, 20);
+	}
+
 	public void stopGeneratorLoop() {
 		stopGenerator = true;
 		g.cancel();
@@ -95,6 +126,53 @@ public class Generator {
 
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
 				() -> startGeneratorLoop(startIn, frequency), 40);
+	}
+
+	public void give(Player p) {
+		p.playSound(p.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 0.45f, 0.8f);
+
+		ItemStack is = new ItemStack(Material.AIR);
+		Random r = new Random();
+
+		is.setType(r.nextInt(10) == 0 ? getRare() : getCommon());
+		Material type = is.getType();
+
+		if (canEdit(type) && r.nextInt(4) == 0) edit(is);
+		else if (type.toString().contains("SPAWN_EGG")) edit(is);
+
+		Lang l = new Lang(p);
+		if (isCustomItem(type)) {
+
+			p.sendMessage(Lang.PRE + l.getString("rolling_custom_item"));
+			is = Items.getCustomItem(type, r.nextInt(getCustomItemAmount(type) + 1) + 1);
+
+//				ap.sendMessage("cmd: " + cmd + " || type: " + type);
+			p.sendMessage(Lang.PRE + String.format(l.getString("received_custom_item")),
+					is.getItemMeta().getDisplayName());
+		}
+
+		String s = type.toString().toLowerCase().replaceAll("_", " ");
+		if (isRare(type)) p.sendMessage(Lang.PRE + l.getString("receiving_rare_item"));
+
+		if (p.getInventory().firstEmpty() != -1) {
+
+			p.getInventory().addItem(is);
+			p.sendActionBar(Lang.PRE + String.format(l.getString("generated_item_inv"), s));
+
+		} else {
+			p.getWorld().dropItemNaturally(p.getLocation(), is);
+			p.sendActionBar(Lang.PRE + String.format(l.getString("generated_item_drop"), s));
+		}
+
+		PC pc = new PC(p);
+		List<String> list = pc.isSet("Generator.Receiving.Materials") ?
+				pc.getStringList("Generator.Receiving.Materials") : new ArrayList<>();
+
+		if (list.size() >= 8) list.remove(0);
+		list.add(System.currentTimeMillis() + "::" + type.toString());
+
+		pc.set("Generator.Receiving.Materials", list);
+		pc.savePCon();
 	}
 
 	public void giveAll() {
@@ -342,7 +420,7 @@ public class Generator {
 			if (!spawnEggs.contains(m)) spawnEggs.add(m);
 		}
 
-		for(Material mat : spawnEggs) rare.remove(mat);
+		for (Material mat : spawnEggs) rare.remove(mat);
 
 		if (!spawnEggs.contains(Material.ALLAY_SPAWN_EGG)) spawnEggs.add(Material.ALLAY_SPAWN_EGG);
 		if (!rare.contains(Material.ALLAY_SPAWN_EGG)) rare.add(Material.ALLAY_SPAWN_EGG);

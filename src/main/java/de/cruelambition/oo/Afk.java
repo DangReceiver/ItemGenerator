@@ -28,35 +28,35 @@ public class Afk implements Listener {
 		e.setCancelled(true);
 		Player p = e.getPlayer();
 
-		p.sendMessage(e.getCause() + "");
-
 		p.resetIdleDuration();
-		Spawn.sendToSpawn(p);
 
-//		p.setIdle
+		if (p.getWorld() != Bukkit.getWorld("Spawn")) {
+			p.sendMessage(e.getCause() + "");
+			Spawn.sendToSpawn(p);
+		}
 	}
 
 
-	private final BukkitTask checker;
+//	private final BukkitTask checker;
 
-	public Afk() {
-		checker = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
-			PC pc;
+//	public Afk() {
+//		checker = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
+//			PC pc;
+//
+//			for (Player ap : Bukkit.getOnlinePlayers()) {
+//				pc = new PC(ap);
+//				if (!isAfk(pc)) continue;
+//
+//				sendToSpawn(ap);
+//				ap.sendMessage("detected as afk");
+//
+//			}
+//		}, 10 * 20, 20 * 20);
+//	}
 
-			for (Player ap : Bukkit.getOnlinePlayers()) {
-				pc = new PC(ap);
-				if (!isAfk(pc)) continue;
-
-				sendToSpawn(ap);
-				ap.sendMessage("detected as afk");
-
-			}
-		}, 10 * 20, 20 * 20);
-	}
-
-	public BukkitTask getChecker() {
-		return checker;
-	}
+//	public BukkitTask getChecker() {
+//		return checker;
+//	}
 
 	public void updateAfkTime(PC pc) {
 		pc.setAfkTime(System.currentTimeMillis() - pc.getAfkLead());
@@ -112,23 +112,23 @@ public class Afk implements Listener {
 
 
 	// Afk tracking
-	@EventHandler
+//	@EventHandler
 	public void handle(PlayerToggleSneakEvent e) {
 		afkListener(e.getPlayer());
 	}
 
-	@EventHandler
+	//	@EventHandler
 	public void handle(PlayerJumpEvent e) {
 		afkListener(e.getPlayer());
 	}
 
-	@EventHandler
+	//	@EventHandler
 	public void handle(AsyncChatEvent e) {
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
 				() -> afkListener(e.getPlayer()), 0);
 	}
 
-	@EventHandler
+	//	@EventHandler
 	public void handle(InventoryClickEvent e) {
 		HumanEntity he = e.getWhoClicked();
 		if (!(he instanceof Player p)) return;

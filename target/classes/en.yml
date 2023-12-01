@@ -102,6 +102,8 @@ generator:
   generated_item_drop: "You were dropped %s"
   potion: "Potion of %s"
   receiving_rare_item: "You just received a rare item!"
+  generator_on_delay: "You're on delay (%s seconds)."
+  generator_ready: "You can now generate a new item!"
 
 itemgenerator:
   modules_success: "All modules were loaded sucessfully!"
@@ -214,7 +216,7 @@ frequent:
   argument_range: "The argument #%s should be between %s and %s§8."
   arg_length_required: "The required argument length for this command is %s§8."
   arg_length_range: "Valid argument lengths for this command are between %s and %s§8."
-  insufficient_permission: "You do not have the required permission %s to perform this action."
+  insufficient_permission: "You are lacking the permission %s required to perform this action."
   usage: "The usage of the command %s is %s"
   target_invalid: "The specified target is invalid."
   no_player: "This feature is exclusively available to players§8."

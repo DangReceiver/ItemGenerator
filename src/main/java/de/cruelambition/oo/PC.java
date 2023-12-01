@@ -441,6 +441,18 @@ public class PC {
 		c.set("Player.ToDo.List", sl);
 	}
 
+	public boolean mayGenerateItem() {
+		return c.getBoolean("Generator.canGenerate");
+	}
+
+	public void allowItemGeneration() {
+		c.set("Generator.canGenerate", true);
+	}
+
+	public void disallowItemGeneration() {
+		c.set("Generator.canGenerate", false);
+	}
+
 	public int getPronouns() {
 		return c.getInt("Settings.Pronouns", 0);
 	}

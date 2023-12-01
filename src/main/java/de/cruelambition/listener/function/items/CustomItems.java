@@ -1,5 +1,6 @@
 package de.cruelambition.listener.function.items;
 
+import de.cruelambition.itemgenerator.Generator;
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.oo.Items;
@@ -40,7 +41,24 @@ public class CustomItems implements Listener {
 		Lang l = new Lang(p);
 //		p.sendMessage(Items.ITEMS.get(im.getCustomModelData() - 1).displayName());
 
-		if (item.equals(Items.ITEMS.get(6))) {
+		if (item.equals(Items.ITEMS.get(0))) {
+			e.setCancelled(true);
+			PC pc = new PC(p);
+
+			p.sendMessage("§5§oGenerator");
+			if (!pc.mayGenerateItem()) {
+
+				p.sendMessage(Lang.PRE + String.format(l.getString("generator_on_delay"),
+						ItemGenerator.getItemGenerator().getConfig().getInt("Generator.Delay")));
+				return;
+			}
+
+			pc.disallowItemGeneration();
+			ItemGenerator.g.give(p);
+
+			pc.savePCon();
+
+		} else if (item.equals(Items.ITEMS.get(7))) {
 			e.setCancelled(true);
 			p.sendMessage("§5Phantom - wavvyboi");
 
@@ -57,7 +75,7 @@ public class CustomItems implements Listener {
 //				cb.setBlockData(Bukkit.createBlockData(""));
 			}
 
-		} else if (item.equals(Items.ITEMS.get(5))) {
+		} else if (item.equals(Items.ITEMS.get(6))) {
 //			e.setCancelled(true);
 			p.sendMessage("Baked Banana");
 
@@ -65,7 +83,7 @@ public class CustomItems implements Listener {
 
 			}
 
-		} else if (item.equals(Items.ITEMS.get(4))) {
+		} else if (item.equals(Items.ITEMS.get(5))) {
 //			e.setCancelled(true);
 			p.sendMessage("Banana");
 
@@ -73,7 +91,7 @@ public class CustomItems implements Listener {
 
 			}
 
-		} else if (item.equals(Items.ITEMS.get(3))) {
+		} else if (item.equals(Items.ITEMS.get(4))) {
 			e.setCancelled(true);
 			p.sendMessage("Crate");
 
@@ -81,7 +99,7 @@ public class CustomItems implements Listener {
 				p.sendMessage("some action idk yet");
 			}
 
-		} else if (item.equals(Items.ITEMS.get(2))) {
+		} else if (item.equals(Items.ITEMS.get(3))) {
 			e.setCancelled(true);
 			p.sendMessage("eraser");
 
@@ -95,7 +113,7 @@ public class CustomItems implements Listener {
 				p.sendMessage("need to left click a block");
 			}
 
-		} else if (item.equals(Items.ITEMS.get(1))) {
+		} else if (item.equals(Items.ITEMS.get(2))) {
 			e.setCancelled(true);
 
 			if (a.toString().contains("RIGHT") || a.toString().contains("LEFT")) {
@@ -108,7 +126,7 @@ public class CustomItems implements Listener {
 						sound.toString().toLowerCase()), 20, 20, 10);
 			}
 
-		} else if (item.equals(Items.ITEMS.get(0))) {
+		} else if (item.equals(Items.ITEMS.get(1))) {
 			e.setCancelled(true);
 			PC pc = new PC(p);
 

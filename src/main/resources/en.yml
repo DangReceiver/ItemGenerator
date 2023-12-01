@@ -102,6 +102,8 @@ generator:
   generated_item_drop: "You were dropped %s"
   potion: "Potion of %s"
   receiving_rare_item: "You just received a rare item!"
+  generator_on_delay: "You're on delay (%s seconds)."
+  generator_ready: "You can now generate a new item!"
 
 itemgenerator:
   modules_success: "All modules were loaded sucessfully!"
