@@ -187,50 +187,7 @@ public class Generator {
 
 		for (Player ap : wP) {
 			if (ap.getGameMode() != GameMode.SURVIVAL) continue;
-			ap.playSound(ap.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 0.45f, 0.8f);
-
-			ItemStack is = new ItemStack(Material.AIR);
-			Random r = new Random();
-
-			is.setType(r.nextInt(10) == 0 ? getRare() : getCommon());
-			Material type = is.getType();
-
-			if (canEdit(type) && r.nextInt(4) == 0) edit(is);
-			else if (type.toString().contains("SPAWN_EGG")) edit(is);
-
-			Lang l = new Lang(ap);
-			if (isCustomItem(type)) {
-
-				ap.sendMessage(Lang.PRE + l.getString("rolling_custom_item"));
-				is = Items.getCustomItem(type, r.nextInt(getCustomItemAmount(type) + 1) + 1);
-
-//				ap.sendMessage("cmd: " + cmd + " || type: " + type);
-				ap.sendMessage(Lang.PRE + String.format(l.getString("received_custom_item")),
-						is.getItemMeta().getDisplayName());
-			}
-
-			String s = type.toString().toLowerCase().replaceAll("_", " ");
-			if (isRare(type)) ap.sendMessage(Lang.PRE + l.getString("receiving_rare_item"));
-
-			if (ap.getInventory().firstEmpty() != -1) {
-
-				ap.getInventory().addItem(is);
-				ap.sendActionBar(Lang.PRE + String.format(l.getString("generated_item_inv"), s));
-
-			} else {
-				ap.getWorld().dropItemNaturally(ap.getLocation(), is);
-				ap.sendActionBar(Lang.PRE + String.format(l.getString("generated_item_drop"), s));
-			}
-
-			PC pc = new PC(ap);
-			List<String> list = pc.isSet("Generator.Receiving.Materials") ?
-					pc.getStringList("Generator.Receiving.Materials") : new ArrayList<>();
-
-			if (list.size() >= 8) list.remove(0);
-			list.add(System.currentTimeMillis() + "::" + type.toString());
-
-			pc.set("Generator.Receiving.Materials", list);
-			pc.savePCon();
+			give(ap);
 		}
 	}
 
