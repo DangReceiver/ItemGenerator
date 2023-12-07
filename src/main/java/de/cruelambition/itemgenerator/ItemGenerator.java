@@ -104,7 +104,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new Anvil(), this);
 		pm.registerEvents(new TrailGui(), this);
 		pm.registerEvents(new WorldBorder(), this);
-		pm.registerEvents(new ClickGrowed(), this);
+		pm.registerEvents(new GrowedClick(), this);
 		pm.registerEvents(new Doors(), this);
 		pm.registerEvents(new SleepPhantomAway(), this);
 		pm.registerEvents(new PlayerClickPlayer(), this);
@@ -161,7 +161,7 @@ public final class ItemGenerator extends JavaPlugin {
 		cs.sendMessage(Lang.PRE + String.format(Lang.getMessage(Lang.getServerLang(),
 				"running_version"), VERSION));
 
-		ClickGrowed.fillSeedList();
+		GrowedClick.fillSeedList();
 
 		FileConfiguration c = getConfig();
 		if (!c.isSet("Generator.ItemAlternative")) {

@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Random;
 
-public class ClickGrowed implements Listener {
+public class GrowedClick implements Listener {
 
 	public static HashMap<Material, Material> seeds = new HashMap<>();
 
