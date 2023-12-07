@@ -38,6 +38,7 @@ public class GrowedClick implements Listener {
 				&& p.getGameMode() != GameMode.ADVENTURE)) return;
 
 		Lang l = new Lang(p);
+		if (!p.getInventory().getItemInMainHand().getType().toString().contains("HOE")) return;
 
 		if (e.getClickedBlock().getBlockData().toString().contains("[age=7]")) {
 			switch (e.getClickedBlock().getType()) {
@@ -91,9 +92,9 @@ public class GrowedClick implements Listener {
 			p.playSound(p.getLocation(), Sound.ITEM_CROP_PLANT, 0.5f, 1.1f);
 
 			Random r = new Random();
-			if (r.nextInt(15) != 1) return;
+			if (r.nextInt(18) != 1) return;
 
-			for (int i = 0; i < r.nextInt(3); i++)
+			for (int i = 0; i < r.nextInt(2); i++)
 				p.getWorld().spawnEntity(p.getLocation(), EntityType.THROWN_EXP_BOTTLE);
 		}
 	}
