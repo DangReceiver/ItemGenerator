@@ -17,15 +17,15 @@ public class Brute implements Listener {
 	@EventHandler
 	public void handle(EntityBreedEvent e) {
 		e.setExperience(e.getExperience() + new Random().nextInt(5));
+		if(new Random().nextInt(6) == 0) e.setCancelled(true);
 	}
 
 	@EventHandler
 	public void handle(EntityDropItemEvent e) {
-		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 		if (e.getItemDrop().getItemStack().getType() != Material.EGG) return;
 
 		Random r = new Random();
-		if (r.nextInt(4) == 0) return;
+		if (r.nextInt(5) == 0) return;
 		e.setCancelled(true);
 
 		int i = r.nextInt(5);
