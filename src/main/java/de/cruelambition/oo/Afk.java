@@ -25,13 +25,14 @@ public class Afk implements Listener {
 	public void handle(PlayerKickEvent e) {
 		if (e.getCause() != PlayerKickEvent.Cause.IDLING) return;
 
-		e.setCancelled(true);
 		Player p = e.getPlayer();
+		p.sendMessage(e.getCause() + "0");
 
+		e.setCancelled(true);
 		p.resetIdleDuration();
 
 		if (p.getWorld() != Bukkit.getWorld("Spawn")) {
-			p.sendMessage(e.getCause() + "");
+			p.sendMessage(e.getCause() + "1");
 			Spawn.sendToSpawn(p);
 		}
 	}

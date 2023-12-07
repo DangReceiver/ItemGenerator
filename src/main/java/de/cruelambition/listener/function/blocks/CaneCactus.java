@@ -49,6 +49,8 @@ public class CaneCactus implements Listener {
 		p.playSound(p.getLocation(), Sound.ITEM_BONE_MEAL_USE, 0.4f, 1.15f);
 		Utils.particleOffset(l.clone().add(0.5, 0.5, 0.5), Particle.VILLAGER_HAPPY, 4, 0.65);
 
+		Bukkit.getConsoleSender().sendMessage(e.getHandlers().toString());
+
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
 			PC pc1 = new PC(p);
 

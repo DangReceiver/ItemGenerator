@@ -33,7 +33,7 @@ public class Items {
 				bakedBanana = newEdibleItem("§eBaked Banana", Lang.splitString("§e§o Baked Banana o:")),
 				disc = newDisc("§5Phantom - wavvyboi", Lang.splitString("§e§oSpiele ein Lied 💞"));
 
-		it.add(generator);        // 0
+		it.add(generator);       // 0
 		it.add(mini_jetpack);    // 1
 		it.add(sound);           // 2
 		it.add(eraser);          // 3
