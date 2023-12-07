@@ -1,4 +1,3 @@
-de\cruelambition\listener\function\blocks\ClickGrowed.class
 de\cruelambition\listener\essential\Beacon.class
 de\cruelambition\worlds\SpawnWorld$SpawnGen.class
 de\cruelambition\listener\function\blocks\Anvil$1.class
@@ -16,7 +15,6 @@ de\cruelambition\listener\essential\CM.class
 de\cruelambition\cmd\moderation\Get.class
 de\cruelambition\cmd\moderation\LearnRecipes.class
 de\cruelambition\listener\function\entities\Brute.class
-de\cruelambition\listener\function\blocks\ClickGrowed$1.class
 de\cruelambition\language\Pronouns.class
 de\cruelambition\listener\function\entities\KillDeath.class
 de\cruelambition\listener\function\items\ItemDrop.class

@@ -68,7 +68,7 @@ public class Lang extends Language {
 	}
 
 	public void setLocalLanguage(File temp) {
-		Language.getLangFile(temp.getName().split(".yml")[0]);
+		lf = Language.getLangFile(temp.getName().split(".yml")[0]);
 	}
 
 	public void updateLf(File pF) {

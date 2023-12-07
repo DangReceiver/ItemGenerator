@@ -146,18 +146,20 @@ public class CustomItems implements Listener {
 			pc.setJetpackUsage(true);
 			pc.savePCon();
 
-			p.setVelocity(p.getVelocity().setY(0).add(new Vector(0, 0.2, 0)).multiply(1.75f));
-			Utils.particleOffset(p.getLocation(), Particle.FLAME, 2, 0.275);
+			p.setVelocity(p.getLocation().getDirection().multiply(0.3).setY(0.16));
+			Utils.particleOffset(p.getLocation(), Particle.FLAME, 1, 0.275);
 
 			Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
 
-				p.setVelocity(p.getFacing().getDirection().multiply(1.2).setY(0.3));
-				Utils.particleOffset(p.getLocation(), Particle.SMALL_FLAME, 4, 0.35);
+				p.setVelocity(p.getLocation().getDirection().multiply(0.3).setY(0.16));
+				Utils.particleOffset(p.getLocation(), Particle.SOUL_FIRE_FLAME, 2, 0.35);
 
 				PC pc1 = new PC(p);
 				pc1.setJetpackUsage(false);
 				pc1.savePCon();
-			}, 5);
+
+			}, 4);
+			p.setCooldown(item.getType(), 12);
 		}
 	}
 

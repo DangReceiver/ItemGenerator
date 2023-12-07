@@ -20,18 +20,18 @@ public class Items {
 	public Items() {
 		List<ItemStack> it = new ArrayList<>();
 		Lang l = new Lang(null);
-		l.setPlayerLanguage(Language.getServerLang());
+		l.setLocalLanguage(Language.getServerLang());
 
 		ItemStack generator = newItem(l.getString("generator_item_name"), Lang.splitString(l.getString("generator_item_lore"))),
-				mini_jetpack = newItem("§6Mini Jetpack", Lang.splitString("§oClick to be boosted " +
+				mini_jetpack = newItem(l.getString("jetpack_item_name"), Lang.splitString("§oClick to be boosted " +
 						"in the air every time you click")),
-				sound = newItem("§eSound", Lang.splitString("§oClick to produce a random sound")),
-				eraser = newItem("§cEraser", Lang.splitString("§oClick to remove a set of blocks" +
+				sound = newItem(l.getString("sound_item_name"), Lang.splitString("§oClick to produce a random sound")),
+				eraser = newItem(l.getString("eraser_item_name"), Lang.splitString("§oClick to remove a set of blocks" +
 						"Comes with a 3 second delay")),
-				crate = newHeadItem("§cItem Crate", Lang.splitString("§oClick to roll the lucky wheel")),
-				banana = newEdibleItem("§eBanana", Lang.splitString("§e§oBanana!")),
-				bakedBanana = newEdibleItem("§eBaked Banana", Lang.splitString("§e§o Baked Banana o:")),
-				disc = newDisc("§5Phantom - wavvyboi", Lang.splitString("§e§oSpiele ein Lied 💞"));
+				crate = newHeadItem(l.getString("crate_item_name"), Lang.splitString("§oClick to roll the lucky wheel")),
+				banana = newEdibleItem(l.getString("banana_item_name"), Lang.splitString("§e§oBanana!")),
+				bakedBanana = newEdibleItem(l.getString("baked_banana_item_name"), Lang.splitString("§e§o Baked Banana o:")),
+				disc = newDisc(l.getString("phantom_wavvy_disc_item_name"), Lang.splitString("§e§oSpiele ein Lied 💞"));
 
 		it.add(generator);       // 0
 		it.add(mini_jetpack);    // 1

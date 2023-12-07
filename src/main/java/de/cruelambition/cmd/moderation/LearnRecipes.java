@@ -70,7 +70,7 @@ public class LearnRecipes implements CommandExecutor, TabCompleter {
 
 					t.discoverRecipe(k.getKey());
 				}
-				t.sendMessage("Learned all custom recipes!");
+				t.sendMessage(Lang.PRE + l.getString("recipes_learned"));
 				return false;
 
 			} else {
@@ -85,12 +85,12 @@ public class LearnRecipes implements CommandExecutor, TabCompleter {
 						if (t.hasDiscoveredRecipe(k.getKey())) t.undiscoverRecipe(k.getKey());
 
 						t.discoverRecipe(k.getKey());
-						t.sendMessage("Learned desired recipe!");
+						t.sendMessage(Lang.PRE + l.getString("recipe_learned"));
 					}
 				}
 			}
 
-			if (t != p) p.sendMessage("target learned recipe");
+			if (t != p) p.sendMessage(Lang.PRE + l.getString("target_learned_recipes"));
 		}
 		return false;
 	}

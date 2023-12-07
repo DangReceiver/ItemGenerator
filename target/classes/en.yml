@@ -49,8 +49,20 @@ generatorfrequencies:
   generatorfrequencies_after: "Generator Timings after Change - CheckStart: %s, CheckFrequency: %s,
    GeneratorStart: %s, GeneratorFrequency: %s"
 
+get:
+  invalid_custom_item: "The given item does not seem to exist."
+  custom_item_received: "You received the desired custom item!"
+  everyone_received_custom_item: "Everyone just received a custom item!"
+  target_custom_item_received: "The target was given the desired item."
+
 invsee:
   invsee_target: "Now viewing %s's inventory"
+
+leanrrecipes:
+  player_receiving_recipe: ""
+  recipes_learned: ""
+  recipe_learned: ""
+  target_learned_recipes: ""
 
 backpack:
   backpack_opened: "Now viewing your personal backpack."
@@ -174,6 +186,24 @@ playerclickplayer:
   x_loves_you: "§C%s §7loves you ^^"
 
 customitems:
+  generator_item_name: "§5Item Generator"
+  jetpack_item_name: "§6Portable Jetpack"
+  sound_item_name: "§9§oSound"
+  eraser_item_name: "§cEraser"
+  crate_item_name: "§6Item Crate"
+  banana_item_name: "§eBanana"
+  baked_banana_item_name: "§6Baked Banana"
+  phantom_wavvy_disc_item_name: "§5Phantom - wavvyboi"
+  generator_item_lore: "§5§oCome and generate an item dfrom time to time! // §5§oDirected to a server-wide delay"
+  jetpack_item_lore: "§7§oClick to be carried through air // 
+  §7§orepeated clicking to cross distance // §7§owill increase height over time"
+  sound_item_lore: "§7§oClick to make a random sound play"
+  eraser_item_lore: "§7§oLeft click to erase blocks of the same type in a 5.5 block radius // 
+  §7§oRight click to highlight targeted blocks"
+  crate_item_lore: ""
+  banana_item_lore: ""
+  baked_banana_item_lore: ""
+  phantom_wavvy_disc_item_lore: ""
   jetpack_in_use: "You're currently on delay for this item!"
   sound_playing_sound: "Playing the sound '%s'."
 
@@ -201,6 +231,7 @@ sb:
 pc:
   kill_level_increase: "§5Kill level up! (%s)"
   kill_level_increase_sub: "§7New level requirement is §a%s §7kills!"
+
 
 worldborder:
   as_wb: "§2WorldBorder Upgrader"
