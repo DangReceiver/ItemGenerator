@@ -25,10 +25,6 @@ public class Utils {
 				oneByOne(p, s, times, startAtPitch, pitch, up, volume, delay, current + 1), delay);
 	}
 
-	public static List<String> splitString(String s) {
-		return new ArrayList<>(Arrays.asList(s.split("//")));
-	}
-
 	public static void particleOffset(Location l, Particle par, int amount, double area) {
 		for (int i = 0; i < amount; i++) {
 

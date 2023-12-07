@@ -337,6 +337,10 @@ public class Language {
 		}
 	}
 
+	public static List<String> splitString(String s) {
+		return new ArrayList<>(Arrays.asList(s.split("//")));
+	}
+
 	public static void saveMissingKeys() {
 		ConsoleCommandSender cs = Bukkit.getConsoleSender();
 		List<String> mkl = missingKeys;

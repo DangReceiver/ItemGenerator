@@ -6,10 +6,7 @@ import de.cruelambition.language.Lang;
 import de.cruelambition.oo.Items;
 import de.cruelambition.oo.PC;
 import de.cruelambition.oo.Utils;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -105,11 +102,17 @@ public class CustomItems implements Listener {
 
 			if (a == Action.LEFT_CLICK_BLOCK && cb != null) {
 
-				int i = 0;
+				erase(cb, cb.getWorld());
+				p.setCooldown(item.getType(), 60);
+
+			} else if (a == Action.RIGHT_CLICK_BLOCK && cb != null) {
+
 				// needs to be reworked
-				checkNextBlocks(cb, i);
+				highlight(cb, cb.getWorld());
+				p.setCooldown(item.getType(), 60);
 
 			} else {
+
 				p.sendMessage("need to left click a block");
 			}
 
@@ -156,6 +159,62 @@ public class CustomItems implements Listener {
 				pc1.savePCon();
 			}, 6);
 		}
+	}
+
+	public void erase(Block cb, World w) {
+		int x = cb.getX(), y = cb.getY(), z = cb.getZ();
+
+		for (int xt = x - 5; xt <= x + 5; xt++)
+			for (int yt = x - 5; yt <= x + 5; yt++)
+				for (int zt = x - 5; zt <= x + 5; zt++)
+
+					if (w.getBlockAt(xt, yt, zt).getType() == cb.getType())
+						cb.setType(Material.AIR);
+
+	}
+
+	public void highlight(Block cb, World w) {
+		int x = cb.getX(), y = cb.getY(), z = cb.getZ();
+
+		// FOR LINES X -> Y & X -> Z
+		for (int i = 0; i <= 10; i++) {
+			for (int yt = y - 5; yt <= y + 5; yt++) {
+				w.spawnParticle(Particle.FLAME, w.getBlockAt(x, yt, z).getLocation(), 1);
+				w.spawnParticle(Particle.FLAME, w.getBlockAt(x, yt, z).getLocation().add(0, 0.5, 0), 1);
+			}
+
+			for (int zt = z - 5; zt <= z + 5; zt++) {
+				w.spawnParticle(Particle.FLAME, w.getBlockAt(x, y, zt).getLocation(), 1);
+				w.spawnParticle(Particle.FLAME, w.getBlockAt(x, y, zt).getLocation().add(0, 0, 1), 1);
+			}
+		}
+
+		// FOR LINES Y -> Z & Y -> X
+		for (int i = 0; i <= 10; i++) {
+			for (int xt = x - 5; xt <= x + 5; xt++) {
+				w.spawnParticle(Particle.FLAME, w.getBlockAt(xt, y, z).getLocation(), 1);
+				w.spawnParticle(Particle.FLAME, w.getBlockAt(xt, y, z).getLocation().add(0, 0.5, 0), 1);
+			}
+
+			for (int zt = z - 5; zt <= z + 5; zt++) {
+				w.spawnParticle(Particle.FLAME, w.getBlockAt(x, y, zt).getLocation(), 1);
+				w.spawnParticle(Particle.FLAME, w.getBlockAt(x, y, zt).getLocation().add(0, 0, 1), 1);
+			}
+		}
+
+		// FOR LINES Z -> X & Z -> Y
+		for (int i = 0; i <= 10; i++) {
+			for (int xt = x - 5; xt <= x + 5; xt++) {
+				w.spawnParticle(Particle.FLAME, w.getBlockAt(xt, y, z).getLocation(), 1);
+				w.spawnParticle(Particle.FLAME, w.getBlockAt(xt, y, z).getLocation().add(0, 0.5, 0), 1);
+			}
+
+			for (int yt = y - 5; yt <= y + 5; yt++) {
+				w.spawnParticle(Particle.FLAME, w.getBlockAt(x, yt, z).getLocation(), 1);
+				w.spawnParticle(Particle.FLAME, w.getBlockAt(x, yt, z).getLocation().add(0, 0, 1), 1);
+			}
+		}
+
 	}
 
 	public void checkNextBlocks(Block cb, int i) {

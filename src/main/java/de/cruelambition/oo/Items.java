@@ -1,5 +1,7 @@
 package de.cruelambition.oo;
 
+import de.cruelambition.language.Lang;
+import de.cruelambition.language.Language;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,29 +18,31 @@ public class Items {
 	public static int[] amount;
 
 	public Items() {
-		List<ItemStack> l = new ArrayList<>();
+		List<ItemStack> it = new ArrayList<>();
+		Lang l = new Lang(null);
+		l.setPlayerLanguage(Language.getServerLang());
 
-		ItemStack generator = newItem("§5§lGenerator", "§7§oClick to receive an item" +
-				"after a server-wide delay"),
-				mini_jetpack = newItem("§6Mini Jetpack", "§oClick to be boosted " +
-				"in the air every time you click"),
-				sound = newItem("§eSound", "§oClick to produce a random sound"),
-				eraser = newItem("§cEraser", "§oClick to remove a set of blocks"),
-				crate = newHeadItem("§cItem Crate", "§oClick to roll the lucky wheel"),
-				banana = newEdibleItem("§eBanana", "§e§oBanana!"),
-				bakedBanana = newEdibleItem("§eBaked Banana", "§e§o Baked Banana o:"),
-				disc = newDisc("§5Phantom - wavvyboi", "§e§oSpiele ein Lied 💞");
+		ItemStack generator = newItem(l.getString("generator_item_name"), Lang.splitString(l.getString("generator_item_lore"))),
+				mini_jetpack = newItem("§6Mini Jetpack", Lang.splitString("§oClick to be boosted " +
+						"in the air every time you click")),
+				sound = newItem("§eSound", Lang.splitString("§oClick to produce a random sound")),
+				eraser = newItem("§cEraser", Lang.splitString("§oClick to remove a set of blocks" +
+						"Comes with a 3 second delay")),
+				crate = newHeadItem("§cItem Crate", Lang.splitString("§oClick to roll the lucky wheel")),
+				banana = newEdibleItem("§eBanana", Lang.splitString("§e§oBanana!")),
+				bakedBanana = newEdibleItem("§eBaked Banana", Lang.splitString("§e§o Baked Banana o:")),
+				disc = newDisc("§5Phantom - wavvyboi", Lang.splitString("§e§oSpiele ein Lied 💞"));
 
-		l.add(generator);		// 0
-		l.add(mini_jetpack);    // 1
-		l.add(sound);           // 2
-		l.add(eraser);          // 3
-		l.add(crate);           // 4
-		l.add(banana);          // 5
-		l.add(bakedBanana);     // 6
-		l.add(disc);            // 7
+		it.add(generator);        // 0
+		it.add(mini_jetpack);    // 1
+		it.add(sound);           // 2
+		it.add(eraser);          // 3
+		it.add(crate);           // 4
+		it.add(banana);          // 5
+		it.add(bakedBanana);     // 6
+		it.add(disc);            // 7
 
-		for (ItemStack is : l) if (!mats.contains(is.getType())) mats.add(is.getType());
+		for (ItemStack is : it) if (!mats.contains(is.getType())) mats.add(is.getType());
 		amount = new int[mats.size()];
 
 		for (int i = 0; i < mats.size(); i++) {
@@ -46,7 +50,7 @@ public class Items {
 			i++;
 		}
 
-		ITEMS.addAll(l);
+		ITEMS.addAll(it);
 //		for (Player ap : Bukkit.getOnlinePlayers()) for (ItemStack is : l) ap.getInventory().addItem(is);
 	}
 
@@ -62,7 +66,7 @@ public class Items {
 		return new ItemStack(m);
 	}
 
-	public ItemStack newItem(String name, String lore) {
+	public ItemStack newItem(String name, List<String> lore) {
 		ItemStack customItem = new ItemStack(Material.PAPER);
 
 		IB.name(customItem, name);
@@ -73,7 +77,7 @@ public class Items {
 		return customItem;
 	}
 
-	public ItemStack newDamageableItem(String name, String lore) {
+	public ItemStack newDamageableItem(String name, List<String> lore) {
 		ItemStack customItem = new ItemStack(Material.IRON_HOE);
 
 		IB.name(customItem, name);
@@ -84,7 +88,7 @@ public class Items {
 		return customItem;
 	}
 
-	public ItemStack newEdibleItem(String name, String lore) {
+	public ItemStack newEdibleItem(String name, List<String> lore) {
 		ItemStack customItem = new ItemStack(Material.APPLE);
 
 		IB.name(customItem, name);
@@ -95,7 +99,7 @@ public class Items {
 		return customItem;
 	}
 
-	public ItemStack newHeadItem(String name, String lore) {
+	public ItemStack newHeadItem(String name, List<String> lore) {
 		ItemStack customItem = new ItemStack(Material.PLAYER_HEAD);
 
 		IB.name(customItem, name);
@@ -106,7 +110,7 @@ public class Items {
 		return customItem;
 	}
 
-	public ItemStack newDisc(String name, String lore) {
+	public ItemStack newDisc(String name, List<String> lore) {
 		ItemStack customItem = new ItemStack(Material.MUSIC_DISC_CAT);
 
 		IB.name(customItem, name);

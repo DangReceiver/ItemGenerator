@@ -95,7 +95,7 @@ public class TrailGui implements CommandExecutor, Listener {
 			}
 
 			if (!allowedSlot(a, i.getSize())) return false;
-			List<String> lore = Utils.splitString(String.format(l.getString("BuyPreviewCost"),
+			List<String> lore = Lang.splitString(String.format(l.getString("BuyPreviewCost"),
 					c.getDouble("ParticleList." + par.toString() + ".cost")));
 
 			lore.add(0, c.getString("ParticleList." + par + ".lore"));
@@ -177,7 +177,7 @@ public class TrailGui implements CommandExecutor, Listener {
 
 				i.setItem(i.getSize() / 2 - 2, IB.name(new ItemStack(Material.GREEN_BANNER),
 						l.getString("confirm_banner")));
-				i.setItem(i.getSize() / 2, IB.lore(ci, Utils.splitString(String.format(
+				i.setItem(i.getSize() / 2, IB.lore(ci, Lang.splitString(String.format(
 						l.getString("buy_preview_cost"), c.getDouble("ParticleList." + ps + ".cost")))));
 				i.setItem(i.getSize() / 2 + 2, IB.name(new ItemStack(Material.RED_BANNER),
 						l.getString("cancel_banner")));

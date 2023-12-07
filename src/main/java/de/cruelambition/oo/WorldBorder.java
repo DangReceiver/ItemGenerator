@@ -165,9 +165,9 @@ public class WorldBorder implements Listener {
 		IB.invFiller(inv, IB.getFiller(new PC(p).getFiller(), true, true, null, null));
 
 		inv.setItem(inv.getSize() / 2 - 3, IB.lore(IB.name(new ItemStack(Material.RED_BANNER),
-				l.getString("cancel_purchase")), Utils.splitString(l.getString("cancel_purchase_lore"))));
+				l.getString("cancel_purchase")), Lang.splitString(l.getString("cancel_purchase_lore"))));
 		inv.setItem(inv.getSize() / 2 - 5, IB.lore(IB.name(new ItemStack(Material.KNOWLEDGE_BOOK),
-				l.getString("purchase_info")), Utils.splitString(String.format(l.getString("wb_upgrade_info"),
+				l.getString("purchase_info")), Lang.splitString(String.format(l.getString("wb_upgrade_info"),
 				getUpgradeCost(as.getWorld())))));
 		inv.setItem(inv.getSize() / 2 - 7, IB.lore(IB.name(new ItemStack(Material.LIME_BANNER),
 				l.getString("confirm_purchase"))));
