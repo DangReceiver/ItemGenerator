@@ -1,5 +1,6 @@
 package de.cruelambition.oo;
 
+import de.cruelambition.cmd.user.Spawn;
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import org.bukkit.Bukkit;
@@ -231,6 +232,9 @@ public class Sb {
 		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
 
 		updateDeathHeader(l);
+
+		if (l.thisPlayer().getIdleDuration().getSeconds() >= MAX_IDLE)
+			Spawn.sendToSpawn(l.thisPlayer());
 	}
 
 	public static void updateDeathHeader(Lang l) {

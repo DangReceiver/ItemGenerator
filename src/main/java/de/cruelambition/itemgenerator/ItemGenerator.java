@@ -154,7 +154,7 @@ public final class ItemGenerator extends JavaPlugin {
 		new Items();
 //		items.newItem("", "");
 
-		VERSION = "1.1.0";
+		VERSION = "1.2.0";
 //		if (getVersion() != null) VERSION = getVersion();
 
 		cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(), "modules_success"));

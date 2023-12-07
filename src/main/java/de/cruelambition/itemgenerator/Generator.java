@@ -50,8 +50,17 @@ public class Generator {
 
 		List<Integer> frequencies = getFrequencies();
 
-		if (!alternativeGenerator) startGeneratorLoop(frequencies.get(0), frequencies.get(1));
-		else alternativeGenerator(frequencies.get(0), frequencies.get(1));
+		if (!alternativeGenerator) {
+			startGeneratorLoop(frequencies.get(0), frequencies.get(1));
+
+			Bukkit.getConsoleSender().sendMessage(Lang.PRE + Language.getMessage(
+					Language.getServerLang(), "starting_classic_generator"));
+		} else {
+			alternativeGenerator(frequencies.get(0), frequencies.get(1));
+
+			Bukkit.getConsoleSender().sendMessage(Lang.PRE + Language.getMessage(
+					Language.getServerLang(), "starting_alternative_generator"));
+		}
 	}
 
 	// Generator Loop Start
@@ -63,7 +72,7 @@ public class Generator {
 				csi = c.getInt("Loops.Check.StartIn", 60),
 				cf = c.getInt("Loops.Check.Frequency", 80);
 
-		return new ArrayList<>(Arrays.asList(csi, cf, gsi, gf));
+		return new ArrayList<>(Arrays.asList(gsi, gf, csi, cf));
 	}
 
 	public void setFrequencies(int csi, int cf, int gsi, int gf) {
@@ -92,18 +101,21 @@ public class Generator {
 	}
 
 	public void alternativeGenerator(int startIn, int frequency) {
-		ItemGenerator ig = ItemGenerator.getItemGenerator();
-		FileConfiguration c = ig.getConfig();
+		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+		Bukkit.getConsoleSender().sendMessage(Lang.PRE + "StartIn: " + startIn + " || Frequency: " + frequency);
 
-		g = Bukkit.getScheduler().runTaskTimer(ig, () -> {
+		g = Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
+//			Bukkit.getConsoleSender().sendMessage(Lang.PRE + Language.getMessage(
+//					Language.getServerLang(), "reloop_in_alternative"));
+
 			PC pc;
+			World spawn = Bukkit.getWorld("Spawn");
 
 			for (Player ap : Bukkit.getOnlinePlayers()) {
-				if (ap.getWorld() == Bukkit.getWorld("Spawn")) continue;
+				if (ap.getWorld() == spawn) continue;
 
 				pc = new PC(ap);
-
-				if (!pc.mayGenerateItem()) {
+				if (!pc.isSet("Generator.canGenerate") || !pc.mayGenerateItem()) {
 					ap.sendMessage(Lang.PRE + Lang.getMessage(pc.getLanguage(), "generator_ready"));
 
 					pc.allowItemGeneration();
@@ -111,16 +123,16 @@ public class Generator {
 				}
 			}
 
-			c.set("Generator.Delay", frequency);
+			c.set("Generator.Delay", frequency + 1);
+			ItemGenerator.getItemGenerator().saveConfig();
 		}, 20L * startIn, 20L * frequency);
 
-		ig.saveConfig();
-		Bukkit.getScheduler().runTaskTimer(ig, () -> {
+		Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
 
 			c.set("Generator.Delay", c.getInt("Generator.Delay") - 1);
-			ig.saveConfig();
+			ItemGenerator.getItemGenerator().saveConfig();
 
-		}, startIn, 20);
+		}, 20L * startIn, 20);
 	}
 
 	public void stopGeneratorLoop() {
@@ -132,7 +144,7 @@ public class Generator {
 		stopGeneratorLoop();
 
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(),
-				() -> startGeneratorLoop(startIn, frequency), 40);
+				() -> startGeneratorLoop(startIn, frequency), 100);
 	}
 
 	public void give(Player p) {

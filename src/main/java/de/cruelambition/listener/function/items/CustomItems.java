@@ -42,7 +42,7 @@ public class CustomItems implements Listener {
 			e.setCancelled(true);
 			PC pc = new PC(p);
 
-			p.sendMessage("§5§oGenerator");
+//			p.sendMessage("§5§oGenerator");
 			if (!pc.mayGenerateItem()) {
 
 				p.sendMessage(Lang.PRE + String.format(l.getString("generator_on_delay"),

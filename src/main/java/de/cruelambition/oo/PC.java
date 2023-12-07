@@ -442,7 +442,8 @@ public class PC {
 	}
 
 	public boolean mayGenerateItem() {
-		return c.getBoolean("Generator.canGenerate");
+		return c.isSet("Generator.canGenerate") ? c.getBoolean("Generator.canGenerate")
+				: true;
 	}
 
 	public void allowItemGeneration() {
