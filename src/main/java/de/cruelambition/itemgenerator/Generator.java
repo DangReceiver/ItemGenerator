@@ -82,6 +82,8 @@ public class Generator {
 
 			if (stopGenerator) {
 				stopGenerator = false;
+				Bukkit.getConsoleSender().sendMessage(Lang.PRE + Language.getMessage(
+						Language.getServerLang(), "stopping_generator_old"));
 				return;
 			}
 
