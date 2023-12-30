@@ -237,49 +237,6 @@ public class CustomItems implements Listener {
 
 	}
 
-	public void checkNextBlocks(Block cb, int i) {
-		Material type = cb.getType();
-		cb.getWorld().dropItemNaturally(cb.getLocation().add(0, 0.5, 0), new ItemStack(type));
-
-		if (i >= 4) return;
-
-		Block xm = cb.getLocation().add(-1, 0, 0).getBlock();
-		if (type == xm.getType()) {
-			checkNextBlocks(xm, i + 1);
-			xm.setType(Material.AIR);
-		}
-
-		Block xp = cb.getLocation().add(1, 0, 0).getBlock();
-		if (type == xp.getType()) {
-			checkNextBlocks(xp, i + 1);
-			xp.setType(Material.AIR);
-		}
-
-		Block ym = cb.getLocation().add(0, -1, 0).getBlock();
-		if (type == ym.getType()) {
-			checkNextBlocks(ym, i + 1);
-			ym.setType(Material.AIR);
-		}
-
-		Block yp = cb.getLocation().add(0, 1, 0).getBlock();
-		if (type == yp.getType()) {
-			checkNextBlocks(yp, i + 1);
-			yp.setType(Material.AIR);
-		}
-
-		Block zm = cb.getLocation().add(0, 0, -1).getBlock();
-		if (type == zm.getType()) {
-			checkNextBlocks(zm, i + 1);
-			zm.setType(Material.AIR);
-		}
-
-		Block zp = cb.getLocation().add(0, 0, 1).getBlock();
-		if (type == zp.getType()) {
-			checkNextBlocks(zp, i + 1);
-			zp.setType(Material.AIR);
-		}
-	}
-
 	@EventHandler
 	public void handle(PlayerItemConsumeEvent e) {
 		Player p = e.getPlayer();

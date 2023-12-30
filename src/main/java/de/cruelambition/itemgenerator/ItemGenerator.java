@@ -8,6 +8,7 @@ import de.cruelambition.listener.essential.*;
 import de.cruelambition.listener.function.entities.*;
 import de.cruelambition.listener.function.*;
 import de.cruelambition.listener.function.blocks.*;
+import de.cruelambition.listener.function.entities.Void;
 import de.cruelambition.listener.function.items.CustomItems;
 import de.cruelambition.listener.function.items.ItemDrop;
 import de.cruelambition.oo.*;
@@ -117,6 +118,7 @@ public final class ItemGenerator extends JavaPlugin {
 		pm.registerEvents(new Brute(), this);
 		pm.registerEvents(new SneakGlow(), this);
 		pm.registerEvents(new Afk(), this);
+		pm.registerEvents(new Void(), this);
 
 		TrailGui.fillParList();
 		WorldBorder wb = new WorldBorder();
@@ -202,6 +204,21 @@ public final class ItemGenerator extends JavaPlugin {
 			pc.set("Temp", null);
 			pc.savePCon();
 		}
+	}
+
+	public static int voidOffset() {
+		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+
+		return !c.isSet("Mechanics.VoidOffsetRadius") ?
+				defaultVoidOffset() : c.getInt("Mechanics.VoidOffsetRadius");
+	}
+
+	public static int defaultVoidOffset() {
+		FileConfiguration c = ItemGenerator.getItemGenerator().getConfig();
+		c.set("Mechanics.VoidOffsetRadius", 64);
+
+		ItemGenerator.getItemGenerator().saveConfig();
+		return 64;
 	}
 
 	public void removeRecipes() {

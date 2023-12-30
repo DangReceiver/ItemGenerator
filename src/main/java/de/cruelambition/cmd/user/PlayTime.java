@@ -41,10 +41,7 @@ public class PlayTime implements CommandExecutor {
 		if (args.length == 0) {
 			PC pc = new PC(p);
 
-			long tpt = pc.getTotalPlayTime();
-			tpt = tpt + (System.currentTimeMillis() - pc.getJoinTime());
-
-			p.sendMessage(Lang.PRE + String.format(l.getString("playtime"), convertTime(tpt)));
+			p.sendMessage(Lang.PRE + String.format(l.getString("playtime"), convertTime(pc.getCurrentPlayTime())));
 			return false;
 		}
 

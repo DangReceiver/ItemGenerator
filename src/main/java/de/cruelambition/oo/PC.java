@@ -348,34 +348,6 @@ public class PC {
 		return false;
 	}
 
-	public void setAfk(boolean isAfk) {
-		c.set("Mechanics.Afk.isAfk", isAfk);
-	}
-
-	public boolean isAfk() {
-		return c.getBoolean("Mechanics.Afk.isAfk", false);
-	}
-
-	public void setAfkLead(long lead) {
-		c.set("Mechanics.Afk.LastAction", lead);
-	}
-
-	public long getAfkLead() {
-		return c.getLong("Mechanics.Afk.LastAction", 0);
-	}
-
-	public long getAfkTime() {
-		return c.getLong("Mechanics.Afk.AfkTime");
-	}
-
-	public void resetAfkTime() {
-		c.set("Mechanics.Afk.AfkTime", 0);
-	}
-
-	public void setAfkTime(long time) {
-		c.set("Mechanics.Afk.AfkTime", time);
-	}
-
 	public void updatePlayTime() {
 		setTotalPlayTime(getTotalPlayTime() + getQuitTime() - getJoinTime());
 		setJoinTime(-1L);
@@ -460,30 +432,6 @@ public class PC {
 
 	public void setPronouns(int i) {
 		c.set("Settings.Pronouns", Integer.valueOf((i <= 4) ? i : 0));
-	}
-
-	public float getReadOutVolume() {
-		return (float) c.getDouble("Settings.ReadOut.Volume", 1.0D);
-	}
-
-	public void setReadOutVolume(float volume) {
-		c.set("Settings.ReadOut.Volume", Float.valueOf(volume));
-	}
-
-	public float getReadOutPitch() {
-		return (float) c.getDouble("Settings.ReadOut.Pitch", 1.0D);
-	}
-
-	public void setReadOutPitch(float pitch) {
-		c.set("Settings.ReadOut.Pitch", Float.valueOf(pitch));
-	}
-
-	public boolean getReadOutEnabled() {
-		return c.getBoolean("Settings.ReadOut.toggle");
-	}
-
-	public void setReadOutEnabled(boolean enabled) {
-		c.set("Settings.ReadOut.toggle", Boolean.valueOf(enabled));
 	}
 
 	public void savePCon() {

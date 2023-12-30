@@ -72,6 +72,7 @@ public class CM implements Listener {
 		pc.updatePlayTime();
 
 		if (p.getWorld() == Bukkit.getWorld("world")) pc.setLogoutLocation(p.getLocation());
+		pc.setJetpackUsage(false);
 		pc.savePCon();
 
 		e.setQuitMessage(null);
