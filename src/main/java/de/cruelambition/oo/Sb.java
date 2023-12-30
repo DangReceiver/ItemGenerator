@@ -233,7 +233,7 @@ public class Sb {
 
 		updateDeathHeader(l);
 
-		if (l.thisPlayer().getIdleDuration().getSeconds() >= MAX_IDLE)
+		if (l.thisPlayer().getIdleDuration().getSeconds() >= MAX_IDLE && l.thisPlayer().getWorld() != ItemGenerator.spawn)
 			Spawn.sendToSpawn(l.thisPlayer());
 	}
 

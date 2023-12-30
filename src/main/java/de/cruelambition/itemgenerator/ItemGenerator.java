@@ -35,6 +35,8 @@ public final class ItemGenerator extends JavaPlugin {
 	private static Location ssl;
 	public static Generator g;
 
+	public static World spawn, world;
+
 	public void onEnable() {
 		ig = this;
 
@@ -44,10 +46,10 @@ public final class ItemGenerator extends JavaPlugin {
 		createFolder(getDataFolder() + "/languages");
 		createFolder(getDataFolder() + "/players");
 
-		World world = Bukkit.getWorld("world");
+		world = Bukkit.getWorld("world");
 		if (world == null) world.save();
 
-		World spawn = Bukkit.getWorld("Spawn");
+		spawn = Bukkit.getWorld("Spawn");
 		if (spawn == null) SpawnWorld.SpawnGen.checkCreate("Spawn", true);
 
 		Lang l = new Lang(null);

@@ -70,11 +70,9 @@ public class WorldBorder implements Listener {
 //			cs.sendMessage("§2en: " + en.toString() + " || dn: " + (en.getCustomName() != null
 //					? en.getCustomName() : null));
 
-			if (en instanceof ArmorStand as &&
-					as.hasEquipmentLock(EquipmentSlot.HEAD, ArmorStand.LockType.REMOVING_OR_CHANGING)) {
-//				cs.sendMessage("§2is upgrader");
+			if (en instanceof ArmorStand as && as.getCustomName() != null &&
+					as.getCustomName().equalsIgnoreCase(Lang.getMessage(Lang.getServerLang(), "as_wb")))
 				return true;
-			}
 		}
 
 		return false;
@@ -82,21 +80,22 @@ public class WorldBorder implements Listener {
 
 	public ArmorStand getSpawnUpgrader(World w) {
 		for (Entity en : w.getNearbyEntities(new Location(w, 0.5, 64, 0.5), 8d, 8d, 8d))
-			if (en instanceof ArmorStand as &&
-					as.hasEquipmentLock(EquipmentSlot.HEAD, ArmorStand.LockType.REMOVING_OR_CHANGING))
+			if (en instanceof ArmorStand as && as.getCustomName() != null &&
+					as.getCustomName().equalsIgnoreCase(Lang.getMessage(Lang.getServerLang(), "as_wb")))
 				return as;
 
 		return null;
 	}
 
 	public void spawnUpgrader(World w) {
-		ArmorStand as = (ArmorStand) w.spawnEntity(new Location(w, 2.5, 67.0, 2.5), EntityType.ARMOR_STAND);
+		ArmorStand as = (ArmorStand) w.spawnEntity(new Location(w, 2.5, 66.5, 2.5), EntityType.ARMOR_STAND);
+		as.setGravity(false);
 
 		as.setMaxHealth(1000);
 		as.setHealth(1000);
 
-		as.setGravity(false);
 		as.setBasePlate(false);
+		as.setArms(true);
 
 		as.setCustomName(l.getString("as_wb"));
 		as.setCustomNameVisible(true);
@@ -115,10 +114,12 @@ public class WorldBorder implements Listener {
 	}
 
 	public void defaults(org.bukkit.WorldBorder pWb) {
-		pWb.setCenter(0.5, 0.5);
 		pWb.setSize(pWb.getWorld().getName().contains("_nether") ? 21 * 3 : 21);
+		pWb.setCenter(0.5, 0.5);
+
 		pWb.setDamageAmount(0.25);
 		pWb.setDamageBuffer(0.25);
+
 		pWb.setWarningDistance(4);
 		pWb.setWarningTime(2);
 
