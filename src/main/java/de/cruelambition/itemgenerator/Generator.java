@@ -35,7 +35,6 @@ public class Generator {
 		spawnEggs = new ArrayList<>();
 
 		editable = new ArrayList<>();
-
 		c = ItemGenerator.getItemGenerator().getConfig();
 
 		syncForbidden();
@@ -148,7 +147,7 @@ public class Generator {
 	}
 
 	public void give(Player p) {
-		p.playSound(p.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 0.45f, 0.8f);
+		p.playSound(p.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 0.5f, 0.8f);
 
 		ItemStack is = new ItemStack(Material.AIR);
 		Random r = new Random();

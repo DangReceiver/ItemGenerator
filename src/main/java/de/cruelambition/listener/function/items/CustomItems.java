@@ -63,7 +63,7 @@ public class CustomItems implements Listener {
 			ItemGenerator.g.give(p);
 
 			pc.savePCon();
-			p.setCooldown(item.getType(), 100);
+			p.setCooldown(item.getType(), 160);
 
 		} else if (item.equals(Items.ITEMS.get(7))) {
 			e.setCancelled(true);
@@ -108,7 +108,7 @@ public class CustomItems implements Listener {
 
 		} else if (item.equals(Items.ITEMS.get(3))) {
 			e.setCancelled(true);
-			p.sendMessage("eraser");
+			p.sendMessage("Eraser");
 
 			if (a == Action.LEFT_CLICK_BLOCK && cb != null) {
 
@@ -160,16 +160,16 @@ public class CustomItems implements Listener {
 			Utils.particleOffset(p.getLocation(), Particle.FLAME, 1, 0.275);
 
 			Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> {
-
 				p.setVelocity(p.getLocation().getDirection().multiply(0.2).setY(0.2));
-				Utils.particleOffset(p.getLocation(), Particle.SOUL_FIRE_FLAME, 2, 0.35);
 
+				Utils.particleOffset(p.getLocation(), Particle.SOUL_FIRE_FLAME, 2, 0.35);
 				PC pc1 = new PC(p);
+
 				pc1.setJetpackUsage(false);
 				pc1.savePCon();
 
-			}, 5);
-			p.setCooldown(item.getType(), 10);
+			}, 6);
+			p.setCooldown(item.getType(), 6);
 		}
 	}
 
@@ -185,8 +185,8 @@ public class CustomItems implements Listener {
 		int x = cb.getX(), y = cb.getY(), z = cb.getZ();
 
 		for (int xt = x - 5; xt <= x + 5; xt++)
-			for (int yt = x - 5; yt <= x + 5; yt++)
-				for (int zt = x - 5; zt <= x + 5; zt++)
+			for (int yt = y - 5; yt <= y + 5; yt++)
+				for (int zt = z - 5; zt <= z + 5; zt++)
 
 					if (w.getBlockAt(xt, yt, zt).getType() == cb.getType())
 						cb.setType(Material.AIR);

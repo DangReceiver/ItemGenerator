@@ -26,17 +26,18 @@ public class Void implements Listener {
 		if (!(en instanceof Player p)) return;
 
 		Location l = p.getLocation();
-		e.setDamage(e.getDamage() + (e.getDamage() / 2));
+		if (l.getWorld() == ItemGenerator.spawn) return;
 
+		e.setDamage(e.getDamage() + (e.getDamage() / 2));
 		if (p.getHealth() <= 0) return;
 
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
 				10, 0, false, false, false));
 
 		int x = offset(), z = offset();
-		p.teleport(l.add(x, 350, z));
+		p.teleport(l.add(x, 850, z));
 
-		blink(p);
+		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> blink(p), 4);
 	}
 
 	public int offset() {
@@ -51,15 +52,23 @@ public class Void implements Listener {
 			p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,
 					Integer.MAX_VALUE, 0, false, false, false));
 
-		if (nearGround(p)) return;
+		if (nearGround(p)) {
+			p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,
+					Integer.MAX_VALUE, 0, false, false, false));
+			return;
+		}
+
 		Bukkit.getScheduler().runTaskLater(ItemGenerator.getItemGenerator(), () -> blink(p), 10);
 	}
 
 	public boolean nearGround(Player p) {
 		Location l = p.getLocation();
-		for (int i = 0; i <= 3; i++)
+		for (int i = 0; i >= -3; i--) {
 
-			if (l.clone().add(0, i, 0).getBlock().getType() != Material.AIR) return true;
+			Material type = l.clone().add(0, i, 0).getBlock().getType();
+			if (type != Material.AIR && type != Material.VOID_AIR) return true;
+
+		}
 		return false;
 	}
 }
