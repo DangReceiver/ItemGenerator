@@ -100,7 +100,9 @@ public class WorldBorder implements Listener {
 		as.setCustomName(l.getString("as_wb"));
 		as.setCustomNameVisible(true);
 
-		as.addEquipmentLock(EquipmentSlot.HEAD, ArmorStand.LockType.REMOVING_OR_CHANGING);
+		for (EquipmentSlot val : EquipmentSlot.values())
+			as.addEquipmentLock(val, ArmorStand.LockType.REMOVING_OR_CHANGING);
+
 		as.setHelmet(IB.ench(new ItemStack(Material.CREEPER_HEAD), Enchantment.BINDING_CURSE, 0));
 	}
 
