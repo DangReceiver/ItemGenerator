@@ -1,6 +1,6 @@
 name: ItemGenerator
 main: de.cruelambition.itemgenerator.ItemGenerator
-version: '1.2.0'
+version: '1.2.1'
 api-version: '1.20'
 author: CruelAmbition / Rae
 description: this awesome generation mini game :)

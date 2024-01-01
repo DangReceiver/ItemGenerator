@@ -78,9 +78,9 @@ public class Recipes implements Listener {
 
 		dirtRec1.setIngredient('W', Material.WATER_BUCKET);
 		dirtRec1.setIngredient('C', Material.CLAY_BALL);
-		dirtRec1.setIngredient('G', Material.GRASS);
 		dirtRec1.setIngredient('S', Material.STONE);
 		dirtRec1.setIngredient('B', Material.BONE_MEAL);
+		dirtRec1.setIngredient('G', Material.SHORT_GRASS);
 		dirtRec1.setIngredient('D', Material.EMERALD);
 		rec.add(dirtRec1);
 
