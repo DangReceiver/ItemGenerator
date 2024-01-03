@@ -25,8 +25,4 @@ public class Afk implements Listener {
 		}
 	}
 
-
-	public void sendToSpawn(Player p) {
-		Spawn.sendToSpawn(p);
-	}
 }
