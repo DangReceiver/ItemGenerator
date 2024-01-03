@@ -14,7 +14,7 @@ motd:
   motd_6: "§6This doesn't seem to work out!"
   motd_7: "§7Testing new features.... and!... Uhm, didn't work"
   motd_8: "§2Wake up, eat, Minecraft, repeat"
-  motd_9: "§dKoerbe Flechten (with two ä)"
+  motd_9: "§dKoerbe Flechten (with ae not e)"
   motd_10: "§3Ein Leinen Hemd"
   motd_11: "§0This may be hard to read"
   motd_12: "§4R§6A§eI§aN§2B§1O§5W"
@@ -93,7 +93,7 @@ language_cmd:
 
 playtime:
   playtime: "You've played for %s"
-  target_hasnt_yet_played: "%s has never played on this server."
+  target_hasnt_yet_played: "According to ItemGenerator, %s has never played on this server."
   targets_play_time: "%s has played for %s"
 
 todo:

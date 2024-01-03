@@ -1,29 +1,47 @@
 prefixes:
   broadcast: "§3Broadcast §8‖ §7"
 
+#$200,255,20; -> Color Codes: '$<R>,<G>,<B>; ' -> 0-255
+
 motd:
-  motd_0: "$200,255,20; Hab dich lieb <3"
-  motd_1: "$100,255,100; Today: actually including rules!"
-  motd_2: "$40,120,120; That's it! I Quit >:c"
-  motd_3: "$200,100,150; ily"
-  motd_4: "$50,200,200; lasagna"
-  motd_5: "$30,200,220; Minequaft"
-  motd_6: "$50,255,150; This doesn't seem to work out!"
+  using_motd_x: "Motd %s wird verwendet."
+  motd_0: "§dHab dich lieb <3"
+  motd_1: "§bHeute: Sogar mit Regeln!"
+  motd_2: "§cDas Wars! Ich gehe >:c"
+  motd_3: "§4ily"
+  motd_4: "§elasagna"
+  motd_5: "§aMinequaft"
+  motd_6: "§6Das scheint nicht zu funktionieren!"
+  motd_7: "§7Teste neue features.... und!... ehm, klappt nicht"
+  motd_8: "§2Aufwachen, essen, Minecraft, wiederholen"
+  motd_9: "§dKoerbe Flechten (with ae not e)"
+  motd_10: "§3Ein Leinen Hemd"
+  motd_11: "§0Das ist wohl schwer zu lesen"
+  motd_12: "§4R§6A§eI§aN§2B§1O§5W"
+  motd_13: "§aGay"
+  motd_14: "§eZeit für Kaffee..."
 
 chat:
   chat_customization_link: "Chat Link"
-  chat_customization_link_lore: "Click to view available Chat Links"
+  chat_customization_link_lore: "Klicken, um verfügbare Chat Links zu sehen"
   chat_customization_counter: "Chat Counter Link"
-  chat_customization_counter_lore: "Click to view available Chat Counter Links"
+  chat_customization_counter_lore: "Klicken, um verfügbare Chat Counter Links zu sehen"
 
 checkmessage:
-  no_missing_keys: "Currently there are no known missing strings§8."
-  listing_missing_keys: "Listing missing keys§8..."
+  no_missing_keys: "Derzeit gibt es keine ungültigen Strings§8."
+  listing_missing_keys: "Liste ungültige Keys§8..."
   list_missing_keys: "Key§8:§2 %s"
 
+fix:
+  fix_attempt: "Versuche dein Item zu reparieren..."
+  could_not_fix_item: "item konnte nicht repariert werden... versuche es erneut!"
+  fixed_item: "Item erfolgreich repariert."
+  already_fixed: "Dieses Item ist bereits repariert."
+  fix_invalid_item: "Dieses Item kann nicht repariert werden."
+
 fly:
-  flight_updated: "Your target's flight mode was toggled."
-  flight_updated_target: "Your flight mode was toggled."
+  flight_updated: "Flight-Mode von %s wurde umgeschaltet."
+  flight_updated_target: "Dein Flight-Mode wurde umgeschaltet."
 
 generatorfrequencies:
   generatorfrequencies_before: "Generator Timings before Change - CheckStart: %s, CheckFrequency: %s,
@@ -31,36 +49,81 @@ generatorfrequencies:
   generatorfrequencies_after: "Generator Timings after Change - CheckStart: %s, CheckFrequency: %s,
    GeneratorStart: %s, GeneratorFrequency: %s"
 
+get:
+  invalid_custom_item: "Das angegebene Item gibt es nicht."
+  custom_item_received: "Du hast ein Custom Item erhalten!"
+  everyone_received_custom_item: "Jede Person hat ein Custom Item erhalten!"
+  target_custom_item_received: "Das Item wurde der Person gegeben."
+
 invsee:
-  invsee_target: "Now viewing %s's inventory"
+  invsee_target: "Du siehst jetzt %s's Inventar"
+
+leanrrecipes:
+  player_receiving_recipe: ""
+  recipes_learned: ""
+  recipe_learned: ""
+  target_learned_recipes: ""
 
 backpack:
-  backpack_opened: "Now viewing your personal backpack."
+  backpack_opened: "Du betrachtest deinen Backpack."
   backpack_inventory: "§8» $175,120,50; Backpack"
-  backpack_saved: "Your backpack inventory was saved."
+  backpack_saved: "Dein Backpack Inventar wurde gespeichert."
+  backpack_upgrade_inv: "§8» $175,120,50; Backpack vergrößern"
+  backpack_upgrade: "§7Beim Bestätigen zahlst du %s Smaragde und // §7erhälst 1 (weitere) Reihe an Platz"
+  backpack_not_unlocked: "Du hast den Backpack bisher nicht freigeschaltet."
+  backpack_upgrade_info: "§7Verbessern für eine weitere Reihe. //§7 Kosten: %s Smaragde"
+
+purchase:
+  confirm_purchase: "§aKlicken, um den Kauf zu bestätigen"
+  cancel_purchase: "§cKlicken, um den Kauf abzubrechen"
+  cancel_purchase_lore: "§7Klicken bricht die Kaufabwicklung ab."
+  purchase_info: "§9Kaufinformationen§8: "
+  wb_upgrade_info: "§bDas Worldborder Upgrade kostet %s XP (Level) //
+   §bund erweitert die Border um 2 Blöcke//§binnerhalb von 4 Sekunden."
 
 info:
-  info: "Ram usage: §e%s/§a%s. "
-  info_version: "§7Plugin version %s"
-  info_author: "§7Plugin author %s"
-  average_ping: "§7Your ping: §a%s§8. §7Average Ping§8: §e%s§8."
+  info: "Ram Nutzung: §e%s/§a%s. "
+  info_version: "§7Plugin Version %s"
+  info_author: "§7Plugin Author*innen %s"
+  average_ping: "§7Dein Ping: §a%s§8. §7Durchschnittlicher Ping§8: §e%s§8."
 
 language_cmd:
-  not_a_lang_file: "The given argument does not link to a valid language file."
-  language_changed: "Your language was changed to §b%s§8."
+  not_a_lang_file: "Das angegebene Argument lässt auf keine valide Sprachdatei schließen."
+  language_changed: "Deine Sprache wurde zu §b%s §7geändert§8."
 
 playtime:
-  playtime: "You've played for %s"
-  target_hasnt_yet_played: "%s has never played on this server."
-  targets_play_time: "%s has played for %s"
+  playtime: "Du hast %s gespielt"
+  target_hasnt_yet_played: "ItemGenerator zufolge hat %s hier noch nicht gespielt."
+  targets_play_time: "%s hat für %s hier gespielt"
+
+todo:
+  todo_usage: "Nutzung: /todo <list; add; remove; check> <listname> 
+  [<\"String in Anführungszeichen\"; #Reihe; Spieler*innenname>]"
+  todo_length: "Ungültige Länge, Versuche \"/todo\" oder überprüfe die Nutzung!"
+  check_todos_pre: "Deine ToDo-Liste:"
+  todos_listing: "§5ToDo §7#%s§8: §7%s"
+  todo_list_empty: "§oDiese ToDo-Liste ist leer..."
+  todo_check_number: "You cannot check this task, as you did not provide a number, or the task does not exist."
+  todo_remove_number: "You cannot remove this task, as you did not provide a number, or the task does not exist."
+  adding_todo: "Adding \"§n%s§7\" as a new task!"
 
 generator:
+  starting_alternative_generator: ""
+  starting_classic_generator: ""
   itemgenerator_forbiddenlist_add_item: "§6Item %s was added to the forbidden item list."
-  itemgenerator_forbidden_listing: "§6Currently forbidden items§8: §e"
+  itemgenerator_forbidden_listing: "§6Currently forbidden items§8: §e%s"
+  generated_item_inv: "You received %s."
+  generated_item_drop: "You were dropped %s"
+  potion: "Potion of %s"
+  receiving_rare_item: "You just received a rare item!"
+  generator_on_delay: "You're on delay (%s seconds)."
+  generator_ready: "You can now generate a new item!"
 
 itemgenerator:
   modules_success: "All modules were loaded sucessfully!"
   running_version: "Running on Plugin Version %s."
+  player_receiving_recipe: "The player %s received all custom recipes!"
+  player_removeRecipe_recipe: "Removing all plugin recipes from player %s"
 
 language:
   string_not_found: "The string %s could not be determined§8."
@@ -94,6 +157,7 @@ cm:
   player_join_14: "The magic worked! %s is now here§8. ⌈§a»§8⌋"
   player_join_15: "Stop cursing, %s appeared§8. ⌈§a»§8⌋"
   player_join_16: "What's that? A %s§8? ⌈§a»§8⌋"
+  player_join_17: "Meep-Mop, Diip-doop§8... §7player §a%s §7successfully created ⌈§a»§8⌋"
   player_unsuitable_quit: "%s dodged the quitting system§8."
   player_quit_0: "%s has enough for today§8. ⌈§c«§8⌋"
   player_quit_1: "%s forgot their pizza in the oven§8. ⌈§c«§8⌋"
@@ -112,14 +176,70 @@ cm:
   player_quit_14: "%s left their trouble behind§8. ⌈§c«§8⌋"
   player_quit_15: "%s figured this is a waste of time§8. ⌈§c«§8⌋"
   player_quit_16: "The last thing we've got left of %s is the idea of them§8. ⌈§c«§8⌋"
+  player_quit_17: "That's it for §c%s§8. ⌈§c«§8⌋"
   player_rejoin_0: "Am I havin' a Deja Vu? It's %s again! ⌈§5§l↺§8⌋"
   player_rejoin_1: "And it is... %s... I read that name already today... ⌈§5§l↺§8⌋"
   player_rejoin_2: "Here we go again, %s. Welcome back ⌈§5§l↺§8⌋"
   player_rejoin_3: "You must be fooling me! %s, I almost thought we lost you :c ⌈§5§l↺§8⌋"
+  player_rejoin_4: "Nom§8, §7nom§8, §7nom §8(§a%s§8) ⌈§5§l↺§8⌋"
+  player_rejoin_5: "You must be fooling me! %s, I almost thought we lost you :c ⌈§5§l↺§8⌋"
+
+playerclickplayer:
+  x_loves_you: "§C%s §7loves you ^^"
+
+customitems:
+  generator_item_name: "§5Item Generator"
+  jetpack_item_name: "§6Portable Jetpack"
+  sound_item_name: "§9§oSound"
+  eraser_item_name: "§cEraser"
+  crate_item_name: "§6Item Crate"
+  banana_item_name: "§eBanana"
+  baked_banana_item_name: "§6Baked Banana"
+  phantom_wavvy_disc_item_name: "§5Phantom - wavvyboi"
+  generator_item_lore: "§5§oCome and generate an item dfrom time to time! // §5§oDirected to a server-wide delay"
+  jetpack_item_lore: "§7§oClick to be carried through air // 
+  §7§orepeated clicking to cross distance // §7§owill increase height over time"
+  sound_item_lore: "§7§oClick to make a random sound play"
+  eraser_item_lore: "§7§oLeft click to erase blocks of the same type in a 5.5 block radius // 
+  §7§oRight click to highlight targeted blocks"
+  crate_item_lore: ""
+  banana_item_lore: ""
+  baked_banana_item_lore: ""
+  phantom_wavvy_disc_item_lore: ""
+  jetpack_in_use: "You're currently on delay for this item!"
+  sound_playing_sound: "Playing the sound '%s'."
 
 gamemode:
   gamemode_changed_survival: "You will now receive items (again)."
   gamemode_changed_non_survival: "You will not receive items while not in survival mode!"
+
+afk:
+  afk_warn: "§7You seem to be afk... Do something!"
+
+mergeresult:
+  ignore_too_expensive: "Just ignore the Too Expensive statement..."
+  can_repair_expensive: "This enchantment will cost %s level."
+
+sb:
+  sb_time_0: "§6Current time"
+  sb_time_1: "§6World Time"
+  sb_world_0: "§3Your World"
+  sb_world_1: "§3Nearby NPCs"
+  sb_deaths_0: "§4Deaths"
+  sb_deaths_1: "§4Idle Duration"
+  sb_kills_0: "§5Kills"
+  sb_kills_1: "§5Kill Level"
+
+pc:
+  kill_level_increase: "§5Kill level up! (%s)"
+  kill_level_increase_sub: "§7New level requirement is §a%s §7kills!"
+
+
+worldborder:
+  as_wb: "§2WorldBorder Upgrader"
+  wb_upgraded: "The World Border was upgraded by %s for %s xp (level)!"
+  wb_upgrader_inv: "§2WorldBorder Upgrader"
+  spawning_wb_non_existing: "Creating worldborder upgrader..."
 
 frequent:
   not_implemented_yet: "You are looking into the future! This feature has not been implemented yet!"
@@ -135,3 +255,4 @@ frequent:
   no_player: "This feature is exclusively available to players§8."
   change_attribute_target: "The target's attribute was changed from %s to %s successfully."
   change_attribute: "Your attribute was changed from %s to %s successfully."
+  invalid_time_slot: "The chosen Value is not compatible with the chosen Slot!"
