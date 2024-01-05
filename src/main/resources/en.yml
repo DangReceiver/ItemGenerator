@@ -108,8 +108,8 @@ todo:
   adding_todo: "Adding \"§n%s§7\" as a new task!"
 
 generator:
-  starting_alternative_generator: ""
-  starting_classic_generator: ""
+  starting_alternative_generator: "Starting the alternative ItemGenerator"
+  starting_classic_generator: "Starting the classic ItemGenerator"
   itemgenerator_forbiddenlist_add_item: "§6Item %s was added to the forbidden item list."
   itemgenerator_forbidden_listing: "§6Currently forbidden items§8: §e%s"
   generated_item_inv: "You received %s."
