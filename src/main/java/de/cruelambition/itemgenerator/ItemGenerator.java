@@ -1,18 +1,32 @@
 package de.cruelambition.itemgenerator;
 
 import de.cruelambition.cmd.moderation.*;
-import de.cruelambition.cmd.moderation.Chat;
+import de.cruelambition.cmd.user.customization.Chat;
+import de.cruelambition.cmd.hotfixes.Arms;
+import de.cruelambition.cmd.hotfixes.Fix;
+import de.cruelambition.cmd.moderation.generator.Forbidden;
+import de.cruelambition.cmd.moderation.generator.GeneratorFrequencies;
+import de.cruelambition.cmd.moderation.generator.Get;
+import de.cruelambition.cmd.hotfixes.LearnRecipes;
 import de.cruelambition.cmd.user.*;
+import de.cruelambition.cmd.user.customization.Trail;
+import de.cruelambition.cmd.user.customization.TrailGui;
+import de.cruelambition.cmd.user.util.Backpack;
+import de.cruelambition.cmd.user.util.PlayTime;
+import de.cruelambition.cmd.user.util.ToDo;
 import de.cruelambition.language.Lang;
 import de.cruelambition.listener.essential.*;
 import de.cruelambition.listener.function.entities.*;
 import de.cruelambition.listener.function.*;
 import de.cruelambition.listener.function.blocks.*;
-import de.cruelambition.listener.function.entities.Void;
+import de.cruelambition.listener.function.player.*;
 import de.cruelambition.listener.function.items.CustomItems;
 import de.cruelambition.listener.function.items.ItemDrop;
+import de.cruelambition.listener.function.player.Void;
+import de.cruelambition.listener.test.anvil.Anvil;
 import de.cruelambition.oo.*;
-import de.cruelambition.oo.WorldBorder;
+import de.cruelambition.worlds.WorldBorder;
+import de.cruelambition.oo.utils.Items;
 import de.cruelambition.worlds.SpawnWorld;
 
 import java.io.File;
@@ -64,7 +78,7 @@ public final class ItemGenerator extends JavaPlugin {
 		Objects.requireNonNull(getCommand("invsee")).setExecutor(new InvSee());
 		Objects.requireNonNull(getCommand("language")).setExecutor(new Language());
 		Objects.requireNonNull(getCommand("playtime")).setExecutor(new PlayTime());
-		Objects.requireNonNull(getCommand("chat")).setExecutor(new de.cruelambition.cmd.moderation.Chat());
+		Objects.requireNonNull(getCommand("chat")).setExecutor(new Chat());
 		Objects.requireNonNull(getCommand("generatorfrequencies")).setExecutor(new GeneratorFrequencies());
 		Objects.requireNonNull(getCommand("backpack")).setExecutor(new Backpack());
 		Objects.requireNonNull(getCommand("arms")).setExecutor(new Arms());

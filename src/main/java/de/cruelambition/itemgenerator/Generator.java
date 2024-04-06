@@ -2,8 +2,8 @@ package de.cruelambition.itemgenerator;
 
 import de.cruelambition.language.Lang;
 import de.cruelambition.language.Language;
-import de.cruelambition.oo.IB;
-import de.cruelambition.oo.Items;
+import de.cruelambition.oo.utils.IB;
+import de.cruelambition.oo.utils.Items;
 import de.cruelambition.oo.PC;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;

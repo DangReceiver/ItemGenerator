@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import de.cruelambition.language.Language;
 import de.cruelambition.oo.PC;
-import de.cruelambition.oo.Utils;
+import de.cruelambition.oo.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -23,7 +22,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

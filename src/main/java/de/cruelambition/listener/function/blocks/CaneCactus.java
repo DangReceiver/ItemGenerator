@@ -2,17 +2,15 @@ package de.cruelambition.listener.function.blocks;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.oo.PC;
-import de.cruelambition.oo.Utils;
+import de.cruelambition.oo.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.codehaus.plexus.util.ReflectionUtils;
 
 public class CaneCactus implements Listener {
 

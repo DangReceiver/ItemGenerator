@@ -2,9 +2,9 @@ package de.cruelambition.listener.function.items;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
-import de.cruelambition.oo.Items;
+import de.cruelambition.oo.utils.Items;
 import de.cruelambition.oo.PC;
-import de.cruelambition.oo.Utils;
+import de.cruelambition.oo.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

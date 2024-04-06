@@ -1,8 +1,7 @@
 package de.cruelambition.listener.function.blocks;
 
 import de.cruelambition.language.Lang;
-import de.cruelambition.language.Language;
-import de.cruelambition.oo.IB;
+import de.cruelambition.oo.utils.IB;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;

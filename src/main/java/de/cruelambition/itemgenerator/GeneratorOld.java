@@ -4,8 +4,8 @@ import java.util.*;
 import java.util.List;
 
 import de.cruelambition.language.Lang;
-import de.cruelambition.oo.IB;
-import de.cruelambition.oo.Items;
+import de.cruelambition.oo.utils.IB;
+import de.cruelambition.oo.utils.Items;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
