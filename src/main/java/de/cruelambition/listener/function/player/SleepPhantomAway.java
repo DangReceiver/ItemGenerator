@@ -1,4 +1,4 @@
-package de.cruelambition.listener.function.entities;
+package de.cruelambition.listener.function.player;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import org.bukkit.Bukkit;

@@ -1,7 +1,7 @@
-package de.cruelambition.listener.function.entities;
+package de.cruelambition.listener.function.player;
 
 import de.cruelambition.language.Lang;
-import de.cruelambition.oo.Utils;
+import de.cruelambition.oo.utils.Utils;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

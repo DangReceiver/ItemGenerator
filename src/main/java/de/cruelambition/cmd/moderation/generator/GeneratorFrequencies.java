@@ -1,4 +1,4 @@
-package de.cruelambition.cmd.moderation;
+package de.cruelambition.cmd.moderation.generator;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;

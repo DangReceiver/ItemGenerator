@@ -1,4 +1,4 @@
-package de.cruelambition.listener.essential;
+package de.cruelambition.listener.test;
 
 import io.papermc.paper.event.block.BeaconActivatedEvent;
 import org.bukkit.event.Listener;

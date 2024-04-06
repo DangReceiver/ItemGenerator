@@ -1,7 +1,7 @@
-package de.cruelambition.cmd.moderation;
+package de.cruelambition.cmd.moderation.generator;
 
 import de.cruelambition.language.Lang;
-import de.cruelambition.oo.Items;
+import de.cruelambition.oo.utils.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

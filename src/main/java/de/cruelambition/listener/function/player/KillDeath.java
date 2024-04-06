@@ -1,4 +1,4 @@
-package de.cruelambition.listener.function.entities;
+package de.cruelambition.listener.function.player;
 
 import de.cruelambition.language.Lang;
 import de.cruelambition.oo.PC;

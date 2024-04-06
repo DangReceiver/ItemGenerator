@@ -1,4 +1,4 @@
-package de.cruelambition.oo;
+package de.cruelambition.listener.test.anvil;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import org.bukkit.configuration.file.FileConfiguration;

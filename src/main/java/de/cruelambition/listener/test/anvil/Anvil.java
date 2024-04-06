@@ -1,9 +1,7 @@
-package de.cruelambition.listener.function.blocks;
+package de.cruelambition.listener.test.anvil;
 
 import de.cruelambition.language.Lang;
 import de.cruelambition.language.Language;
-import de.cruelambition.oo.MergeResult;
-import de.cruelambition.oo.MergeType;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;

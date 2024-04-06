@@ -1,6 +1,5 @@
 package de.cruelambition.oo;
 
-import de.cruelambition.cmd.user.ToDo;
 import de.cruelambition.language.Lang;
 import de.cruelambition.language.Language;
 

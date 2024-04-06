@@ -1,8 +1,8 @@
-package de.cruelambition.cmd.user;
+package de.cruelambition.cmd.user.util;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
-import de.cruelambition.oo.IB;
+import de.cruelambition.oo.utils.IB;
 import de.cruelambition.oo.PC;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

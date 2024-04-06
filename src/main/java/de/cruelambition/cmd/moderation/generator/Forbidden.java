@@ -1,17 +1,14 @@
-package de.cruelambition.cmd.moderation;
+package de.cruelambition.cmd.moderation.generator;
 
 import de.cruelambition.language.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-public class Arms implements CommandExecutor {
+public class Forbidden implements CommandExecutor {
 
-	public static String PERMISSION = "ItemGenerator.ArmorStand";
+	public static String PERMISSION = "ItemGenerator.Forbidden";
 
 	@Override
 	public boolean onCommand(CommandSender sen, Command cmd, String lab, String[] args) {
@@ -32,17 +29,9 @@ public class Arms implements CommandExecutor {
 			return false;
 		}
 
-		for (Entity ne : p.getNearbyEntities(1.25, 1.25, 1.25)) {
-			if (ne.getType() != EntityType.ARMOR_STAND) continue;
 
-			((ArmorStand) ne).setArms(true);
-			((ArmorStand) ne).setBasePlate(false);
-			((ArmorStand) ne).setMaxHealth(100);
-			((ArmorStand) ne).setHealth(100);
-		}
-
-		p.sendMessage(Lang.PRE + l.getString("done"));
 
 		return false;
 	}
+
 }

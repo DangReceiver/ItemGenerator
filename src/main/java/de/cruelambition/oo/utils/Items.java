@@ -1,4 +1,4 @@
-package de.cruelambition.oo;
+package de.cruelambition.oo.utils;
 
 import de.cruelambition.language.Lang;
 import de.cruelambition.language.Language;

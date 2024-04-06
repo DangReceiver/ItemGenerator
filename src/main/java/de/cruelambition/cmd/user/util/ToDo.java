@@ -1,4 +1,4 @@
-package de.cruelambition.cmd.user;
+package de.cruelambition.cmd.user.util;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;

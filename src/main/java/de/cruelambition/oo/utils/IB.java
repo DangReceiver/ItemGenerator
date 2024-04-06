@@ -1,4 +1,4 @@
-package de.cruelambition.oo;
+package de.cruelambition.oo.utils;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

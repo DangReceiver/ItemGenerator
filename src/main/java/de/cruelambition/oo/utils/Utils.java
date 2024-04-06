@@ -1,4 +1,4 @@
-package de.cruelambition.oo;
+package de.cruelambition.oo.utils;
 
 import de.cruelambition.itemgenerator.ItemGenerator;
 import org.bukkit.Bukkit;
