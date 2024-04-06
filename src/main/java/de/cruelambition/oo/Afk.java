@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 
 public class Afk implements Listener {
 
-	@EventHandler
+//	@EventHandler
 	public void handle(PlayerKickEvent e) {
 		if (e.getCause() != PlayerKickEvent.Cause.IDLING) return;
 

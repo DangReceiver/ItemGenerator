@@ -12,6 +12,9 @@ public class Rare implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sen, Command cmd, String lab, String[] args) {
+
+		// Not implemented yet
+
 		Player p;
 		Lang l = new Lang(null);
 
