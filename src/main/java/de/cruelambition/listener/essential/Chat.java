@@ -31,9 +31,9 @@ public class Chat implements Listener {
 		String msg = e.getMessage();
 		e.setFormat(f = replaceChat(pc, f, null));
 
-		if (p.hasPermission("Savior.Chat.Color")) f = f.replaceAll("&", "§");
+		if (p.hasPermission("ItemGenerator.Chat.Color")) f = f.replaceAll("&", "§");
 
-		if (p.hasPermission("Savior.Chat.Tagging"))
+		if (p.hasPermission("ItemGenerator.Chat.Tagging"))
 			for (Player ap : Bukkit.getOnlinePlayers()) {
 
 				if (!msg.contains(ap.getName())) continue;
