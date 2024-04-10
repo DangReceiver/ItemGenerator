@@ -77,9 +77,16 @@ public class CustomItems implements Listener {
 			if (a == Action.LEFT_CLICK_BLOCK) {
 				if (cb.getType() != Material.JUKEBOX) return;
 
+				if(p.isSneaking()) {
+					p.stopSound("sounds/records/aa_itemgenerator_wavvyboi-Phantom");
+					return;
+				}
+
 				for (Player ap : Bukkit.getOnlinePlayers())
 					ap.stopSound(Sound.MUSIC_DISC_CAT);
 
+				cb.getWorld().playSound(cb.getLocation(), "sounds/records/aa_itemgenerator_wavvyboi-Phantom",
+						0.5f, 1);
 				cb.getWorld().playSound(cb.getLocation(), "records/aa_itemgenerator_wavvyboi-Phantom",
 						0.5f, 1);
 				cb.getWorld().playSound(cb.getLocation(), "aa_itemgenerator_wavvyboi-Phantom",
