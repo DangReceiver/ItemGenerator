@@ -118,6 +118,7 @@ generator:
   receiving_rare_item: "You just received a rare item!"
   generator_on_delay: "You're on delay (%s seconds)."
   generator_ready: "You can now generate a new item!"
+  "generator_wrong_world": "Items cannot be generated in your current world"
 
 itemgenerator:
   modules_success: "All modules were loaded sucessfully!"

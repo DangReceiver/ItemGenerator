@@ -49,6 +49,11 @@ public class CustomItems implements Listener {
 			e.setCancelled(true);
 			PC pc = new PC(p);
 
+			if(p.getWorld() == ItemGenerator.spawn) {
+				p.sendMessage(Lang.PRE + String.format(l.getString("generator_wrong_world")));
+				return;
+			}
+
 			if (!pc.mayGenerateItem()) {
 				if (delay.contains(p)) return;
 
