@@ -65,7 +65,10 @@ public final class ItemGenerator extends JavaPlugin {
 		if (world == null) world.save();
 
 		spawn = Bukkit.getWorld("Spawn");
-		if (spawn == null) SpawnWorld.SpawnGen.checkCreate("Spawn", true);
+		if (spawn == null){
+			cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(),"spawn_world_not_found"));
+			SpawnWorld.SpawnGen.checkCreate("Spawn", true);
+		}
 
 		Lang l = new Lang(null);
 		l.loadingSequence();
