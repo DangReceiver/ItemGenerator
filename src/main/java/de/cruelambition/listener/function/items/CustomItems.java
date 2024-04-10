@@ -196,9 +196,9 @@ public class CustomItems implements Listener {
 	public void erase(Block cb, World w) {
 		int x = cb.getX(), y = cb.getY(), z = cb.getZ();
 
-		for (int xt = x - 5; xt <= x + 5; xt++)
-			for (int yt = y - 5; yt <= y + 5; yt++)
-				for (int zt = z - 5; zt <= z + 5; zt++)
+		for (int xt = x - 4; xt <= x + 4; xt++)
+			for (int yt = y - 4; yt <= y + 4; yt++)
+				for (int zt = z - 4; zt <= z + 4; zt++)
 
 					if (w.getBlockAt(xt, yt, zt).getType() == cb.getType())
 						cb.setType(Material.AIR);
@@ -210,12 +210,12 @@ public class CustomItems implements Listener {
 
 		// FOR LINES X -> Y & X -> Z
 		for (int i = 0; i <= 10; i++) {
-			for (int yt = y - 5; yt <= y + 5; yt++) {
+			for (int yt = y - 4; yt <= y + 4; yt++) {
 				w.spawnParticle(Particle.VILLAGER_HAPPY, w.getBlockAt(x, yt, z).getLocation(), 1);
 				w.spawnParticle(Particle.VILLAGER_HAPPY, w.getBlockAt(x, yt, z).getLocation().add(0, 0.5, 0), 1);
 			}
 
-			for (int zt = z - 5; zt <= z + 5; zt++) {
+			for (int zt = z - 4; zt <= z + 4; zt++) {
 				w.spawnParticle(Particle.VILLAGER_HAPPY, w.getBlockAt(x, y, zt).getLocation(), 1);
 				w.spawnParticle(Particle.VILLAGER_HAPPY, w.getBlockAt(x, y, zt).getLocation().add(0, 0, 1), 1);
 			}
@@ -223,7 +223,7 @@ public class CustomItems implements Listener {
 
 		// FOR LINES Y -> Z & Y -> X
 		for (int i = 0; i <= 10; i++) {
-			for (int xt = x - 5; xt <= x + 5; xt++) {
+			for (int xt = x - 4; xt <= x + 4; xt++) {
 				w.spawnParticle(Particle.VILLAGER_HAPPY, w.getBlockAt(xt, y, z).getLocation(), 1);
 				w.spawnParticle(Particle.VILLAGER_HAPPY, w.getBlockAt(xt, y, z).getLocation().add(0, 0.5, 0), 1);
 			}
@@ -236,12 +236,12 @@ public class CustomItems implements Listener {
 
 		// FOR LINES Z -> X & Z -> Y
 		for (int i = 0; i <= 10; i++) {
-			for (int xt = x - 5; xt <= x + 5; xt++) {
+			for (int xt = x - 4; xt <= x + 4; xt++) {
 				w.spawnParticle(Particle.VILLAGER_HAPPY, w.getBlockAt(xt, y, z).getLocation(), 1);
 				w.spawnParticle(Particle.VILLAGER_HAPPY, w.getBlockAt(xt, y, z).getLocation().add(0, 0.5, 0), 1);
 			}
 
-			for (int yt = y - 5; yt <= y + 5; yt++) {
+			for (int yt = y - 4; yt <= y + 4; yt++) {
 				w.spawnParticle(Particle.VILLAGER_HAPPY, w.getBlockAt(x, yt, z).getLocation(), 1);
 				w.spawnParticle(Particle.VILLAGER_HAPPY, w.getBlockAt(x, yt, z).getLocation().add(0, 0, 1), 1);
 			}
