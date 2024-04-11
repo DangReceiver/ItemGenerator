@@ -199,13 +199,13 @@ public class Sb {
 	public static void updateWorldTime(Lang l) {
 		Scoreboard sb = l.thisPlayer().getScoreboard();
 		sb.getTeam("dTime").setPrefix("    §e➥ ☞ " + String.format("%s",
-				convertTime(l.thisPlayer().getWorld().getTime())));
+				convertTime(l.thisPlayer().getWorld().getGameTime())));
 	}
 
 	public static void updateWorldSlot(Lang l) {
 		if (worldEntry == 0) updateWorld(l);
 		else if (worldEntry == 1) updateNearbyEntities(l);
-		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
+		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_world_slot"));
 
 		updateWorldHeader(l);
 	}
@@ -229,11 +229,12 @@ public class Sb {
 	public static void updateDeathSlot(Lang l) {
 		if (deathEntry == 0) updateDeaths(l);
 		else if (deathEntry == 1) updateIdle(l);
-		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
+		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_death_slot"));
 
 		updateDeathHeader(l);
 
-		if (l.thisPlayer().getIdleDuration().getSeconds() >= MAX_IDLE && l.thisPlayer().getWorld() != ItemGenerator.spawn)
+		if (l.thisPlayer().getIdleDuration().getSeconds() >= MAX_IDLE
+				&& l.thisPlayer().getWorld() != ItemGenerator.spawn)
 			Spawn.sendToSpawn(l.thisPlayer());
 	}
 
@@ -258,7 +259,7 @@ public class Sb {
 	public static void updateKillSlot(Lang l) {
 		if (killEntry == 0) updateKills(l);
 		else if (killEntry == 1) updateKillLevel(l);
-		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_time_slot"));
+		else throw new RuntimeException(Lang.getMessage(Lang.getServerLang(), "invalid_kill_slot"));
 
 		updateKillHeader(l);
 	}
