@@ -1,5 +1,6 @@
 package de.cruelambition.cmd.user;
 
+import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.oo.PC;
 import de.cruelambition.worlds.SpawnWorld;
@@ -32,7 +33,7 @@ public class Spawn implements CommandExecutor {
 	}
 
 	public static void sendToSpawn(Player p) {
-		Location loc = SpawnWorld.getSafeSpawnLocation();
+		Location loc = ItemGenerator.ssl.clone();
 
 		PC pc = new PC(p);
 		if (p.getWorld() == Bukkit.getWorld("world")) {

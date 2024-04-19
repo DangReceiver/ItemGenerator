@@ -438,7 +438,7 @@ public class PC {
 			c.save(f);
 		} catch (IOException e) {
 			Bukkit.getConsoleSender().sendMessage(Language.getMessage(Lang.getServerLang(),
-					"info") + Language.getMessage(Lang.getServerLang(), "info"));
+					"info") + Language.getMessage(Lang.getServerLang(), "error_saving_player_file"));
 		}
 	}
 }

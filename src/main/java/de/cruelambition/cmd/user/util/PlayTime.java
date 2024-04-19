@@ -73,7 +73,7 @@ public class PlayTime implements CommandExecutor {
 
 	public String convertTime(long time) {
 		Date date = new Date(time);
-		Format format = new SimpleDateFormat("MM dd HH:mm:ss:SSS");
+		Format format = new SimpleDateFormat("HH:mm:ss:SSS");
 		return format.format(date);
 	}
 }

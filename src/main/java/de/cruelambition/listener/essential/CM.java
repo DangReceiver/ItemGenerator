@@ -1,5 +1,6 @@
 package de.cruelambition.listener.essential;
 
+import de.cruelambition.itemgenerator.ItemGenerator;
 import de.cruelambition.language.Lang;
 import de.cruelambition.oo.*;
 import de.cruelambition.worlds.SpawnWorld;
@@ -36,7 +37,7 @@ public class CM implements Listener {
 		if (!p.hasPlayedBefore()) {
 
 			Lang.broadcastArg("player_first_join", p.getName());
-			p.teleport(SpawnWorld.getSafeSpawnLocation());
+			p.teleport(ItemGenerator.ssl);
 
 			if (!pc.hasCon(p)) pc.createCon(p);
 			pc.allowItemGeneration();
@@ -48,7 +49,7 @@ public class CM implements Listener {
 		else Lang.broadcastArg("player_join_" + (new Random()).nextInt(18), p.getName());
 
 		p.setGameMode(GameMode.ADVENTURE);
-		p.teleport(SpawnWorld.getSafeSpawnLocation());
+		p.teleport(ItemGenerator.ssl);
 
 		pc.setJoinTime(System.currentTimeMillis());
 		pc.savePCon();

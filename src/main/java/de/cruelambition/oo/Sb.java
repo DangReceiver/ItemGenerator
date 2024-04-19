@@ -284,7 +284,7 @@ public class Sb {
 
 	public static String convertTime(long time) {
 		Date date = new Date(time);
-		Format format = new SimpleDateFormat("HH:mm:ss");
+		Format format = new SimpleDateFormat("HH:mm");
 		return format.format(date);
 	}
 }
