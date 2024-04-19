@@ -142,32 +142,16 @@ public class ToDo implements CommandExecutor, TabCompleter {
         if (args[0].equalsIgnoreCase("add")) {
             String entry = "";
 
-            boolean sw = false;
-            for (String arg : args) {
-                if (arg.equals(args[0])) continue;
-
-                p.sendMessage("§b0: " + entry + " || " + arg);
-
-                if (arg.contains("\"")) sw = !sw;
-                entry = entry + arg.replaceAll("\"", "");
-
-                if (arg.contains("\"")) {
-                    entry = entry.replaceAll("\"", "");
-                    sw = !sw;
-                }
-                p.sendMessage("§b1: " + entry + " || " + arg);
-
-                if (!sw) {
-                    pc.addToDo(entry = entry.replaceAll("&", "§").replace("\"", ""));
-                    p.sendMessage(Lang.PRE + String.format(l.getString("adding_todo"), entry));
-
-                    pc.savePCon();
-                    p.sendMessage("§a2: " + entry + " || " + arg);
-
-                    return false;
-                }
-                p.sendMessage("§b3: " + entry + " || " + arg);
+            int i = 1;
+            while (i <= args.length - 1) {
+                entry = entry + args[i];
+                i++;
             }
+
+            pc.addToDo(entry = entry.replaceAll("&", "§").replace("\"", ""));
+            p.sendMessage(Lang.PRE + String.format(l.getString("adding_todo"), entry));
+            pc.savePCon();
+
             return false;
         }
 
