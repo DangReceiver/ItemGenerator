@@ -59,7 +59,8 @@ invsee:
   invsee_target: "Du siehst jetzt %s's Inventar"
 
 leanrrecipes:
-  player_receiving_recipe: ""
+  player_receiving_recipe: "Der*Die Spieler*in %s hat alle Plugin Rezepte erhalten!"
+  player_removeRecipe_recipe: "Entferne alle Rezepte von des*der Spieler*in %s"
   recipes_learned: ""
   recipe_learned: ""
   target_learned_recipes: ""
@@ -122,8 +123,6 @@ generator:
 itemgenerator:
   modules_success: "Alle Module wurden erfolgreich geladen!"
   running_version: "Plugin Version %s gestartet."
-  player_receiving_recipe: "Der*Die Spieler*in %s hat alle Plugin Rezepte erhalten!"
-  player_removeRecipe_recipe: "Entferne alle Rezepte von dem*der Spieler*in %s"
 
 language:
   string_not_found: "The string %s could not be determined§8."

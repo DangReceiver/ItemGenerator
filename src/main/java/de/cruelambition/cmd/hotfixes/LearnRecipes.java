@@ -40,7 +40,7 @@ public class LearnRecipes implements CommandExecutor, TabCompleter {
 			return false;
 		}
 
-		Bukkit.getConsoleSender().sendMessage(String.format(l.getString("player_receiving_recipe"),
+		Bukkit.getConsoleSender().sendMessage(String.format(l.getString("player_receiving_recipes"),
 				p.getName()));
 
 		if (args.length == 0) {

@@ -59,10 +59,12 @@ invsee:
   invsee_target: "Now viewing %s's inventory"
 
 leanrrecipes:
-  player_receiving_recipe: ""
-  recipes_learned: ""
-  recipe_learned: ""
-  target_learned_recipes: ""
+  player_receiving_recipes: "%s just received all custom recipes."
+  player_removeRecipe_recipe: "Removing all plugin recipes from player %s"
+  recipes_learned: "All plugin recipes were learned."
+  recipe_learned: "The desired recipe was learned."
+  target_learned_recipes: "Target %s received the desired recipe(s)"
+  recipe_list_invalid: "The recipe list is invalid!"
 
 backpack:
   backpack_opened: "Now viewing your personal backpack."
@@ -123,8 +125,6 @@ generator:
 itemgenerator:
   modules_success: "All modules were loaded sucessfully!"
   running_version: "Running on Plugin Version %s."
-  player_receiving_recipe: "The player %s received all custom recipes!"
-  player_removeRecipe_recipe: "Removing all plugin recipes from player %s"
 
 language:
   string_not_found: "The string %s could not be determined§8."
