@@ -61,6 +61,9 @@ public final class ItemGenerator extends JavaPlugin {
 		createFolder(getDataFolder() + "/languages");
 		createFolder(getDataFolder() + "/players");
 
+		Lang l = new Lang(null);
+		l.loadingSequence();
+
 		world = Bukkit.getWorld("world");
 		if (world == null) world.save();
 
@@ -69,9 +72,6 @@ public final class ItemGenerator extends JavaPlugin {
 			cs.sendMessage(Lang.PRE + Lang.getMessage(Lang.getServerLang(),"spawn_world_not_found"));
 			SpawnWorld.SpawnGen.checkCreate("Spawn", true);
 		}
-
-		Lang l = new Lang(null);
-		l.loadingSequence();
 
 		ssl = SpawnWorld.getSafeSpawnLocation();
 
