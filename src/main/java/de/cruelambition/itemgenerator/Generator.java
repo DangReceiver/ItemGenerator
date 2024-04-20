@@ -138,7 +138,7 @@ public class Generator {
 
         Bukkit.getScheduler().runTaskTimer(ItemGenerator.getItemGenerator(), () -> {
 
-            y.set("Generator.Delay", y.getInt("Generator.Delay") - 1);
+            y.set("Generator.Delay", y.getInt("Generator.Delay", 1) - 1);
             saveGenFile();
 
         }, 20L * startIn, 20);
